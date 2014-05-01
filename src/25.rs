@@ -33,7 +33,7 @@ fn main() {
     // because it would be interpreted as a 'native' number. The one() function leverages trait
     // dispatch and returns a BigInt '1'
     let core_fib = Unfold::new((one(), one()), fib_iteration);
-    let initial  = (~[one(), one()]).move_iter();
+    let initial  = vec!(one(), one()).move_iter();
 
     initial.chain(core_fib)
   };
