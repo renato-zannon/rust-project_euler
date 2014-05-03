@@ -1,5 +1,6 @@
 extern crate collections;
-use collections::treemap::TreeMap;
+
+use self::collections::treemap::TreeMap;
 use std::iter::count;
 
 pub struct Sieve {
@@ -20,7 +21,7 @@ impl Iterator<uint> for Sieve {
   fn next(&mut self) -> Option<uint> {
     count(self.last_test + 1, 1).find(|&number| {
       if self.is_prime(number) {
-        self.checked.insert(number, number);
+        self.checked.insert(number, number * number);
         self.last_test = number;
         true
       } else {
@@ -30,20 +31,44 @@ impl Iterator<uint> for Sieve {
   }
 }
 
+
 impl Sieve {
-  fn is_composite(&mut self, number: uint) -> bool {
-    self.checked.mut_iter().any(|(&prime, checked_num)| {
-      while number > *checked_num {
-        *checked_num += prime;
-      }
-
-      *checked_num == number
-    })
-  }
-
   #[inline]
   fn is_prime(&mut self, number: uint) -> bool {
     ! self.is_composite(number)
+  }
+
+  fn is_composite(&mut self, number: uint) -> bool {
+    self.checked.mut_iter().any(|(&prime, prev_composite)| {
+      match check_composite(prime, *prev_composite, number) {
+        Composite => {
+          *prev_composite = number + prime;
+          true
+        },
+
+        NotComposite(closest_composite) => {
+          *prev_composite = closest_composite;
+          false
+        }
+      }
+    })
+  }
+}
+
+enum CompositeCheckResult {
+  Composite,
+  NotComposite(uint),
+}
+
+fn check_composite(prime: uint, prev_composite: uint, number: uint) -> CompositeCheckResult {
+  let mut closest_composite = prev_composite;
+
+  loop {
+    match closest_composite.cmp(&number) {
+      Less    => { closest_composite += prime; },
+      Equal   => { return Composite; },
+      Greater => { return NotComposite(closest_composite); }
+    }
   }
 }
 
