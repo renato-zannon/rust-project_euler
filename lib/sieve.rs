@@ -4,30 +4,34 @@ use self::collections::treemap::TreeMap;
 use std::iter::count;
 
 pub struct Sieve {
-  last_test: uint,
-  checked: TreeMap<uint, uint>
+  last_prime: Option<uint>,
+  checked:    TreeMap<uint, uint>
 }
 
 pub fn new() -> Sieve {
-  let map = TreeMap::new();
-
   Sieve {
-    last_test: 1,
-    checked: map,
+    last_prime: None,
+    checked: TreeMap::new(),
   }
 }
 
 impl Iterator<uint> for Sieve {
   fn next(&mut self) -> Option<uint> {
-    count(self.last_test + 1, 1).find(|&number| {
-      if self.is_prime(number) {
-        self.checked.insert(number, number * number);
-        self.last_test = number;
-        true
-      } else {
-        false
+    let prime = match self.last_prime {
+      None    => 2,
+      Some(2) => 3,
+
+      Some(prev_prime) => {
+        count(prev_prime + 2, 2)
+          .find(|&number| self.is_prime(number))
+          .unwrap()
       }
-    })
+    };
+
+    self.checked.insert(prime, prime * prime);
+    self.last_prime = Some(prime);
+
+    Some(prime)
   }
 }
 
@@ -39,7 +43,11 @@ impl Sieve {
   }
 
   fn is_composite(&mut self, number: uint) -> bool {
+    let max_prime_factor = (number as f64).sqrt().ceil() as uint;
+
     self.checked.mut_iter().any(|(&prime, prev_composite)| {
+      if prime > max_prime_factor { return false; }
+
       match check_composite(prime, *prev_composite, number) {
         Composite => {
           *prev_composite = number + prime;
