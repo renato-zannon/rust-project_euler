@@ -3,13 +3,14 @@ BIN = $(patsubst src/%.rs,%,$(SRC))
 
 LIBSHARED_FILENAME = $(shell rustc --crate-file-name lib/shared.rs --out-dir build/)
 LIBSHARED          = $(addprefix build/, $(LIBSHARED_FILENAME))
+RUSTFLAGS          ?= -O
 
-.PHONY: clean all
+.PHONY: clean all libshared
 
 all: $(addprefix bin/, $(BIN))
 
-bin/%: src/%.rs $(LIBSHARED) | builddirs
-	rustc -L build/ -O $< -o $@
+bin/%: src/%.rs libshared | builddirs
+	rustc $(RUSTFLAGS) -L build/ $< -o $@
 
 builddirs: | bin build
 
@@ -22,5 +23,7 @@ build:
 clean:
 	rm -rf build bin
 
+libshared: $(LIBSHARED)
+
 $(LIBSHARED): lib/*.rs | builddirs
-	rustc -O lib/shared.rs --out-dir build/
+	rustc $(RUSTFLAGS) lib/shared.rs --out-dir build/
