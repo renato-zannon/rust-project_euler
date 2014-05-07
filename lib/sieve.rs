@@ -1,81 +1,98 @@
-extern crate collections;
+// Based on the ruby implementation:
+// https://github.com/ruby/ruby/blob/1aa54bebaf274bc08e72f9ad3854c7ad592c344a/lib/prime.rb#L423
 
-use self::collections::treemap::TreeMap;
-use std::iter::count;
+static WHEEL: &'static [uint] = &[2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101];
 
 pub struct Sieve {
-  last_prime: Option<uint>,
-  checked:    TreeMap<uint, uint>
+  last_prime_index: Option<uint>,
+  max_checked: uint,
+  primes: Vec<uint>,
 }
 
 pub fn new() -> Sieve {
+  let primes = Vec::from_slice(WHEEL);
+
   Sieve {
-    last_prime: None,
-    checked: TreeMap::new(),
+    last_prime_index: None,
+    max_checked: primes.last().unwrap() + 1,
+    primes: primes,
   }
 }
 
 impl Iterator<uint> for Sieve {
   fn next(&mut self) -> Option<uint> {
-    let prime = match self.last_prime {
-      None    => 2,
-      Some(2) => 3,
-
-      Some(prev_prime) => {
-        count(prev_prime + 2, 2)
-          .find(|&number| self.is_prime(number))
-          .unwrap()
-      }
+    let index = match self.last_prime_index {
+      Some(last_index) => last_index + 1,
+      None             => 0
     };
 
-    self.checked.insert(prime, prime * prime);
-    self.last_prime = Some(prime);
-
-    Some(prime)
-  }
-}
-
-
-impl Sieve {
-  #[inline]
-  fn is_prime(&mut self, number: uint) -> bool {
-    ! self.is_composite(number)
-  }
-
-  fn is_composite(&mut self, number: uint) -> bool {
-    let max_prime_factor = (number as f64).sqrt().ceil() as uint;
-
-    self.checked.mut_iter().any(|(&prime, prev_composite)| {
-      if prime > max_prime_factor { return false; }
-
-      match check_composite(prime, *prev_composite, number) {
-        Composite => {
-          *prev_composite = number + prime;
-          true
+    loop {
+      match self.primes.as_slice().get(index) {
+        Some(&prime) => {
+          self.last_prime_index = Some(index);
+          return Some(prime);
         },
 
-        NotComposite(closest_composite) => {
-          *prev_composite = closest_composite;
-          false
-        }
+        None => self.compute_primes()
       }
-    })
+    }
   }
 }
 
-enum CompositeCheckResult {
-  Composite,
-  NotComposite(uint),
+struct Segment {
+  min: uint,
+  max: uint,
+  len: uint,
+  values: Vec<Option<uint>>,
 }
 
-fn check_composite(prime: uint, prev_composite: uint, number: uint) -> CompositeCheckResult {
-  let mut closest_composite = prev_composite;
+impl Sieve {
+  fn compute_primes(&mut self) {
+    use std::iter::range_step;
 
-  loop {
-    match closest_composite.cmp(&number) {
-      Less    => { closest_composite += prime; },
-      Equal   => { return Composite; },
-      Greater => { return NotComposite(closest_composite); }
+    let mut segment = self.next_segment();
+
+    for prime in self.sieving_primes(segment.max).move_iter() {
+      let first_composite = prime - (segment.min % prime);
+
+      for composite_index in range_step(first_composite, segment.len, prime) {
+        *segment.values.get_mut(composite_index) = None;
+      }
+    }
+
+    self.max_checked = segment.max;
+
+    for maybe_num in segment.values.move_iter() {
+      match maybe_num {
+        Some(prime) => self.primes.push(prime),
+        None        => (),
+      }
+    }
+  }
+
+  fn sieving_primes(&self, max: uint) -> Vec<uint> {
+    let root = (max as f64).sqrt().floor() as uint;
+
+    self.primes.iter()
+        .map(|prime| *prime)
+        .take_while(|&prime| prime <= root)
+        .collect::<Vec<uint>>()
+  }
+
+  fn next_segment(&self) -> Segment {
+    let max_cached_prime = *self.primes.last().unwrap();
+
+    let min = self.max_checked + 1;
+    let max = max_cached_prime * 2;
+    let len = max - min;
+
+    let values = Vec::from_fn(len, |index| Some(min + index));
+
+    Segment {
+      min: min,
+      max: max,
+      len: len,
+      values: values
     }
   }
 }
