@@ -1,6 +1,8 @@
 // Based on the ruby implementation:
 // https://github.com/ruby/ruby/blob/1aa54bebaf274bc08e72f9ad3854c7ad592c344a/lib/prime.rb#L423
 
+use std::iter::RandomAccessIterator;
+
 static WHEEL: &'static [uint] = &[2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101];
 
 static MAX_SEGMENT_SIZE: uint = 1_000u;
@@ -32,6 +34,26 @@ impl Iterator<uint> for Sieve {
       match self.primes.as_slice().get(index) {
         Some(&prime) => {
           self.last_prime_index = Some(index);
+          return Some(prime);
+        },
+
+        None => self.compute_primes()
+      }
+    }
+  }
+}
+
+impl RandomAccessIterator<uint> for Sieve {
+  fn indexable(&self) -> uint {
+    use std::uint;
+
+    uint::MAX
+  }
+
+  fn idx(&mut self, index: uint) -> Option<uint> {
+    loop {
+      match self.primes.as_slice().get(index) {
+        Some(&prime) => {
           return Some(prime);
         },
 
