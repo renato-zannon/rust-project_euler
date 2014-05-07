@@ -5,14 +5,19 @@
  *
  * What is the 10 001st prime number? */
 
-use std::iter::count;
-use std::iter::range_step_inclusive;
+#![allow(unused_imports)]
+
+extern crate shared;
+
+use std::iter::{count, range_step_inclusive};
+use shared::sieve;
 
 fn main() {
 //let mut all_primes = count(1u, 1).filter(naive_is_prime);
-  let mut all_primes = count(1u, 1).filter(smart_is_prime);
+//let mut all_primes = count(1u, 1).filter(smart_is_prime);
+  let mut all_primes = sieve::new();
 
-  let result = all_primes.nth(10_001).unwrap();
+  let result = all_primes.nth(10_000).unwrap();
   println!("{}", result);
 }
 
