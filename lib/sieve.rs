@@ -3,6 +3,8 @@
 
 static WHEEL: &'static [uint] = &[2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101];
 
+static MAX_SEGMENT_SIZE: uint = 1_000u;
+
 pub struct Sieve {
   last_prime_index: Option<uint>,
   max_checked: uint,
@@ -14,7 +16,7 @@ pub fn new() -> Sieve {
 
   Sieve {
     last_prime_index: None,
-    max_checked: primes.last().unwrap() + 1,
+    max_checked: *primes.last().unwrap(),
     primes: primes,
   }
 }
@@ -53,14 +55,14 @@ impl Sieve {
     let mut segment = self.next_segment();
 
     for prime in self.sieving_primes(segment.max).move_iter() {
-      let first_composite = prime - (segment.min % prime);
+      let first_composite = (prime - (segment.min % prime)) % prime;
 
       for composite_index in range_step(first_composite, segment.len, prime) {
         *segment.values.get_mut(composite_index) = None;
       }
     }
 
-    self.max_checked = segment.max;
+    self.max_checked = segment.max - 1;
 
     for maybe_num in segment.values.move_iter() {
       match maybe_num {
@@ -80,10 +82,13 @@ impl Sieve {
   }
 
   fn next_segment(&self) -> Segment {
+    use std::cmp;
+
     let max_cached_prime = *self.primes.last().unwrap();
 
     let min = self.max_checked + 1;
-    let max = max_cached_prime * 2;
+    let max = cmp::min(max_cached_prime * 2, min + MAX_SEGMENT_SIZE);
+
     let len = max - min;
 
     let values = Vec::from_fn(len, |index| Some(min + index));
