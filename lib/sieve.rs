@@ -71,6 +71,17 @@ struct Segment {
 }
 
 impl Sieve {
+  pub fn is_prime(&mut self, number: uint) -> bool {
+    while *self.primes.last().unwrap() < number {
+      self.compute_primes();
+    }
+
+    match self.primes.as_slice().bsearch_elem(&number) {
+      Some(_) => true,
+      None    => false,
+    }
+  }
+
   fn compute_primes(&mut self) {
     use std::iter::range_step;
 
