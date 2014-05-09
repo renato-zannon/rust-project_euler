@@ -43,7 +43,7 @@ mod triangular_numbers {
   use std::iter::count;
 
   pub struct TriangularNumbers {
-    iter: ~Iterator<u64>
+    iter: Box<Iterator<u64>>
   }
 
   impl Iterator<u64> for TriangularNumbers {
@@ -53,11 +53,11 @@ mod triangular_numbers {
   }
 
   pub fn new() -> TriangularNumbers {
-    let iter = ~count(1u64, 1).scan(0u64, |sum, number| {
+    let iter = count(1u64, 1).scan(0u64, |sum, number| {
       *sum = *sum + number;
       Some(*sum)
     });
 
-    TriangularNumbers { iter: iter as ~Iterator<u64> }
+    TriangularNumbers { iter: box iter }
   }
 }
