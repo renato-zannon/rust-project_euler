@@ -2,28 +2,30 @@ SRC = $(wildcard src/*.rs)
 BIN = $(patsubst src/%.rs,%,$(SRC))
 
 LIBSHARED_FILENAME = $(shell rustc --crate-file-name lib/shared.rs --out-dir build/)
-LIBSHARED          = $(addprefix build/, $(LIBSHARED_FILENAME))
+HOST_TARGET        = $(shell llvm-config --host-target)
+LIBDIR             = $(addprefix .rust/lib/, $(HOST_TARGET))
+LIBSHARED          = $(addprefix $(LIBDIR)/, $(LIBSHARED_FILENAME))
 RUSTFLAGS          ?= -O
 
-.PHONY: clean all libshared
+.PHONY: clean all libshared builddirs
 
 all: $(addprefix bin/, $(BIN))
 
-bin/%: src/%.rs libshared | builddirs
-	rustc $(RUSTFLAGS) -L build/ $< -o $@
-
-builddirs: | bin build
-
-bin:
-	mkdir -p bin/
-
-build:
-	mkdir -p build/
-
-clean:
-	rm -rf build bin
-
-libshared: $(LIBSHARED)
+bin/%: src/%.rs | libshared builddirs
+	rustc $(RUSTFLAGS) $< -o $@
 
 $(LIBSHARED): lib/*.rs | builddirs
-	rustc $(RUSTFLAGS) lib/shared.rs --out-dir build/
+	rustc $(RUSTFLAGS) lib/shared.rs --out-dir $(LIBDIR)
+
+libshared: $(LIBSHARED) | builddirs
+
+builddirs: bin $(LIBDIR)
+
+bin:
+	mkdir -p bin
+
+$(LIBDIR):
+	mkdir -p $(LIBDIR)
+
+clean:
+	rm -rf .rust bin
