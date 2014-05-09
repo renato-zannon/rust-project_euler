@@ -2,7 +2,7 @@ SRC = $(wildcard src/*.rs)
 BIN = $(patsubst src/%.rs,%,$(SRC))
 
 LIBSHARED_FILENAME = $(shell rustc --crate-file-name lib/shared.rs --out-dir build/)
-HOST_TARGET        = $(shell llvm-config --host-target)
+HOST_TARGET        = $(shell rustc -v | grep host | awk '{print $$2}')
 LIBDIR             = $(addprefix .rust/lib/, $(HOST_TARGET))
 LIBSHARED          = $(addprefix $(LIBDIR)/, $(LIBSHARED_FILENAME))
 RUSTFLAGS          ?= -O
