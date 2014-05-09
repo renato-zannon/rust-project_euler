@@ -17,15 +17,72 @@
  * NOTE: Once the chain starts the terms are allowed to go above one million. */
 
 extern crate num;
-
 use num::Integer;
 
+static MAX: uint = 1_000_000;
+
 fn main() {
-  let result = range(1u64, 1_000_000).max_by(|num| {
-    collatz_length(*num)
-  });
+  let master_rx = spawn_workers(MAX);
+
+  let mut result = 0;
+  let mut max    = 0;
+
+  for WorkResult { number: num, result: current } in master_rx.iter() {
+    if current > max {
+      max = current;
+      result = num;
+    }
+  }
 
   println!("{}", result);
+}
+
+fn spawn_workers(max: uint) -> Receiver<WorkResult> {
+  use std::os;
+  use std::iter::range_step_inclusive;
+
+  let (master_tx, master_rx) = channel();
+
+  let task_count: uint = match os::getenv("NPROC") {
+    Some(num) => from_str(num).unwrap(),
+    None      => 4,
+  };
+
+  let per_task = max / task_count;
+
+  for start in range_step_inclusive(1, max, per_task) {
+    let master_tx_clone = master_tx.clone();
+
+    spawn(proc() {
+      let end = start + per_task;
+      collatz_worker((start, end), master_tx_clone);
+    });
+  }
+
+  return master_rx;
+}
+
+struct WorkResult {
+  number: u64,
+  result: uint,
+}
+
+fn collatz_worker(numbers: (uint, uint), tx: Sender<WorkResult>) {
+  let (start, end) = numbers;
+
+  let mut current = 0;
+  let mut max = 0;
+
+  for num in range(start as u64, end as u64) {
+    let len = collatz_length(num);
+
+    if len > max {
+      current = num;
+      max = len;
+    }
+  }
+
+  tx.send(WorkResult { number: current, result: max });
 }
 
 fn collatz_length(number: u64) -> uint {
