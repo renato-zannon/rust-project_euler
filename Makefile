@@ -2,8 +2,7 @@ SRC = $(wildcard src/*.rs)
 BIN = $(patsubst src/%.rs,%,$(SRC))
 
 LIBSHARED_FILENAME = $(shell rustc --crate-file-name lib/shared.rs --out-dir build/)
-HOST_TARGET        = $(shell rustc -v | grep host | awk '{print $$2}')
-LIBDIR             = $(addprefix .rust/lib/, $(HOST_TARGET))
+LIBDIR             = build
 LIBSHARED          = $(addprefix $(LIBDIR)/, $(LIBSHARED_FILENAME))
 RUSTFLAGS          ?= -O
 
@@ -12,10 +11,10 @@ RUSTFLAGS          ?= -O
 all: $(addprefix bin/, $(BIN))
 
 bin/%: src/%.rs | libshared builddirs
-	rustc $(RUSTFLAGS) $< -o $@
+	rustc -L $(LIBDIR) $(RUSTFLAGS) $< -o $@
 
 %-test: src/%.rs | libshared builddirs
-	rustc $(RUSTFLAGS) --test $< -o bin/$@
+	rustc -L $(LIBDIR) $(RUSTFLAGS) --test $< -o bin/$@
 	bin/$@ --test
 
 $(LIBSHARED): lib/*.rs | builddirs
@@ -32,4 +31,4 @@ $(LIBDIR):
 	mkdir -p $(LIBDIR)
 
 clean:
-	rm -rf .rust bin
+	rm -rf build bin
