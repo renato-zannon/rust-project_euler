@@ -1,23 +1,23 @@
 pub struct Combinations<A> {
   values: Vec<A>,
-  lastPair: Option<(uint, uint)>
+  last_pair: Option<(uint, uint)>
 }
 
 pub fn new<A>(values: Vec<A>) -> Combinations<A> {
   Combinations {
     values: values,
-    lastPair: None
+    last_pair: None
   }
 }
 
 impl<A: Clone> Iterator<(A, A)> for Combinations<A> {
   fn next(&mut self) -> Option<(A, A)> {
-    let perm = self.nextPair();
-    self.lastPair = perm;
+    let perm = self.next_pair();
+    self.last_pair = perm;
 
-    perm.map(|(nextLeft, nextRight)| {
-      let left_value  = self.values.get(nextLeft);
-      let right_value = self.values.get(nextRight);
+    perm.map(|(next_left, next_right)| {
+      let left_value  = self.values.get(next_left);
+      let right_value = self.values.get(next_right);
 
       (left_value.clone(), right_value.clone())
     })
@@ -25,17 +25,17 @@ impl<A: Clone> Iterator<(A, A)> for Combinations<A> {
 }
 
 impl<A> Combinations<A> {
-  fn nextPair(&self) -> Option<(uint, uint)> {
-    return match self.lastPair {
+  fn next_pair(&self) -> Option<(uint, uint)> {
+    return match self.last_pair {
       None => Some((0, 0)),
 
-      Some((lastLeft, lastRight)) => {
+      Some((last_left, last_right)) => {
         let max = self.values.len() - 1;
 
-        if lastRight < max {
-          Some((lastLeft, lastRight + 1))
-        } else if lastLeft < max {
-          Some((lastLeft + 1, 0))
+        if last_right < max {
+          Some((last_left, last_right + 1))
+        } else if last_left < max {
+          Some((last_left + 1, 0))
         } else {
           None
         }
