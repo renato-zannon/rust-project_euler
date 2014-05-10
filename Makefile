@@ -14,6 +14,10 @@ all: $(addprefix bin/, $(BIN))
 bin/%: src/%.rs | libshared builddirs
 	rustc $(RUSTFLAGS) $< -o $@
 
+%-test: src/%.rs | libshared builddirs
+	rustc $(RUSTFLAGS) --test $< -o bin/$@
+	bin/$@ --test
+
 $(LIBSHARED): lib/*.rs | builddirs
 	rustc $(RUSTFLAGS) lib/shared.rs --out-dir $(LIBDIR)
 
