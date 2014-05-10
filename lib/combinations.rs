@@ -1,15 +1,14 @@
 pub struct Combinations<A> {
-  values: ~[A],
+  values: Vec<A>,
   lastPair: Option<(uint, uint)>
 }
 
-pub fn new<A>(values: ~[A]) -> Combinations<A> {
+pub fn new<A>(values: Vec<A>) -> Combinations<A> {
   Combinations {
     values: values,
     lastPair: None
   }
 }
-
 
 impl<A: Clone> Iterator<(A, A)> for Combinations<A> {
   fn next(&mut self) -> Option<(A, A)> {
@@ -17,7 +16,10 @@ impl<A: Clone> Iterator<(A, A)> for Combinations<A> {
     self.lastPair = perm;
 
     perm.map(|(nextLeft, nextRight)| {
-      (self.values[nextLeft].clone(), self.values[nextRight].clone())
+      let left_value  = self.values.get(nextLeft);
+      let right_value = self.values.get(nextRight);
+
+      (left_value.clone(), right_value.clone())
     })
   }
 }
