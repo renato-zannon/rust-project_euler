@@ -1,10 +1,10 @@
 extern crate collections;
 
-use std;
 use self::collections::treemap::TreeMap;
 use std::cell::RefCell;
+use std::cmp::TotalEq;
 
-impl std::cmp::TotalEq for RefCell<Value> { }
+impl TotalEq for RefCell<Value> { }
 
 #[deriving(Eq, Show)]
 struct Value {
