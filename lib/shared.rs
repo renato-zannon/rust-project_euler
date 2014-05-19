@@ -4,3 +4,4 @@
 pub mod combinations;
 pub mod triangle;
 pub mod sieve;
+pub mod digits;
