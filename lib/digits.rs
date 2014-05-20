@@ -1,20 +1,23 @@
 extern crate num;
 use self::num::Integer;
+use std::num::pow;
 
 pub struct Digits<A> {
   remaining: A,
+  remaining_digits: uint,
 }
 
 impl<A: Integer + FromPrimitive + ToPrimitive> Iterator<A> for Digits<A> {
   fn next(&mut self) -> Option<A> {
-    let ten:  A = FromPrimitive::from_uint(10u).unwrap();
-    let zero: A = FromPrimitive::from_uint(0u).unwrap();
+    let divisor: A = FromPrimitive::from_uint(self.current_divisor()).unwrap();
+    let zero:    A = FromPrimitive::from_uint(0u).unwrap();
 
     if self.remaining == zero {
       None
     } else {
-      let (remainder, digit) = self.remaining.div_rem(&ten);
+      let (digit, remainder) = self.remaining.div_rem(&divisor);
       self.remaining = remainder;
+      self.remaining_digits -= 1;
 
       Some(digit)
     }
@@ -32,6 +35,20 @@ impl<A: Integer + FromPrimitive + ToPrimitive> Iterator<A> for Digits<A> {
   }
 }
 
-pub fn new<A>(number: A) -> Digits<A> {
-  Digits { remaining: number }
+pub fn new<A: ToPrimitive>(number: A) -> Digits<A> {
+  Digits {
+    remaining_digits: number_of_digits(&number),
+    remaining: number,
+  }
+}
+
+impl<A: ToPrimitive> Digits<A> {
+  fn current_divisor(&self) -> uint {
+    pow(10u, self.remaining_digits - 1)
+  }
+}
+
+fn number_of_digits<A: ToPrimitive>(number: &A) -> uint {
+  let as_float = number.to_f64().expect("Number not convertible to float!");
+  (as_float.log10().floor() as uint) + 1
 }
