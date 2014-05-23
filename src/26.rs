@@ -67,7 +67,7 @@ fn seen_to_str(vec: &[(uint, uint)]) -> StrBuf {
   let count = vec.len();
 
   vec.iter().fold(StrBuf::with_capacity(count), |acc, &(_, divided)| {
-    acc.append(divided.to_str())
+    acc.append(divided.to_str().as_slice())
   })
 }
 

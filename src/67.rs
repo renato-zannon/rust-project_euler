@@ -42,7 +42,7 @@ fn read_triangle<'a>() -> Vec<Vec<uint>> {
     let line_text = line.unwrap();
     let mut parsed_line = Vec::new();
 
-    for atom in line_text.trim().split(' ') {
+    for atom in line_text.as_slice().trim().split(' ') {
       match from_str::<uint>(atom) {
         Some(num) => { parsed_line.push(num); },
         None      => { () }

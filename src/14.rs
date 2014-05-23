@@ -44,7 +44,7 @@ fn spawn_workers(max: uint) -> Receiver<WorkResult> {
   let (master_tx, master_rx) = channel();
 
   let task_count: uint = match os::getenv("NPROC") {
-    Some(num) => from_str(num).unwrap(),
+    Some(num) => from_str(num.as_slice()).unwrap(),
     None      => 4,
   };
 
