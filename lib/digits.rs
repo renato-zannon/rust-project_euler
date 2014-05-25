@@ -33,6 +33,15 @@ impl<A: Integer + FromPrimitive + ToPrimitive> Iterator<A> for Digits<A> {
       None => (0, None)
     }
   }
+
+  fn len(&mut self) -> uint {
+    let prev_len = self.remaining_digits;
+
+    self.remaining_digits = 0;
+    self.remaining = FromPrimitive::from_uint(0u).unwrap();
+
+    prev_len
+  }
 }
 
 pub fn new<A: ToPrimitive>(number: A) -> Digits<A> {
