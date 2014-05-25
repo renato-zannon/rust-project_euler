@@ -10,17 +10,13 @@ pub struct Digits<A> {
 impl<A: Integer + FromPrimitive + ToPrimitive> Iterator<A> for Digits<A> {
   fn next(&mut self) -> Option<A> {
     let divisor: A = FromPrimitive::from_uint(self.current_divisor()).unwrap();
-    let zero:    A = FromPrimitive::from_uint(0u).unwrap();
 
-    if self.remaining == zero {
-      None
-    } else {
-      let (digit, remainder) = self.remaining.div_rem(&divisor);
+    self.consume_remaining(divisor).map(|(digit, remainder)| {
       self.remaining = remainder;
       self.remaining_digits -= 1;
 
-      Some(digit)
-    }
+      digit
+    })
   }
 
   fn size_hint(&self) -> (uint, Option<uint>) {
@@ -44,6 +40,19 @@ impl<A: Integer + FromPrimitive + ToPrimitive> Iterator<A> for Digits<A> {
   }
 }
 
+impl<A: Integer + FromPrimitive + ToPrimitive> DoubleEndedIterator<A> for Digits<A> {
+  fn next_back(&mut self) -> Option<A> {
+    let ten: A = FromPrimitive::from_uint(10u).unwrap();
+
+    self.consume_remaining(ten).map(|(remainder, digit)| {
+      self.remaining = remainder;
+      self.remaining_digits -= 1;
+
+      digit
+    })
+  }
+}
+
 pub fn new<A: ToPrimitive>(number: A) -> Digits<A> {
   Digits {
     remaining_digits: number_of_digits(&number),
@@ -51,7 +60,17 @@ pub fn new<A: ToPrimitive>(number: A) -> Digits<A> {
   }
 }
 
-impl<A: ToPrimitive> Digits<A> {
+impl<A: Integer + FromPrimitive + ToPrimitive> Digits<A> {
+  fn consume_remaining(&mut self, divisor: A) -> Option<(A, A)> {
+    let zero: A = FromPrimitive::from_uint(0u).unwrap();
+
+    if self.remaining == zero {
+      None
+    } else {
+      Some(self.remaining.div_rem(&divisor))
+    }
+  }
+
   fn current_divisor(&self) -> uint {
     pow(10u, self.remaining_digits - 1)
   }
