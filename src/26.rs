@@ -63,10 +63,10 @@ fn division_type(numerator: uint, denominator: uint) -> DivisionType {
   }
 }
 
-fn seen_to_str(vec: &[(uint, uint)]) -> StrBuf {
+fn seen_to_str(vec: &[(uint, uint)]) -> String {
   let count = vec.len();
 
-  vec.iter().fold(StrBuf::with_capacity(count), |acc, &(_, divided)| {
+  vec.iter().fold(String::with_capacity(count), |acc, &(_, divided)| {
     acc.append(divided.to_str().as_slice())
   })
 }
@@ -74,5 +74,5 @@ fn seen_to_str(vec: &[(uint, uint)]) -> StrBuf {
 #[deriving(Show)]
 enum DivisionType {
   Terminating,
-  Recurring(StrBuf)
+  Recurring(String)
 }

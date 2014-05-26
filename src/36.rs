@@ -17,7 +17,7 @@ fn main() {
   println!("{}", result);
 }
 
-fn is_palindrome(string: StrBuf) -> bool {
+fn is_palindrome(string: String) -> bool {
   let slice = string.as_slice();
 
   slice.chars().zip(slice.chars().rev()).all(|(from_start, from_end)| {

@@ -14,7 +14,7 @@ use std::io::{File, BufferedReader};
 use std::str;
 
 fn main() {
-  let names: Vec<StrBuf> = get_name_list();
+  let names: Vec<String> = get_name_list();
 
   let mut values: Vec<Vec<uint>> = names.move_iter().map(|name| {
     alphabetical_value(name.as_slice())
@@ -37,11 +37,11 @@ fn alphabetical_value(name: &str) -> Vec<uint> {
   }).collect::<Vec<uint>>()
 }
 
-fn get_name_list() -> Vec<StrBuf> {
+fn get_name_list() -> Vec<String> {
   let path = &Path::new("./data/22-names.txt");
   let mut file = BufferedReader::new(File::open(path));
 
-  let mut result: Vec<StrBuf> = Vec::new();
+  let mut result: Vec<String> = Vec::new();
 
   loop {
     let maybe_name = file.read_until(',' as u8).ok().and_then(|vec| {

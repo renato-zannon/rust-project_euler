@@ -72,7 +72,7 @@ fn number_of_digits(num: &BigInt, minimum_digits: uint) -> uint {
   let mut digits = minimum_digits;
 
   let mut remaining = {
-    let mut buf = StrBuf::with_capacity(minimum_digits + 1);
+    let mut buf = String::with_capacity(minimum_digits + 1);
     buf.push_char('1');
     buf.grow(minimum_digits, '0');
 
