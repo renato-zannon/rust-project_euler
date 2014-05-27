@@ -14,6 +14,8 @@
 
 extern crate shared;
 use shared::digits;
+use shared::pandigital;
+use shared::pandigital::{is_9_pandigital, PandigitalResult};
 use std::iter::AdditiveIterator;
 
 fn main() {
@@ -23,15 +25,15 @@ fn main() {
     for y in range(1u, x) {
       let result = x * y;
 
-      match is_9_pandigital(&[x, y, result]) {
-        IsPandigital => {
+      match pandigital_product(&[x, y, result]) {
+        pandigital::IsPandigital => {
           if !products.contains(&result) {
             products.push(result);
           }
         },
 
-        TooLarge => break,
-        _        => continue
+        pandigital::TooLarge => break,
+        _                    => continue
       }
     }
   }
@@ -39,56 +41,12 @@ fn main() {
   println!("{}", products.move_iter().sum());
 }
 
-enum PandigitalResult {
-  IsPandigital,
-  TooSmall,
-  TooLarge,
-  HasRepetitions,
-}
-
-#[allow(dead_code)]
-impl PandigitalResult {
-  fn to_bool(self) -> bool {
-    match self {
-      IsPandigital => true,
-      _            => false,
-    }
-  }
-}
-
-fn is_9_pandigital(numbers: &[uint]) -> PandigitalResult {
+fn pandigital_product(numbers: &[uint]) -> PandigitalResult {
   let all_digits: Vec<uint> = numbers.iter().flat_map(|&number| {
     digits::new(number)
   }).collect();
 
-  match all_digits.len().cmp(&9) {
-    Less    => return TooSmall,
-    Greater => return TooLarge,
-    Equal   => (),
-  }
-
-  let mut found_numbers = Vec::from_elem(9, false);
-
-  let only_uniques = all_digits.move_iter().all(|digit| {
-    let found = match digit {
-      0    => return false,
-      1..9 => found_numbers.get_mut(digit - 1),
-      _    => unreachable!(),
-    };
-
-    if *found {
-      return false;
-    } else {
-      *found = true;
-      return true;
-    }
-  });
-
-  if only_uniques {
-    IsPandigital
-  } else {
-    HasRepetitions
-  }
+  is_9_pandigital(all_digits.as_slice())
 }
 
 #[cfg(test)]
