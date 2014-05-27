@@ -87,7 +87,7 @@ impl Sieve {
 
     let mut segment = self.next_segment();
 
-    for prime in self.sieving_primes(segment.max).move_iter() {
+    for &prime in self.sieving_primes(segment.max).iter() {
       let first_composite = (prime - (segment.min % prime)) % prime;
 
       for composite_index in range_step(first_composite, segment.len, prime) {
@@ -105,13 +105,14 @@ impl Sieve {
     }
   }
 
-  fn sieving_primes(&self, max: uint) -> Vec<uint> {
+  fn sieving_primes<'a>(&'a self, max: uint) -> &'a [uint] {
     let root = (max as f64).sqrt().floor() as uint;
 
-    self.primes.iter()
-        .map(|prime| *prime)
-        .take_while(|&prime| prime <= root)
-        .collect::<Vec<uint>>()
+    let last = self.primes.iter().position(|&prime| {
+      prime > root
+    }).unwrap();
+
+    self.primes.slice_to(last)
   }
 
   fn next_segment(&self) -> Segment {
