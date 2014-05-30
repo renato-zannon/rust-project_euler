@@ -19,11 +19,12 @@ fn main() {
 fn solution_count(perimeter: uint) -> uint {
   let mut count = 0;
   let perimeter_by_3 = perimeter / 3;
+  let half_perimeter = perimeter / 2;
 
   for a in range(1, perimeter_by_3) {
     let a_squared = a * a;
 
-    for b in range(a, perimeter_by_3 + a) {
+    for b in range(half_perimeter - a, perimeter_by_3 + a) {
       let c = perimeter - (a + b);
 
       let b_squared = b * b;
