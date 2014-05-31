@@ -5,7 +5,7 @@ use std::iter::RandomAccessIterator;
 
 static WHEEL: &'static [uint] = &[2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101];
 
-static MAX_SEGMENT_SIZE: uint = 1_000u;
+static MAX_SEGMENT_SIZE: uint = 1_000_000u;
 
 pub struct Sieve {
   last_prime_index: Option<uint>,

@@ -44,23 +44,21 @@ fn get_name_list() -> Vec<String> {
   let mut result: Vec<String> = Vec::new();
 
   loop {
-    let maybe_name = file.read_until(',' as u8).ok().and_then(|vec| {
-      str::from_utf8(trim_markup(vec).as_slice()).map(|str_slice| {
-        str_slice.to_owned()
-      })
+    let maybe_name = file.read_until(',' as u8).map(|bytes| {
+      trim_markup(bytes).unwrap()
     });
 
     match maybe_name {
-      Some(name) => { result.push(name); },
-      None       => break
+      Ok(name) => result.push(name),
+      Err(_)   => break
     }
   }
 
   return result;
 
-  fn trim_markup(bytes: Vec<u8>) -> Vec<u8> {
-    bytes.move_iter().filter(|&byte| {
-      byte >= ('A' as u8) && byte <= ('Z' as u8)
-    }).collect::<Vec<u8>>()
+  fn trim_markup(bytes: Vec<u8>) -> Option<String> {
+    str::from_utf8(bytes.as_slice()).map(|slice| {
+      slice.trim_chars(&['"', ',']).into_string()
+    })
   }
 }
