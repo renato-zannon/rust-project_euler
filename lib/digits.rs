@@ -62,9 +62,7 @@ pub fn new<A: ToPrimitive>(number: A) -> Digits<A> {
 
 impl<A: Integer + FromPrimitive + ToPrimitive> Digits<A> {
   fn consume_remaining(&mut self, divisor: A) -> Option<(A, A)> {
-    let zero: A = FromPrimitive::from_uint(0u).unwrap();
-
-    if self.remaining == zero {
+    if self.remaining_digits == 0 {
       None
     } else {
       Some(self.remaining.div_rem(&divisor))
