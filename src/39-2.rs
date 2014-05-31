@@ -9,7 +9,7 @@
 
 static MAX_PERIMETER: f64 = 1_000.0;
 
-// Alternative implementation for problem 39. Much faster - 2ms vs 45ms
+// Alternative implementation for problem 39. Much faster
 fn main() {
   let mut counts = [0u, ..(MAX_PERIMETER as uint)];
 
