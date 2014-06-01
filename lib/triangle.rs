@@ -2,11 +2,11 @@ extern crate collections;
 
 use self::collections::treemap::TreeMap;
 use std::cell::RefCell;
-use std::cmp::TotalEq;
+use std::cmp::{TotalEq, PartialEq};
 
 impl TotalEq for RefCell<Value> { }
 
-#[deriving(Eq, Show)]
+#[deriving(PartialEq, Show)]
 struct Value {
   coord: (uint, uint),
   value: uint,

@@ -15,7 +15,7 @@
  *   divisible by 400.
  *
  * How many Sundays fell on the first of the month during the twentieth century
-  (1 Jan 1901 to 31 Dec 2000)? */
+ * (1 Jan 1901 to 31 Dec 2000)? */
 
 extern crate num;
 use num::Integer;
@@ -92,7 +92,7 @@ impl Year {
   }
 }
 
-#[deriving(Eq, FromPrimitive, Ord, Show)]
+#[deriving(PartialEq, FromPrimitive, PartialOrd, Show)]
 enum Month {
   January,
   February,
@@ -128,7 +128,7 @@ impl Month {
   }
 }
 
-#[deriving(Eq, FromPrimitive, Show)]
+#[deriving(PartialEq, FromPrimitive, Show)]
 enum Weekday {
   Sunday,
   Monday,
