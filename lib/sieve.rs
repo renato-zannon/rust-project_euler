@@ -5,7 +5,7 @@ use std::iter::RandomAccessIterator;
 
 static WHEEL: &'static [uint] = &[2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101];
 
-static MAX_SEGMENT_SIZE: uint = 1_000_000u;
+static MAX_SEGMENT_SIZE: uint = 10_000u;
 
 pub struct Sieve {
   last_prime_index: Option<uint>,
@@ -87,11 +87,16 @@ impl Sieve {
 
     let mut segment = self.next_segment();
 
-    for &prime in self.sieving_primes(segment.max).iter() {
-      let first_composite = (prime - (segment.min % prime)) % prime;
+    {
+      let seg_values = segment.values.as_mut_slice();
 
-      for composite_index in range_step(first_composite, segment.len, prime) {
-        *segment.values.get_mut(composite_index) = None;
+      for &prime in self.sieving_primes(segment.max).iter() {
+        let first_composite = (prime - (segment.min % prime)) % prime;
+        let mut composites = range_step(first_composite, segment.len, prime);
+
+        for composite_index in composites  {
+          seg_values[composite_index] = None;
+        }
       }
     }
 
