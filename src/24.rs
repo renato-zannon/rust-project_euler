@@ -29,7 +29,7 @@ struct SEPA<A> {
   first: bool,
 }
 
-impl<A: TotalOrd+Clone> Iterator<~[A]> for SEPA<A> {
+impl<A: Ord+Clone> Iterator<~[A]> for SEPA<A> {
   fn next(&mut self) -> Option<~[A]> {
     if self.first {
       self.first = false;
@@ -42,7 +42,7 @@ impl<A: TotalOrd+Clone> Iterator<~[A]> for SEPA<A> {
   }
 }
 
-impl<A: TotalOrd+Clone> SEPA<A> {
+impl<A: Ord+Clone> SEPA<A> {
   fn keys(&self) -> Option<(uint, uint)> {
     let current_perm = self.current.as_slice();
     let current_len  = current_perm.len();
