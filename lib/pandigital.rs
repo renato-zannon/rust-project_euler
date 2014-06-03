@@ -1,3 +1,6 @@
+use super::digits;
+use super::std::{slice, iter};
+
 pub enum PandigitalResult {
   IsPandigital,
   TooSmall,
@@ -14,19 +17,46 @@ impl PandigitalResult {
   }
 }
 
-pub fn is_9_pandigital(digits: &[uint]) -> PandigitalResult {
-  match digits.len().cmp(&9) {
+trait DigitCollection<T: Iterator<uint>> {
+  fn digit_iter(self)     -> T;
+  fn digit_len(&mut self) -> uint;
+}
+
+impl DigitCollection<digits::Digits<uint>> for digits::Digits<uint> {
+  fn digit_iter(self) -> digits::Digits<uint> {
+    return self
+  }
+
+  fn digit_len(&mut self) -> uint {
+    9
+  }
+}
+
+type SliceDigits<'a> = iter::Map<'a, &'a uint, uint, slice::Items<'a, uint>>;
+
+impl<'a> DigitCollection<SliceDigits<'a>> for &'a [uint] {
+  fn digit_iter(self) -> SliceDigits<'a> {
+    return self.iter().map(|&digit| digit)
+  }
+
+  fn digit_len(&mut self) -> uint {
+    self.len()
+  }
+}
+
+pub fn is_9_pandigital<U: Iterator<uint>, T: DigitCollection<U>>(mut digits: T) -> PandigitalResult {
+  match digits.digit_len().cmp(&9) {
     Less    => return TooSmall,
     Greater => return TooLarge,
     Equal   => (),
   }
 
-  let mut found_numbers = Vec::from_elem(9, false);
+  let mut found_numbers = [false, ..9];
 
-  let only_uniques = digits.iter().all(|digit| {
-    let found = match *digit {
+  let only_uniques = digits.digit_iter().all(|digit| {
+    let found = match digit {
       0    => return false,
-      1..9 => found_numbers.get_mut(digit - 1),
+      1..9 => &mut found_numbers[digit - 1],
       _    => unreachable!(),
     };
 
