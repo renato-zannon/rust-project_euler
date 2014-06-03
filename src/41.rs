@@ -30,7 +30,7 @@ fn main() {
 }
 
 fn to_number(digits: &[uint]) -> uint {
-  digits.iter().rev().fold(0u, |acc, &digit| {
+  digits.iter().fold(0u, |acc, &digit| {
     acc * 10 + digit
   })
 }
