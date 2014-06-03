@@ -9,9 +9,10 @@
  *
  * What is the total of all the name scores in the file? */
 
+extern crate shared;
+
+use shared::data_reader;
 use std::iter::AdditiveIterator;
-use std::io::{File, BufferedReader};
-use std::str;
 
 fn main() {
   let names: Vec<String> = get_name_list();
@@ -38,27 +39,5 @@ fn alphabetical_value(name: &str) -> Vec<uint> {
 }
 
 fn get_name_list() -> Vec<String> {
-  let path = &Path::new("./data/22-names.txt");
-  let mut file = BufferedReader::new(File::open(path));
-
-  let mut result: Vec<String> = Vec::new();
-
-  loop {
-    let maybe_name = file.read_until(',' as u8).map(|bytes| {
-      trim_markup(bytes).unwrap()
-    });
-
-    match maybe_name {
-      Ok(name) => result.push(name),
-      Err(_)   => break
-    }
-  }
-
-  return result;
-
-  fn trim_markup(bytes: Vec<u8>) -> Option<String> {
-    str::from_utf8(bytes.as_slice()).map(|slice| {
-      slice.trim_chars(&['"', ',']).into_string()
-    })
-  }
+  data_reader::for_path("./data/22-names.txt").collect()
 }
