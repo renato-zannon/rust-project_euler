@@ -9,11 +9,10 @@
  *
  * Evaluate the sum of all the amicable numbers under 10000. */
 
-extern crate collections;
 extern crate num;
 
-use collections::hashmap::HashMap;
-use collections::treemap::TreeSet;
+use std::collections::hashmap::HashMap;
+use std::collections::treemap::TreeSet;
 use num::Integer;
 use irange = std::iter::range_inclusive;
 use std::iter::AdditiveIterator;

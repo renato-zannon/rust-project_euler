@@ -17,12 +17,11 @@
  * numbers.*/
 
 extern crate num;
-extern crate collections;
 
 use std::iter::{range_inclusive, range_step_inclusive};
 use std::iter::AdditiveIterator;
 use num::Integer;
-use collections::hashmap::HashSet;
+use std::collections::hashmap::HashSet;
 
 static MAX_NON_ABUNDANT: uint = 28123;
 

@@ -13,11 +13,10 @@
  * denominator. */
 
 extern crate shared;
-extern crate collections;
 extern crate num;
 
 use shared::digits;
-use collections::hashmap::HashSet;
+use std::collections::hashmap::HashSet;
 use num::gcd;
 
 fn main() {

@@ -1,6 +1,4 @@
-extern crate collections;
-
-use collections::hashmap::HashSet;
+use std::collections::hashmap::HashSet;
 
 fn main() {
   let mut powers: HashSet<(uint, uint)> = HashSet::new();
