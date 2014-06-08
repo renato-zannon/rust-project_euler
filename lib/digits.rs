@@ -30,13 +30,13 @@ impl<A: Integer + FromPrimitive + ToPrimitive> Iterator<A> for Digits<A> {
     }
   }
 
-  fn len(&mut self) -> uint {
-    let prev_len = self.remaining_digits;
+  fn count(&mut self) -> uint {
+    let prev_count = self.remaining_digits;
 
     self.remaining_digits = 0;
     self.remaining = FromPrimitive::from_uint(0u).unwrap();
 
-    prev_len
+    prev_count
   }
 }
 

@@ -46,7 +46,7 @@ fn main() {
         if value < 0 { return false; }
 
         primes.is_prime(value as uint)
-      }).len();
+      }).count();
 
       if prime_count > max_prime_count {
         max_product = a * b;

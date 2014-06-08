@@ -17,11 +17,11 @@ use std::iter::AdditiveIterator;
 use shared::data_reader;
 
 fn main() {
-  let mut reader = data_reader::for_path("./data/42-words.txt");
+  let reader = data_reader::for_path("./data/42-words.txt");
 
-  let result = reader.count(|word| {
+  let result = reader.filter(|word| {
     is_triangular_word(word.as_slice())
-  });
+  }).count();
 
   println!("{}", result);
 }
