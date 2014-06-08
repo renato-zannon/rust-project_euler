@@ -1,5 +1,6 @@
 #![crate_id = "shared"]
 #![crate_type = "lib"]
+#![feature(macro_rules)]
 
 pub mod combinations;
 pub mod triangle;
