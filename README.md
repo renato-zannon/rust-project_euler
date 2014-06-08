@@ -1,6 +1,8 @@
 rust-project_euler
 ==================
 
+![Project Euler badge](http://projecteuler.net/profile/riccieri.png)
+
 This is my take at solving the Project Euler problems (with far-from-optimal
 solutions, mind you), and learning Rust along the way.
 
