@@ -1,6 +1,6 @@
 extern crate num;
 use self::num::Integer;
-use std::num::pow;
+use std::num::{pow, ToStrRadix};
 
 pub struct Digits<A> {
   remaining: A,
@@ -53,7 +53,7 @@ impl<A: Integer + FromPrimitive + ToPrimitive> DoubleEndedIterator<A> for Digits
   }
 }
 
-pub fn new<A: ToPrimitive>(number: A) -> Digits<A> {
+pub fn new<A: ToPrimitive + ToStrRadix>(number: A) -> Digits<A> {
   Digits {
     remaining_digits: number_of_digits(&number),
     remaining: number,
@@ -74,7 +74,9 @@ impl<A: Integer + FromPrimitive + ToPrimitive> Digits<A> {
   }
 }
 
-fn number_of_digits<A: ToPrimitive>(number: &A) -> uint {
-  let as_float = number.to_f64().expect("Number not convertible to float!");
-  (as_float.log10().floor() as uint) + 1
+fn number_of_digits<A: ToPrimitive + ToStrRadix>(number: &A) -> uint {
+  match number.to_f64() {
+    Some(as_float) => (as_float.log10().floor() as uint) + 1,
+    None           => number.to_str_radix(10).len()
+  }
 }
