@@ -73,14 +73,22 @@ struct Segment {
 
 impl Sieve {
   pub fn is_prime(&mut self, number: uint) -> bool {
-    while *self.primes.last().unwrap() < number {
-      self.compute_primes();
-    }
+    self.compute_until(number);
 
     match self.primes.as_slice().bsearch_elem(&number) {
       Some(_) => true,
       None    => false,
     }
+  }
+
+  pub fn compute_until(&mut self, number: uint) {
+    while *self.primes.last().unwrap() < number {
+      self.compute_primes();
+    }
+  }
+
+  pub fn found_primes<'a>(&'a self) -> &'a [uint] {
+    self.primes.as_slice()
   }
 
   fn compute_primes(&mut self) {
