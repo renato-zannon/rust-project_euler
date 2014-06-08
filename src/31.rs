@@ -20,22 +20,18 @@ fn main() {
 }
 
 fn ways_to_make(value: uint, denominations: &[uint]) -> uint {
-  range(0, denominations.len()).map(|index| {
-    let denomination = denominations[index];
-    let remaining_denominations = denominations.slice_from(index + 1);
+  match denominations {
+    []  => 0,
+    [_] => 1,
 
-    if remaining_denominations.len() == 0 {
-      return 1;
+    [denom, ..remaining_denoms] => {
+      range_step_inclusive(value % denom, value, denom).map(|rest_val| {
+        if rest_val == 0 {
+          1
+        } else {
+          ways_to_make(rest_val, remaining_denoms)
+        }
+      }).sum()
     }
-
-    range_step_inclusive(denomination, value, denomination).map(|multiple| {
-      let rest = value - multiple;
-
-      if rest == 0 {
-        1
-      } else {
-        ways_to_make(rest, remaining_denominations)
-      }
-    }).sum()
-  }).sum()
+  }
 }
