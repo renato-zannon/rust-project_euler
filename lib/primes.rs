@@ -74,6 +74,7 @@ impl<T: Iterator<uint>> Iterator<uint> for UniqueFilter<T> {
   }
 }
 
+#[cfg(test)]
 mod tests {
   use super::{distinct_prime_factors, prime_factors};
 
