@@ -21,7 +21,7 @@ use shared::sieve;
 use PrimeSieve = shared::sieve::Sieve;
 use std::iter::{count, range_inclusive};
 
-static SEGMENT_SIZE: uint = 1_000_001;
+static SEGMENT_SIZE: uint = 101;
 
 fn main() {
   let mut sieve = sieve::new();
@@ -42,8 +42,6 @@ fn main() {
 fn mark_odd_composites(segment: &mut OddNumberSegment, sieve: &mut PrimeSieve) {
   let segment_start = segment.first();
   let segment_end   = segment.last();
-
-  println!("{} - {}", segment_start, segment_end);
 
   sieve.compute_until(segment_end);
 
