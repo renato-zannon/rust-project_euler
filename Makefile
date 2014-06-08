@@ -20,7 +20,12 @@ bin/%: src/%.rs | libshared builddirs
 $(LIBSHARED): lib/*.rs | builddirs
 	rustc $(RUSTFLAGS) lib/shared.rs --out-dir $(LIBDIR)
 
+libshared-test: lib/*.rs | builddirs
+	rustc $(RUSTFLAGS) --test lib/shared.rs --out-dir $(LIBDIR)
+	build/shared --test
+
 libshared: $(LIBSHARED) | builddirs
+
 
 builddirs: bin $(LIBDIR)
 
