@@ -8,7 +8,7 @@
 extern crate num;
 
 use irange = std::iter::range_inclusive;
-use num::lcm;
+use num::integer::lcm;
 
 fn main() {
   let n = irange(1, 20).fold(1, lcm);

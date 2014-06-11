@@ -17,7 +17,7 @@ extern crate num;
 
 use shared::digits;
 use std::collections::hashmap::HashSet;
-use num::gcd;
+use num::integer::gcd;
 
 fn main() {
   let mut result = (1, 1);
