@@ -24,17 +24,25 @@ fn main() {
   let sequences = primes.filter_map(|prime| {
     let digits: Vec<uint> = digits::new(prime).rev().collect();
 
-    let mut prime_permutations = digits.as_slice().permutations()
+    let mut matching_permutations = digits.as_slice().permutations()
       .map(|digits| to_number(digits.as_slice()))
-      .filter(|&perm| perm > 1000 && sieve.is_prime(perm));
+      .filter(|&perm| {
+        perm > prime &&
+          (perm - prime) % MEMBER_GAP == 0 &&
+          sieve.is_prime(perm)
+      });
 
-    let mut sequence: Vec<uint> = prime_permutations.collect();
+    let mut sequence: Vec<uint> = matching_permutations.collect();
     sequence.push(prime);
 
     sequence.sort();
     sequence.dedup();
 
-    correct_member_gap(sequence)
+    if sequence.len() == 3 {
+      Some(sequence)
+    } else {
+      None
+    }
   });
 
   let sequence = sequences.filter(|seq| *seq.get(0) != 1487).next().unwrap();
@@ -51,29 +59,4 @@ fn to_number(digits: &[uint]) -> uint {
   digits.iter().fold(0, |result, &digit| {
     result * 10 + digit
   })
-}
-
-fn correct_member_gap(numbers: Vec<uint>) -> Option<Vec<uint>> {
-  if numbers.len() < 3 {
-    return None;
-  }
-
-  let mut result = Vec::with_capacity(numbers.len());
-
-  for (index, &a) in numbers.init().iter().enumerate() {
-    for &b in numbers.slice_from(index + 1).iter() {
-      if b - a == MEMBER_GAP {
-        result.push(a);
-        result.push(b);
-        break;
-      }
-    }
-  }
-
-  result.dedup();
-  if result.len() == 3 {
-    Some(result)
-  } else {
-    None
-  }
 }
