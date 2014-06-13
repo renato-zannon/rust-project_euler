@@ -19,11 +19,11 @@ static MAX_PRIME: uint = 1_000_000;
 
 
 fn main() {
-  let primes: Vec<uint> = sieve::new()
+  let mut sieve = sieve::new();
+
+  let primes: Vec<uint> = sieve.by_ref()
     .take_while(|&prime| prime < MAX_PRIME)
     .collect();
-
-  let mut sieve = sieve::new();
 
   let mut sequence = PrimeSequenceSum {
     value: primes.iter().map(|prime| *prime).sum(),
