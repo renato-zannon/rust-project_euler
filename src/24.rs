@@ -18,19 +18,19 @@ fn main() {
 
 fn permutations() -> SEPA<uint> {
   SEPA {
-    current: box [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+    current: vec!(0, 1, 2, 3, 4, 5, 6, 7, 8, 9),
     first: true,
   }
 }
 
 // http://permute.tchs.info/soda_submit.php
 struct SEPA<A> {
-  current: ~[A],
+  current: Vec<A>,
   first: bool,
 }
 
-impl<A: Ord+Clone> Iterator<~[A]> for SEPA<A> {
-  fn next(&mut self) -> Option<~[A]> {
+impl<A: Ord+Clone> Iterator<Vec<A>> for SEPA<A> {
+  fn next(&mut self) -> Option<Vec<A>> {
     if self.first {
       self.first = false;
       return Some(self.current.clone());
@@ -70,7 +70,7 @@ impl<A: Ord+Clone> SEPA<A> {
     })
   }
 
-  fn permute(&mut self, key: uint, newkey: uint) -> ~[A] {
+  fn permute(&mut self, key: uint, newkey: uint) -> Vec<A> {
     let current_perm = self.current.as_mut_slice();
 
     current_perm.swap(key, newkey);
