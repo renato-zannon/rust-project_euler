@@ -80,3 +80,32 @@ fn number_of_digits<A: ToPrimitive + ToStrRadix>(number: &A) -> uint {
     None           => number.to_str_radix(10).len()
   }
 }
+
+#[cfg(test)]
+mod tests {
+  use super::new;
+
+  #[test]
+  fn test_digits_in_order() {
+    let digits = new(12345u).collect::<Vec<uint>>();
+    assert_eq!(digits.as_slice(), &[1, 2, 3, 4, 5]);
+  }
+
+  #[test]
+  fn test_digits_in_reverse() {
+    let digits = new(12345u).rev().collect::<Vec<uint>>();
+    assert_eq!(digits.as_slice(), &[5, 4, 3, 2, 1]);
+  }
+
+  #[test]
+  fn test_digits_in_order_with_zero() {
+    let digits = new(123450u).collect::<Vec<uint>>();
+    assert_eq!(digits.as_slice(), &[1, 2, 3, 4, 5, 0]);
+  }
+
+  #[test]
+  fn test_digits_in_reverse_with_zero() {
+    let digits = new(123450u).rev().collect::<Vec<uint>>();
+    assert_eq!(digits.as_slice(), &[0, 5, 4, 3, 2, 1]);
+  }
+}
