@@ -8,7 +8,6 @@
 
 extern crate shared;
 use shared::digits;
-use std::collections::TreeSet;
 use std::iter::{range_inclusive, count};
 
 fn main() {
@@ -16,13 +15,22 @@ fn main() {
     let num_digits = digit_set(number);
 
     range_inclusive(2u, 6u).rev().all(|multiplier| {
-      num_digits == digit_set(number * multiplier)
+      yields_same_digits(number * multiplier, num_digits.as_slice())
     })
-  });
+  }).unwrap();
 
   println!("{}", result);
 }
 
-fn digit_set(number: uint) -> TreeSet<uint> {
-  digits::new(number).rev().collect()
+fn yields_same_digits(number: uint, digits: &[bool]) -> bool {
+  digits::new(number).rev().all(|digit| digits[digit])
+}
+
+fn digit_set(number: uint) -> [bool, ..10] {
+  let mut found_numbers = [false, ..10];
+  for digit in digits::new(number).rev() {
+    found_numbers[digit] = true;
+  }
+
+  found_numbers
 }
