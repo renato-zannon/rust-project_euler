@@ -10,7 +10,7 @@ use std::iter::AdditiveIterator;
 use std::num::ToStrRadix;
 
 fn main() {
-  let result = range(1, 1_000_000).filter(|number| {
+  let result = range(1u, 1_000_000).filter(|number| {
     is_palindrome(number.to_str()) && is_palindrome(number.to_str_radix(2))
   }).sum();
 

@@ -29,7 +29,7 @@ fn main() {
     current = current.next();
   }
 
-  let mut count = 0;
+  let mut count = 0u;
 
   while current.year.number < 2000 || current.month < December || current.number < 31 {
     if current.number == 1 && current.weekday == Sunday {

@@ -40,8 +40,8 @@ fn main() {
   for b in possible_bs.move_iter() {
     let b = b as int;
 
-    for a in range(-999, 999) {
-      let prime_count = count(0, 1).take_while(|&n| {
+    for a in range(-999i, 999) {
+      let prime_count = count(0i, 1).take_while(|&n| {
         let value = n * n + a * n + b;
         if value < 0 { return false; }
 
