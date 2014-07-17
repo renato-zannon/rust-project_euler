@@ -7,18 +7,19 @@
  * (Please note that the palindromic number, in either base, may not include leading zeros.) */
 
 use std::iter::AdditiveIterator;
-use std::num::ToStrRadix;
+use std::fmt;
 
 fn main() {
   let result = range(1u, 1_000_000).filter(|number| {
-    is_palindrome(number.to_str()) && is_palindrome(number.to_str_radix(2))
+    is_palindrome(*number, 10) && is_palindrome(*number, 2)
   }).sum();
 
   println!("{}", result);
 }
 
-fn is_palindrome(string: String) -> bool {
-  let slice = string.as_slice();
+fn is_palindrome(number: uint, base: u8) -> bool {
+  let string = format!("{}", fmt::radix(number, base));
+  let slice  = string.as_slice();
 
   slice.chars().zip(slice.chars().rev()).all(|(from_start, from_end)| {
     from_start == from_end

@@ -12,7 +12,7 @@ use std::num::One;
 use num::bigint::{BigUint, ToBigUint};
 
 fn main() {
-  let strnum = factorial(100).to_str();
+  let strnum = factorial(100).to_string();
 
   let result = strnum.as_slice().chars().fold(0, |digit, sum| digit + to_i(sum));
   println!("{}", result);

@@ -11,7 +11,7 @@ use std::num::pow;
 use num::bigint::BigUint;
 
 fn main() {
-  let strnum = power_of_2(1_000).to_str();
+  let strnum = power_of_2(1_000).to_string();
 
   let result = strnum.as_slice().chars().fold(0, |digit, sum| digit + to_i(sum));
   println!("{}", result);

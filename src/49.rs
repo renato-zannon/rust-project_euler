@@ -48,7 +48,7 @@ fn main() {
   let sequence = sequences.filter(|seq| *seq.get(0) != 1487).next().unwrap();
 
   let result = sequence.move_iter()
-    .map(|num| num.to_str())
+    .map(|num| num.to_string())
     .collect::<Vec<String>>()
     .concat();
 
