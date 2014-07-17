@@ -1,4 +1,4 @@
-#![crate_id = "shared"]
+#![crate_name = "shared"]
 #![crate_type = "lib"]
 #![feature(macro_rules)]
 

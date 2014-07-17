@@ -1,7 +1,7 @@
 SRC = $(wildcard src/*.rs)
 BIN = $(patsubst src/%.rs,%,$(SRC))
 
-LIBSHARED_FILENAME = $(shell rustc --crate-file-name lib/shared.rs --out-dir build/)
+LIBSHARED_FILENAME = $(shell rustc --print-file-name lib/shared.rs --out-dir build/)
 LIBDIR             = build
 LIBSHARED          = $(addprefix $(LIBDIR)/, $(LIBSHARED_FILENAME))
 RUSTFLAGS          ?= -O
