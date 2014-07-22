@@ -16,8 +16,8 @@ impl<A: Clone> Iterator<(A, A)> for Combinations<A> {
     self.last_pair = perm;
 
     perm.map(|(next_left, next_right)| {
-      let left_value  = self.values.get(next_left);
-      let right_value = self.values.get(next_right);
+      let ref left_value  = self.values[next_left];
+      let ref right_value = self.values[next_right];
 
       (left_value.clone(), right_value.clone())
     })
