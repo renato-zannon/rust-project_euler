@@ -18,7 +18,7 @@ pub fn is_prime(num: uint) -> bool {
   })
 }
 
-pub type PrimeFactors<'a> = Unfold<'a, uint, (uint, uint)>;
+pub type PrimeFactors = Unfold<'static, uint, (uint, uint)>;
 
 pub fn prime_factors(n: uint) -> PrimeFactors {
   return Unfold::new((n, 2), unfold_factors);
@@ -40,7 +40,7 @@ pub fn prime_factors(n: uint) -> PrimeFactors {
   }
 }
 
-pub type DistinctPrimeFactors<'a> = UniqueFilter<PrimeFactors<'a>>;
+pub type DistinctPrimeFactors = UniqueFilter<PrimeFactors>;
 
 pub fn distinct_prime_factors(n: uint) -> DistinctPrimeFactors {
   UniqueFilter {

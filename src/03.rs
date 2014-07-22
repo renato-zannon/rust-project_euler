@@ -9,7 +9,7 @@ fn main() {
   println!("{}", prime_factors(600851475143).max());
 }
 
-fn prime_factors(n: uint) -> Unfold<uint, (uint, uint)> {
+fn prime_factors(n: uint) -> Unfold<'static, uint, (uint, uint)> {
   return Unfold::new((n, 2), unfold_factors);
 
   fn unfold_factors(state_ptr : &mut (uint, uint)) -> Option<uint> {

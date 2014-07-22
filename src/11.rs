@@ -48,7 +48,7 @@ fn coordinates() -> Vec<(uint, uint)>  {
   return result;
 }
 
-fn slices_for(row: uint, column: uint) -> SlicesFromPoint {
+fn slices_for(row: uint, column: uint) -> SlicesFromPoint<'static> {
   SlicesFromPoint::new(row, column, SLICE_LENGTH, &GRID)
 }
 
