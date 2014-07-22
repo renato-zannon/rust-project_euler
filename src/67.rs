@@ -32,7 +32,7 @@ fn main() {
   println!("{}", result);
 }
 
-fn read_triangle<'a>() -> Vec<Vec<uint>> {
+fn read_triangle() -> Vec<Vec<uint>> {
   let path = &Path::new("./data/67-triangle.txt");
   let mut file = BufferedReader::new(File::open(path));
 
@@ -55,8 +55,8 @@ fn read_triangle<'a>() -> Vec<Vec<uint>> {
   result
 }
 
-fn deep_slice<'a>(v: &'a Vec<Vec<uint>>) -> Vec<&'a [uint]> {
-  let mut result: Vec<&'a [uint]> = Vec::new();
+fn deep_slice(v: &Vec<Vec<uint>>) -> Vec<&[uint]> {
+  let mut result: Vec<&[uint]> = Vec::new();
 
   for row in v.iter() {
     result.push(row.as_slice());

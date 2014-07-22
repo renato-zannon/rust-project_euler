@@ -68,7 +68,7 @@ enum SliceType {
 }
 
 impl<'a> SlicesFromPoint<'a> {
-  fn new(row: uint, column: uint, length: uint, grid: &'a [[uint, ..20], ..20]) -> SlicesFromPoint<'a> {
+  fn new(row: uint, column: uint, length: uint, grid: &[[uint, ..20], ..20]) -> SlicesFromPoint {
     SlicesFromPoint {
       grid: grid,
       row: row,

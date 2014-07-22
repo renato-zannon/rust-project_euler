@@ -102,7 +102,7 @@ impl Segment {
     factor_count.add_factor(factor);
   }
 
-  fn number_factors<'a>(&'a self) -> NumberFactors<'a> {
+  fn number_factors(&self) -> NumberFactors {
     NumberFactors {
       start: self.start,
       values: self.values.as_slice(),

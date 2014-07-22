@@ -88,11 +88,11 @@ impl Triangle {
     }
   }
 
-  fn get_coord<'a>(&'a self, coord: (uint, uint)) -> &'a RefCell<Value> {
+  fn get_coord(&self, coord: (uint, uint)) -> &RefCell<Value> {
     self.values.find(&coord).unwrap()
   }
 
-  fn values_below<'a>(&'a self, (row, col): (uint, uint)) -> Option<(&'a RefCell<Value>, &'a RefCell<Value>)> {
+  fn values_below(&self, (row, col): (uint, uint)) -> Option<(&RefCell<Value>, &RefCell<Value>)> {
     if row + 1 < self.height {
       let left  = self.get_coord((row + 1, col));
       let right = self.get_coord((row + 1, col + 1));

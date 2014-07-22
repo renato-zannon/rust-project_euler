@@ -87,7 +87,7 @@ impl Sieve {
     }
   }
 
-  pub fn found_primes<'a>(&'a self) -> &'a [uint] {
+  pub fn found_primes(&self) -> &[uint] {
     self.primes.as_slice()
   }
 
@@ -119,7 +119,7 @@ impl Sieve {
     }
   }
 
-  fn sieving_primes<'a>(&'a self, max: uint) -> &'a [uint] {
+  fn sieving_primes(&self, max: uint) -> &[uint] {
     let root = (max as f64).sqrt().floor() as uint;
 
     let last = self.primes.iter().position(|&prime| {

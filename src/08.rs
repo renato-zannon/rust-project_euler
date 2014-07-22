@@ -14,7 +14,7 @@ fn main() {
   println!("digits: {}\nproduct: {}", string, result);
 }
 
-fn find_biggest<'a>(slices: consecutive_digits::ConsecutiveDigits<'a>) -> (&'a str, uint) {
+fn find_biggest(slices: consecutive_digits::ConsecutiveDigits) -> (&str, uint) {
   slices.map(|str| (str, multiply(str)))
     .max_by(|&(_, num)| num)
     .unwrap()
@@ -45,7 +45,7 @@ mod consecutive_digits {
     }
   }
 
-  pub fn new<'a>(string: &'a str, length: uint) -> ConsecutiveDigits<'a>  {
+  pub fn new(string: &str, length: uint) -> ConsecutiveDigits {
     ConsecutiveDigits {
       string: string,
       length: length,

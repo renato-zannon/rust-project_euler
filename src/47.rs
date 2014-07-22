@@ -56,7 +56,7 @@ struct FactorCount<'a> {
   primes:    &'a [uint]
 }
 
-fn factors<'a>(mut count: FactorCount<'a>) -> (Memo<'a>, HashSet<uint>) {
+fn factors(mut count: FactorCount) -> (Memo, HashSet<uint>) {
   if count.memo.contains_key(&count.remaining) {
     let cached = count.memo.get(&count.remaining).clone();
     return (count.memo, cached);
