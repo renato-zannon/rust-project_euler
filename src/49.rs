@@ -45,7 +45,7 @@ fn main() {
     }
   });
 
-  let sequence = sequences.filter(|seq| *seq.get(0) != 1487).next().unwrap();
+  let sequence = sequences.filter(|seq| seq[0] != 1487).next().unwrap();
 
   let result = sequence.move_iter()
     .map(|num| num.to_string())
