@@ -32,7 +32,9 @@ fn main() {
 
     sieve.compute_until(segment_end);
 
-    for &prime in sieve.found_primes().iter().take_while(|&&p| p <= segment_end) {
+    for prime in sieve.found_primes().iter().take_while(|&&p| p <= segment_end) {
+      let prime = *prime;
+
       let first_composite = match prime.cmp(&segment_start) {
         Equal | Greater => prime,
         Less => segment_start + (prime - (segment_start % prime)) % prime,
