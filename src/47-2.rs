@@ -143,11 +143,16 @@ impl FactorCount {
 
 impl<'a> Iterator<(uint, uint)> for NumberFactors<'a> {
   fn next(&mut self) -> Option<(uint, uint)> {
-    self.values.shift_ref().map(|factor_count| {
-      let number = self.start;
-      self.start += 1;
+    match self.values.head() {
+      Some(factor_count) => {
+        let number = self.start;
+        self.start += 1;
+        self.values = self.values.tail();
 
-      (number, factor_count.count)
-    })
+        Some((number, factor_count.count))
+      },
+
+      None => None,
+    }
   }
 }

@@ -73,11 +73,13 @@ struct Segment {
 
 impl Sieve {
   pub fn is_prime(&mut self, number: uint) -> bool {
+    use std::slice::{Found, NotFound};
+
     self.compute_until(number);
 
-    match self.primes.as_slice().bsearch_elem(&number) {
-      Some(_) => true,
-      None    => false,
+    match self.primes.as_slice().binary_search_elem(&number) {
+      Found(_)    => true,
+      NotFound(_) => false,
     }
   }
 
