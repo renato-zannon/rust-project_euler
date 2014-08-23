@@ -15,7 +15,7 @@
 extern crate shared;
 
 use std::iter::AdditiveIterator;
-use irange = std::iter::range_inclusive;
+use std::iter::range_inclusive as irange;
 
 use shared::combinations;
 

@@ -14,7 +14,7 @@ extern crate num;
 use std::collections::hashmap::HashMap;
 use std::collections::treemap::TreeSet;
 use num::Integer;
-use irange = std::iter::range_inclusive;
+use std::iter::range_inclusive as irange;
 use std::iter::AdditiveIterator;
 
 fn main() {

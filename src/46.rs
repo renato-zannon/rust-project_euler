@@ -18,7 +18,7 @@
 extern crate shared;
 
 use shared::sieve;
-use PrimeSieve = shared::sieve::Sieve;
+use shared::sieve::Sieve as PrimeSieve;
 use std::iter::{count, range_inclusive};
 
 static SEGMENT_SIZE: uint = 101;

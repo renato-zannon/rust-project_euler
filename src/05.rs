@@ -7,7 +7,7 @@
 
 extern crate num;
 
-use irange = std::iter::range_inclusive;
+use std::iter::range_inclusive as irange;
 use num::integer::lcm;
 
 fn main() {
