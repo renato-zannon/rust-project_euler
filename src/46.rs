@@ -30,7 +30,7 @@ fn main() {
     let mut segment = new_segment(segment_start);
     mark_odd_composites(&mut segment, &mut sieve);
 
-    for unmarked in segment.unmarked_numbers().move_iter() {
+    for unmarked in segment.unmarked_numbers().into_iter() {
       if !sieve.is_prime(unmarked) {
         println!("{}", unmarked);
         return;

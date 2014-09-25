@@ -57,9 +57,12 @@ struct FactorCount<'a> {
 }
 
 fn factors(mut count: FactorCount) -> (Memo, HashSet<uint>) {
-  if count.memo.contains_key(&count.remaining) {
-    let cached = count.memo.get(&count.remaining).clone();
-    return (count.memo, cached);
+  match count.memo.find_copy(&count.remaining) {
+    Some(cached) => {
+      return (count.memo, cached);
+    },
+
+    None => ()
   }
 
   let first_factor = count.primes.iter().find(|&&prime| {

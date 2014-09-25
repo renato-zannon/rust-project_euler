@@ -33,7 +33,7 @@ fn main() {
     // because it would be interpreted as a 'native' number. The one() function leverages trait
     // dispatch and returns a BigInt '1'
     let core_fib = Unfold::new((one(), one()), fib_iteration);
-    let initial  = vec!(one(), one()).move_iter();
+    let initial  = vec!(one(), one()).into_iter();
 
     initial.chain(core_fib)
   };
@@ -73,7 +73,7 @@ fn number_of_digits(num: &BigInt, minimum_digits: uint) -> uint {
 
   let mut remaining = {
     let mut buf = String::with_capacity(minimum_digits + 1);
-    buf.push_char('1');
+    buf.push('1');
     buf.grow(minimum_digits, '0');
 
     let minimum = from_str(buf.as_slice()).unwrap();

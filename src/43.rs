@@ -43,7 +43,7 @@ fn main() {
   let divisible_by_all = DIVISORS.init().iter().rev().fold(bases, |numbers, &divisor| {
     let mut next_digits: Vec<Vec<uint>> = Vec::new();
 
-    for digits in numbers.move_iter() {
+    for digits in numbers.into_iter() {
       let next = plus_one_digit(digits).filter(|more_digits| {
         to_number(more_digits.slice_to(3)) % divisor == 0
       });
@@ -54,7 +54,7 @@ fn main() {
     next_digits
   });
 
-  let result = divisible_by_all.move_iter()
+  let result = divisible_by_all.into_iter()
     .map(|digits| to_number(digits.as_slice()))
     .sum();
 

@@ -17,14 +17,14 @@ use std::iter::AdditiveIterator;
 fn main() {
   let names: Vec<String> = get_name_list();
 
-  let mut values: Vec<Vec<uint>> = names.move_iter().map(|name| {
+  let mut values: Vec<Vec<uint>> = names.into_iter().map(|name| {
     alphabetical_value(name.as_slice())
   }).collect();
 
   values.sort();
 
-  let result = values.move_iter().enumerate().fold(0, |sum, (index, score)| {
-    sum + ((index + 1) * score.move_iter().sum())
+  let result = values.into_iter().enumerate().fold(0, |sum, (index, score)| {
+    sum + ((index + 1) * score.into_iter().sum())
   });
 
   println!("{}", result);

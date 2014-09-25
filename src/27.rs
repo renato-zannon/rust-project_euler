@@ -37,7 +37,7 @@ fn main() {
   // here to generate the possible values of b and speed things up a bit.
   let possible_bs: Vec<uint> = primes.by_ref().take_while(|&prime| prime < 1000).collect();
 
-  for b in possible_bs.move_iter() {
+  for b in possible_bs.into_iter() {
     let b = b as int;
 
     for a in range(-999i, 999) {

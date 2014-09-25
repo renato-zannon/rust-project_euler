@@ -14,7 +14,7 @@ fn main() {
   let mut sieve = sieve::new();
   let search_space: Vec<uint> = sieve.by_ref().take_while(|&prime| prime < 1_000_000).collect();
 
-  let result = search_space.move_iter().filter(|&prime| {
+  let result = search_space.into_iter().filter(|&prime| {
     is_circular(prime, &mut sieve)
   }).count();
 
@@ -22,7 +22,7 @@ fn main() {
 }
 
 fn is_circular(prime: uint, sieve: &mut sieve::Sieve) -> bool {
-  rotations_of(prime).move_iter().all(|rotation| {
+  rotations_of(prime).into_iter().all(|rotation| {
     sieve.is_prime(rotation)
   })
 }

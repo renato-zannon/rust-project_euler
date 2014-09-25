@@ -19,7 +19,7 @@ use std::iter::range_step_inclusive;
 fn main() {
   use std::iter::AdditiveIterator;
 
-  println!("{}", diagonals(1001).move_iter().sum());
+  println!("{}", diagonals(1001).into_iter().sum());
 }
 
 fn diagonals(square_size: uint) -> Vec<uint> {

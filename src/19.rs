@@ -84,7 +84,7 @@ struct Year {
 
 impl Year {
   fn is_leap(&self) -> bool {
-    4u.divides(&self.number) && !400u.divides(&self.number)
+    4u.is_multiple_of(&self.number) && !400u.is_multiple_of(&self.number)
   }
 
   fn next(&self) -> Year {

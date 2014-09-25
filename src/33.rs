@@ -72,7 +72,7 @@ fn build_from_digits(digits: Vec<uint>, except: &HashSet<uint>) -> uint {
 
   let mut used_shared = HashSet::with_capacity(except.len());
 
-  let used_digits = digits.move_iter().filter(|digit| {
+  let used_digits = digits.into_iter().filter(|digit| {
     if except.contains(digit) && !used_shared.contains(digit) {
       used_shared.insert(*digit);
       false

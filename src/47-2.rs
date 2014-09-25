@@ -126,7 +126,7 @@ impl FactorCount {
       return;
     }
 
-    for maybe_factor in self.factors.mut_iter() {
+    for maybe_factor in self.factors.iter_mut() {
       match *maybe_factor {
         None => {
           self.count += 1;

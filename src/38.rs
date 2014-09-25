@@ -58,7 +58,7 @@ fn to_num(digits: Vec<uint>) -> uint {
   let mut multiplier = 1;
   let mut result = 0;
 
-  for digit in digits.move_iter().rev() {
+  for digit in digits.into_iter().rev() {
     result += digit * multiplier;
     multiplier *= 10;
   }

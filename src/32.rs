@@ -38,7 +38,7 @@ fn main() {
     }
   }
 
-  println!("{}", products.move_iter().sum());
+  println!("{}", products.into_iter().sum());
 }
 
 fn pandigital_product(numbers: &[uint]) -> PandigitalResult {

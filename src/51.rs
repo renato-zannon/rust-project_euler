@@ -22,7 +22,7 @@ fn main() {
     let prime_digits = digits::new(prime).collect::<Vec<uint>>();
 
     let mut families = range(1, prime_digits.len()).flat_map(|variable_count| {
-      families_from_variables(variable_count, &prime_digits).move_iter()
+      families_from_variables(variable_count, &prime_digits).into_iter()
     });
 
     for family_iter in families {
