@@ -15,7 +15,7 @@ pub struct Sieve {
 }
 
 pub fn new() -> Sieve {
-  let primes = Vec::from_slice(WHEEL);
+  let primes = WHEEL.to_vec();
 
   Sieve {
     last_prime_index: None,
@@ -113,7 +113,7 @@ impl Sieve {
 
     self.max_checked = segment.max - 1;
 
-    for maybe_num in segment.values.move_iter() {
+    for maybe_num in segment.values.into_iter() {
       match maybe_num {
         Some(prime) => self.primes.push(prime),
         None        => (),

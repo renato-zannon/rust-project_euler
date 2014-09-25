@@ -17,7 +17,7 @@ impl PandigitalResult {
   }
 }
 
-trait DigitCollection<T: Iterator<uint>> {
+pub trait DigitCollection<T: Iterator<uint>> {
   fn digit_iter(self)     -> T;
   fn digit_len(&mut self) -> uint;
 }
@@ -32,7 +32,7 @@ impl DigitCollection<digits::Digits<uint>> for digits::Digits<uint> {
   }
 }
 
-type SliceDigits<'a> = iter::Map<'a, &'a uint, uint, slice::Items<'a, uint>>;
+pub type SliceDigits<'a> = iter::Map<'a, &'a uint, uint, slice::Items<'a, uint>>;
 
 impl<'a> DigitCollection<SliceDigits<'a>> for &'a [uint] {
   fn digit_iter(self) -> SliceDigits<'a> {
