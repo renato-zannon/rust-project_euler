@@ -49,26 +49,30 @@ fn families_from_variables(count: uint, digits: &Vec<uint>) -> Vec<FamilyIterato
       last_used: None,
     });
 
-    let mut max_index = digit_count - 1;
-    let mut var_slice = variables.as_mut_slice();
+    let mut max_index  = digit_count - 1;
+    let mut current_index = variables.len();
+
+    let var_slice = variables.as_mut_slice();
 
     loop {
-      let last_ref = match var_slice.mut_pop_ref() {
+      current_index = current_index - 1;
+
+      let current = match var_slice.get(current_index) {
+        Some(value) => value.clone(),
         None        => return result,
-        Some(value) => value,
       };
 
-      let next_value = *last_ref + 1;
+      let next_value = current + 1;
 
       if next_value > max_index {
-        *last_ref = match var_slice.last() {
+        var_slice[current_index] = match var_slice.get(current_index - 1) {
           Some(prev_var) => prev_var + 2,
           None           => return result,
         };
 
         max_index -= 1;
       } else {
-        *last_ref = next_value;
+        var_slice[current_index] = next_value;
         break;
       }
     }
