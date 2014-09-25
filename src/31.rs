@@ -24,7 +24,7 @@ fn ways_to_make(value: uint, denominations: &[uint]) -> uint {
     []  => 0,
     [_] => 1,
 
-    [denom, ..remaining_denoms] => {
+    [denom, remaining_denoms..] => {
       range_step_inclusive(value % denom, value, denom).map(|rest_val| {
         if rest_val == 0 {
           1
