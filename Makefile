@@ -1,39 +1,19 @@
-SRC = $(wildcard src/*.rs)
-BIN = $(patsubst src/%.rs,%,$(SRC))
+.PHONY: all build clean
 
-LIBSHARED_FILENAME = $(shell rustc --print-file-name lib/shared.rs --out-dir build/)
-LIBDIR             = build
-LIBSHARED          = $(addprefix $(LIBDIR)/, $(LIBSHARED_FILENAME))
-RUSTFLAGS          ?= -O
+all: Cargo.toml build
 
-.PHONY: clean all libshared builddirs
+build: Cargo.toml
+	cargo build
 
-all: $(addprefix bin/, $(BIN))
+clean: Cargo.toml
+	cargo clean
 
-bin/%: src/%.rs | libshared builddirs
-	rustc -L $(LIBDIR) $(RUSTFLAGS) $< -o $@
-
-%-test: src/%.rs | libshared builddirs
-	rustc -L $(LIBDIR) $(RUSTFLAGS) --test $< -o bin/$@
-	bin/$@ --test
-
-$(LIBSHARED): lib/*.rs | builddirs
-	rustc $(RUSTFLAGS) lib/shared.rs --out-dir $(LIBDIR)
-
-libshared-test: lib/*.rs | builddirs
-	rustc $(RUSTFLAGS) --test lib/shared.rs --out-dir $(LIBDIR)
-	build/shared --test
-
-libshared: $(LIBSHARED) | builddirs
-
-
-builddirs: bin $(LIBDIR)
-
-bin:
-	mkdir -p bin
-
-$(LIBDIR):
-	mkdir -p $(LIBDIR)
-
-clean:
-	rm -rf build bin
+Cargo.toml: src/*.rs
+	@sed -e '/# SOLUTIONS BEGIN/q' -i Cargo.toml
+	@for solution_path in src/*.rs; do \
+	  solution="$$(basename $${solution_path%%.rs})"; \
+		echo; \
+	  echo "[[bin]]"; \
+		echo "name = \"$$solution\""; \
+		echo "path = \"$$solution_path\""; \
+	done >> Cargo.toml
