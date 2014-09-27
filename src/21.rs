@@ -11,7 +11,7 @@
 
 extern crate num;
 
-use std::collections::hashmap::HashMap;
+use std::collections::hashmap::{HashMap, Occupied, Vacant};
 use std::collections::treemap::TreeSet;
 use num::Integer;
 use std::iter::range_inclusive as irange;
@@ -24,8 +24,15 @@ fn main() {
   for num in range(1u, 10_000) {
     if amicables.contains(&num) { continue; }
 
-    let &sum         = divisor_sums.find_or_insert_with(num, divisor_sum);
-    let &reverse_sum = divisor_sums.find_or_insert_with(sum, divisor_sum);
+    let sum = match divisor_sums.entry(num) {
+      Vacant(entry)   => * entry.set(divisor_sum(num)),
+      Occupied(entry) => entry.take(),
+    };
+
+    let reverse_sum = match divisor_sums.entry(sum) {
+      Vacant(entry)   => * entry.set(divisor_sum(sum)),
+      Occupied(entry) => entry.take(),
+    };
 
     if num == reverse_sum && sum != num {
       amicables.insert(num);
@@ -36,7 +43,7 @@ fn main() {
   println!("{}", amicables.iter().map(|&x| x).sum());
 }
 
-fn divisor_sum(&num: &uint) -> uint {
+fn divisor_sum(num: uint) -> uint {
   let num_sqrt = (num as f64).sqrt() as uint;
 
   irange(2u, num_sqrt).fold(1, |sum, candidate| {
