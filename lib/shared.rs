@@ -2,6 +2,8 @@
 #![crate_type = "lib"]
 #![feature(macro_rules)]
 
+extern crate num;
+
 pub mod combinations;
 pub mod triangle;
 pub mod sieve;

@@ -1,6 +1,4 @@
-extern crate num;
-
-use self::num::Integer;
+use num::Integer;
 use std::num::pow;
 use std::fmt::Show;
 use std::io::IoResult;
