@@ -55,21 +55,21 @@ enum Rank {
   RoyalFlush,                       // Royal Flush: Ten, Jack, Queen, King, Ace, in same suit.
 }
 
-#[deriving(PartialEq, Eq, PartialOrd, Ord, Clone, FromPrimitive, Hash)]
+#[deriving(PartialEq, Eq, PartialOrd, Ord, Clone, FromPrimitive)]
 enum CardValue {
-  Two,
-  Three,
-  Four,
-  Five,
-  Six,
-  Seven,
-  Eight,
-  Nine,
-  Ten,
-  Jack,
-  Queen,
-  King,
-  Ace
+  Two   = 0,
+  Three = 1,
+  Four  = 2,
+  Five  = 3,
+  Six   = 4,
+  Seven = 5,
+  Eight = 6,
+  Nine  = 7,
+  Ten   = 8,
+  Jack  = 9,
+  Queen = 10,
+  King  = 11,
+  Ace   = 12
 }
 
 impl CardValue {
@@ -93,12 +93,12 @@ impl CardValue {
   }
 }
 
-#[deriving(PartialEq, Eq, PartialOrd, Ord, Clone, Hash)]
+#[deriving(PartialEq, Eq, PartialOrd, Ord, Clone, FromPrimitive)]
 enum CardSuit {
-  Spades,
-  Hearts,
-  Diamonds,
-  Clubs,
+  Spades   = 0,
+  Hearts   = 1,
+  Diamonds = 2,
+  Clubs    = 3,
 }
 
 impl CardSuit {
@@ -269,33 +269,21 @@ impl Hand {
   }
 
   fn card_counts(&self) -> (Vec<(CardSuit, uint)>, Vec<(CardValue, uint)>) {
-    use std::collections::hashmap::{HashMap, Occupied, Vacant};
-    use std::hash::Hash;
-
-    let mut suit_map:  HashMap<CardSuit, uint>  = HashMap::with_capacity(5);
-    let mut value_map: HashMap<CardValue, uint> = HashMap::with_capacity(5);
+    let mut suites = [0, ..4];
+    let mut values = [0, ..13];
 
     for &Card { suit: suit, value: value} in self.cards.iter() {
-      increment_by_one(&mut suit_map,  suit);
-      increment_by_one(&mut value_map, value);
+      suites[suit as uint]  += 1;
+      values[value as uint] += 1;
     }
 
-    return (into_sorted_vec(suit_map), into_sorted_vec(value_map));
+    return (into_sorted_vec(suites), into_sorted_vec(values));
 
-    fn increment_by_one<T: Eq + Hash>(map: &mut HashMap<T, uint>, key: T) {
-      match map.entry(key) {
-        Occupied(entry) => {
-          *entry.into_mut() += 1;
-        },
+    fn into_sorted_vec<T: FromPrimitive + Ord>(values: &[uint]) -> Vec<(T, uint)> {
+      let mut vec: Vec<(T, uint)> = values.iter().enumerate().map(|(idx, &count)| {
+        (FromPrimitive::from_uint(idx).unwrap(), count)
+      }).collect();
 
-        Vacant(entry) => {
-          entry.set(1);
-        }
-      }
-    }
-
-    fn into_sorted_vec<T: Eq + Hash + Ord>(map: HashMap<T, uint>) -> Vec<(T, uint)> {
-      let mut vec =  map.into_iter().collect::<Vec<(T, uint)>>();
       vec.sort_by(|&(ref k1, ref v1), &(ref k2, ref v2)| {
         match v2.cmp(v1) {
           Equal => k2.cmp(k1),
