@@ -18,8 +18,20 @@ fn main() {
 }
 
 fn is_palindrome(number: uint, base: u8) -> bool {
-  let string = format!("{}", fmt::radix(number, base));
-  let slice  = string.as_slice();
+  use std::io::BufWriter;
+  use std::str;
+
+  let mut buffer = [0u8, ..50];
+
+  let slice = {
+    let mut writer = BufWriter::new(buffer.as_mut_slice());
+
+    (write!(writer, "{}", fmt::radix(number, base))).and_then(|_| {
+      return writer.tell()
+    })
+  }.ok().and_then(|size| {
+    str::from_utf8(buffer.slice_to(size as uint))
+  }).unwrap();
 
   slice.chars().zip(slice.chars().rev()).all(|(from_start, from_end)| {
     from_start == from_end
