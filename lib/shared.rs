@@ -4,6 +4,8 @@
 
 extern crate num;
 
+pub use integer_extensions::IntegerExtensions;
+
 pub mod combinations;
 pub mod triangle;
 pub mod sieve;
