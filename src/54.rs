@@ -157,11 +157,11 @@ impl Hand {
       Greater => true,
 
       Equal => {
-        let my_cards    = self.cards_in_order();
-        let other_cards = other.cards_in_order();
+        let my_cards    = self.cards.as_slice();
+        let other_cards = other.cards.as_slice();
 
-        for (my, hers) in my_cards.into_iter().rev().zip(other_cards.into_iter().rev()) {
-          match my.cmp(& hers) {
+        for (my, hers) in my_cards.iter().rev().zip(other_cards.iter().rev()) {
+          match my.cmp(hers) {
             Less    => return false,
             Greater => return true,
             Equal   => continue,
@@ -178,8 +178,10 @@ impl Hand {
       .map(Card::parse)
       .collect::<Option<Vec<Card>>>();
 
-    return parse_cards.and_then(|cards| {
+    return parse_cards.and_then(|mut cards| {
       if cards.len() != 5 { return None }
+
+      cards.sort();
 
       Some(Hand {
         cards: [cards[0], cards[1], cards[2], cards[3], cards[4]]
@@ -189,16 +191,10 @@ impl Hand {
 }
 
 impl Hand {
-  fn cards_in_order(&self) -> Vec<Card> {
-    let mut vec = self.cards.as_slice().into_vec();
-    vec.sort();
-    vec
-  }
-
   fn rank(&self) -> Rank {
     static ROYAL_FLUSH: &'static [CardValue] = &[Ten, Jack, Queen, King, Ace];
 
-    let cards_in_order = self.cards_in_order();
+    let cards_in_order = self.cards.as_slice();
 
     let values_in_order: Vec<CardValue> = cards_in_order.iter().map(|card| {
       card.value
@@ -276,8 +272,8 @@ impl Hand {
     use std::collections::hashmap::{HashMap, Occupied, Vacant};
     use std::hash::Hash;
 
-    let mut suit_map:  HashMap<CardSuit, uint>  = HashMap::new();
-    let mut value_map: HashMap<CardValue, uint> = HashMap::new();
+    let mut suit_map:  HashMap<CardSuit, uint>  = HashMap::with_capacity(5);
+    let mut value_map: HashMap<CardValue, uint> = HashMap::with_capacity(5);
 
     for &Card { suit: suit, value: value} in self.cards.iter() {
       increment_by_one(&mut suit_map,  suit);
