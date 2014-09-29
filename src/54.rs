@@ -196,10 +196,6 @@ impl Hand {
 
     let cards_in_order = self.cards.as_slice();
 
-    let values_in_order: Vec<CardValue> = cards_in_order.iter().map(|card| {
-      card.value
-    }).collect();
-
     let consecutives = self.consecutive_card_count(cards_in_order.as_slice());
 
     let (suits, values) = self.card_counts();
@@ -207,8 +203,10 @@ impl Hand {
     let all_same_suit   = suits[0].val1() == 5;
     let all_consecutive = consecutives == 5;
 
+    let mut values_in_order = cards_in_order.iter().map(|card| card.value);
+
     if all_same_suit && all_consecutive {
-      if values_in_order.as_slice() == ROYAL_FLUSH {
+      if ROYAL_FLUSH.iter().zip(values_in_order).all(|(&v1, v2)| v1 == v2) {
         return RoyalFlush;
       } else {
         return StraightFlush;
@@ -234,7 +232,7 @@ impl Hand {
       (3, _) => ThreeOfAKind(first_value),
       (2, 2) => TwoPairs(first_value, second_value),
       (2, _) => OnePair(first_value),
-      _      => HighCard(* values_in_order.last().unwrap()),
+      _      => HighCard(values_in_order.last().unwrap()),
     };
   }
 
