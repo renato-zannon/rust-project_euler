@@ -74,3 +74,33 @@ pub fn is_9_pandigital<U: Iterator<uint>, T: DigitCollection<U>>(mut digits: T) 
     HasRepetitions
   }
 }
+
+#[cfg(test)]
+mod tests {
+  use super::is_9_pandigital;
+
+  #[test]
+  fn test_1_through_9() {
+    assert!(is_9_pandigital([1u, 2, 3, 4, 5, 6, 7, 8, 9].as_slice()).to_bool());
+  }
+
+  #[test]
+  fn test_out_of_order() {
+    assert!(is_9_pandigital([1u, 3, 5, 9, 7, 2, 8, 4, 6].as_slice()).to_bool());
+  }
+
+  #[test]
+  fn test_not_all_numbers() {
+    assert!(is_9_pandigital([1u, 2, 3, 4, 5, 6, 7].as_slice()).to_bool() == false);
+  }
+
+  #[test]
+  fn test_with_repetitions() {
+    assert!(is_9_pandigital([1u, 2, 3, 4, 5, 6, 7, 8, 9, 1].as_slice()).to_bool() == false);
+  }
+
+  #[test]
+  fn test_rejects_zeroes() {
+    assert!(is_9_pandigital([1u, 3, 5, 9, 7, 0, 0, 2, 8, 0, 0, 0, 4, 6, 0].as_slice()).to_bool() == false);
+  }
+}

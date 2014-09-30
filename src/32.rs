@@ -48,33 +48,3 @@ fn pandigital_product(numbers: &[uint]) -> PandigitalResult {
 
   is_9_pandigital(all_digits.as_slice())
 }
-
-#[cfg(test)]
-mod tests {
-  use super::is_9_pandigital;
-
-  #[test]
-  fn test_1_through_9() {
-    assert!(is_9_pandigital(&[123, 456, 789]).to_bool());
-  }
-
-  #[test]
-  fn test_out_of_order() {
-    assert!(is_9_pandigital(&[135, 97, 28, 46]).to_bool());
-  }
-
-  #[test]
-  fn test_not_all_numbers() {
-    assert!(is_9_pandigital(&[123, 456, 7]).to_bool() == false);
-  }
-
-  #[test]
-  fn test_with_repetitions() {
-    assert!(is_9_pandigital(&[12, 3456, 7891]).to_bool() == false);
-  }
-
-  #[test]
-  fn test_rejects_zeroes() {
-    assert!(is_9_pandigital(&[135, 97002, 80004, 60]).to_bool() == false);
-  }
-}
