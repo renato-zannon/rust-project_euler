@@ -44,7 +44,7 @@ impl<A: Ord+Clone> Iterator<Vec<A>> for SEPA<A> {
 
 impl<A: Ord+Clone> SEPA<A> {
   fn keys(&self) -> Option<(uint, uint)> {
-    let current_perm = self.current.as_slice();
+    let current_perm = self.current[];
     let current_len  = current_perm.len();
 
     let maybe_key_index: Option<uint> = range(1, current_len).rev().find(|&index| {

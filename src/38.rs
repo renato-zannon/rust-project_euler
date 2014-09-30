@@ -27,7 +27,7 @@ fn main() {
     for start in count(1u, 1) {
       let prod = concat_product(start, n);
 
-      match is_9_pandigital(prod.as_slice()) {
+      match is_9_pandigital(prod[]) {
         IsPandigital => {
           let num_prod = to_num(prod);
 

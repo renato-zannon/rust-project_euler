@@ -157,8 +157,8 @@ impl Hand {
       Greater => true,
 
       Equal => {
-        let my_cards    = self.cards.as_slice();
-        let other_cards = other.cards.as_slice();
+        let my_cards    = self.cards[];
+        let other_cards = other.cards[];
 
         for (my, hers) in my_cards.iter().rev().zip(other_cards.iter().rev()) {
           match my.cmp(hers) {
@@ -194,9 +194,9 @@ impl Hand {
   fn rank(&self) -> Rank {
     static ROYAL_FLUSH: &'static [CardValue] = &[Ten, Jack, Queen, King, Ace];
 
-    let cards_in_order = self.cards.as_slice();
+    let cards_in_order = self.cards[];
 
-    let consecutives = self.consecutive_card_count(cards_in_order.as_slice());
+    let consecutives = self.consecutive_card_count(cards_in_order[]);
 
     let (suits, values) = self.card_counts();
 

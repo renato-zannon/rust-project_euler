@@ -26,7 +26,7 @@ use std::from_str::from_str;
 use shared::triangle;
 
 fn main() {
-  let mut triangle = triangle::new(deep_slice(&read_triangle()).as_slice());
+  let mut triangle = triangle::new(deep_slice(&read_triangle())[]);
   let result = triangle.maximum_total();
 
   println!("{}", result);
@@ -42,7 +42,7 @@ fn read_triangle() -> Vec<Vec<uint>> {
     let line_text = line.unwrap();
     let mut parsed_line = Vec::new();
 
-    for atom in line_text.as_slice().trim().split(' ') {
+    for atom in line_text[].trim().split(' ') {
       match from_str::<uint>(atom) {
         Some(num) => { parsed_line.push(num); },
         None      => { () }
@@ -59,7 +59,7 @@ fn deep_slice(v: &Vec<Vec<uint>>) -> Vec<&[uint]> {
   let mut result: Vec<&[uint]> = Vec::new();
 
   for row in v.iter() {
-    result.push(row.as_slice());
+    result.push(row[]);
   }
 
   result

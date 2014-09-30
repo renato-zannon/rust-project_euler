@@ -32,7 +32,7 @@ impl Iterator<uint> for Sieve {
     };
 
     loop {
-      match self.primes.as_slice().get(index) {
+      match self.primes[].get(index) {
         Some(&prime) => {
           self.last_prime_index = Some(index);
           return Some(prime);
@@ -53,7 +53,7 @@ impl RandomAccessIterator<uint> for Sieve {
 
   fn idx(&mut self, index: uint) -> Option<uint> {
     loop {
-      match self.primes.as_slice().get(index) {
+      match self.primes[].get(index) {
         Some(&prime) => {
           return Some(prime);
         },
@@ -77,7 +77,7 @@ impl Sieve {
 
     self.compute_until(number);
 
-    match self.primes.as_slice().binary_search_elem(&number) {
+    match self.primes[].binary_search_elem(&number) {
       Found(_)    => true,
       NotFound(_) => false,
     }
@@ -90,7 +90,7 @@ impl Sieve {
   }
 
   pub fn found_primes(&self) -> &[uint] {
-    self.primes.as_slice()
+    self.primes[]
   }
 
   fn compute_primes(&mut self) {

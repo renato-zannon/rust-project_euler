@@ -14,7 +14,7 @@ use num::bigint::{BigUint, ToBigUint};
 fn main() {
   let strnum = factorial(100).to_string();
 
-  let result = strnum.as_slice().chars().fold(0, |digit, sum| digit + to_i(sum));
+  let result = strnum[].chars().fold(0, |digit, sum| digit + to_i(sum));
   println!("{}", result);
 }
 

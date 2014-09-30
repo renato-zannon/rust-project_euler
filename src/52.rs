@@ -15,7 +15,7 @@ fn main() {
     let num_digits = digit_set(number);
 
     range_inclusive(2u, 6u).rev().all(|multiplier| {
-      yields_same_digits(number * multiplier, num_digits.as_slice())
+      yields_same_digits(number * multiplier, num_digits[])
     })
   }).unwrap();
 

@@ -76,7 +76,7 @@ fn number_of_digits(num: &BigInt, minimum_digits: uint) -> uint {
     buf.push('1');
     buf.grow(minimum_digits, '0');
 
-    let minimum = from_str(buf.as_slice()).unwrap();
+    let minimum = from_str(buf[]).unwrap();
     num / minimum
   };
 

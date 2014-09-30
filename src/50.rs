@@ -29,7 +29,7 @@ fn main() {
     value: primes.iter().map(|prime| *prime).sum(),
     start_index: 0,
     end_index:   primes.len() - 1,
-    all_primes: primes.as_slice()
+    all_primes: primes[]
   };
 
   // Reduce the sequence until we find the longest possible that begins on the first prime

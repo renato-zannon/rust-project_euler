@@ -46,5 +46,5 @@ fn pandigital_product(numbers: &[uint]) -> PandigitalResult {
     digits::new(number)
   }).collect();
 
-  is_9_pandigital(all_digits.as_slice())
+  is_9_pandigital(all_digits[])
 }

@@ -120,7 +120,7 @@ impl FamilyIterator {
 
   fn init_pattern(&mut self) -> Option<uint> {
     let mut found_variable = None;
-    let templ = self.template.as_slice();
+    let templ = self.template[];
 
     for &var_index in self.variables.iter() {
       let on_template = match templ.get(var_index) {
@@ -140,7 +140,7 @@ impl FamilyIterator {
 
     self.last_used = found_variable;
     found_variable.map(|_| {
-      FamilyIterator::to_number(self.template.as_slice())
+      FamilyIterator::to_number(self.template[])
     })
   }
 }
