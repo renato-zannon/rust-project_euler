@@ -29,11 +29,11 @@ fn main() {
     let result = range(2, pow(10u, max_digits)).filter_map(|num| {
         let sum = sum_of_digits_to_power(num, POWER);
 
-         if sum == num {
-             Some(sum)
-         } else {
-             None
-         }
+        if sum == num {
+            Some(sum)
+        } else {
+            None
+        }
     }).sum();
 
     println!("{}", result);

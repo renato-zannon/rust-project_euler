@@ -75,20 +75,20 @@ enum CardValue {
 impl CardValue {
     fn parse(value: &str) -> Option<CardValue> {
         match value {
-         "2" => Some(Two),
-         "3" => Some(Three),
-         "4" => Some(Four),
-         "5" => Some(Five),
-         "6" => Some(Six),
-         "7" => Some(Seven),
-         "8" => Some(Eight),
-         "9" => Some(Nine),
-         "T" => Some(Ten),
-         "J" => Some(Jack),
-         "Q" => Some(Queen),
-         "K" => Some(King),
-         "A" => Some(Ace),
-         _   => None,
+            "2" => Some(Two),
+            "3" => Some(Three),
+            "4" => Some(Four),
+            "5" => Some(Five),
+            "6" => Some(Six),
+            "7" => Some(Seven),
+            "8" => Some(Eight),
+            "9" => Some(Nine),
+            "T" => Some(Ten),
+            "J" => Some(Jack),
+            "Q" => Some(Queen),
+            "K" => Some(King),
+            "A" => Some(Ace),
+            _   => None,
         }
     }
 }
