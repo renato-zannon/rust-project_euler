@@ -41,7 +41,7 @@
 
 #![feature(macro_rules)]
 
-#[deriving(PartialEq, Eq, PartialOrd, Ord)]
+#[deriving(PartialEq, Eq, PartialOrd, Ord, Show)]
 enum Rank {
   HighCard(CardValue),              // High Card: Highest value card.
   OnePair(CardValue),               // One Pair: Two cards of the same value.
@@ -55,7 +55,7 @@ enum Rank {
   RoyalFlush,                       // Royal Flush: Ten, Jack, Queen, King, Ace, in same suit.
 }
 
-#[deriving(PartialEq, Eq, PartialOrd, Ord, Clone, FromPrimitive)]
+#[deriving(PartialEq, Eq, PartialOrd, Ord, Clone, FromPrimitive, Show)]
 enum CardValue {
   Two   = 0,
   Three = 1,
