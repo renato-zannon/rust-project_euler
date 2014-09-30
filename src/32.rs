@@ -19,32 +19,32 @@ use shared::pandigital::{is_9_pandigital, PandigitalResult};
 use std::iter::AdditiveIterator;
 
 fn main() {
-  let mut products = Vec::new();
+    let mut products = Vec::new();
 
-  for x in range(1u, 10_000) {
-    for y in range(1u, x) {
-      let result = x * y;
+    for x in range(1u, 10_000) {
+        for y in range(1u, x) {
+            let result = x * y;
 
-      match pandigital_product(&[x, y, result]) {
-        pandigital::IsPandigital => {
-          if !products.contains(&result) {
-            products.push(result);
-          }
-        },
+            match pandigital_product(&[x, y, result]) {
+                pandigital::IsPandigital => {
+                    if !products.contains(&result) {
+                        products.push(result);
+                    }
+                },
 
-        pandigital::TooLarge => break,
-        _                    => continue
-      }
+                pandigital::TooLarge => break,
+                _                    => continue
+            }
+        }
     }
-  }
 
-  println!("{}", products.into_iter().sum());
+    println!("{}", products.into_iter().sum());
 }
 
 fn pandigital_product(numbers: &[uint]) -> PandigitalResult {
-  let all_digits: Vec<uint> = numbers.iter().flat_map(|&number| {
-    digits::new(number)
-  }).collect();
+    let all_digits: Vec<uint> = numbers.iter().flat_map(|&number| {
+        digits::new(number)
+    }).collect();
 
-  is_9_pandigital(all_digits[])
+    is_9_pandigital(all_digits[])
 }

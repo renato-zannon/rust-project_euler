@@ -16,22 +16,22 @@ use std::iter::{AdditiveIterator, range_step_inclusive};
 static DENOMINATIONS: &'static [uint] = &[200, 100, 50, 20, 10, 5, 2, 1];
 
 fn main() {
-  println!("{}", ways_to_make(200, DENOMINATIONS));
+    println!("{}", ways_to_make(200, DENOMINATIONS));
 }
 
 fn ways_to_make(value: uint, denominations: &[uint]) -> uint {
-  match denominations {
-    []  => 0,
-    [_] => 1,
+    match denominations {
+        []  => 0,
+        [_] => 1,
 
-    [denom, remaining_denoms..] => {
-      range_step_inclusive(value % denom, value, denom).map(|rest_val| {
-        if rest_val == 0 {
-          1
-        } else {
-          ways_to_make(rest_val, remaining_denoms)
+        [denom, remaining_denoms..] => {
+            range_step_inclusive(value % denom, value, denom).map(|rest_val| {
+                if rest_val == 0 {
+                    1
+                } else {
+                    ways_to_make(rest_val, remaining_denoms)
+                }
+            }).sum()
         }
-      }).sum()
     }
-  }
 }

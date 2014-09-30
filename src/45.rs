@@ -13,43 +13,43 @@
 static TARGET: uint = 40755;
 
 fn main() {
-  let mut triangles   = numbers_from_formula(|n| n * (n + 1) / 2);
-  let mut pentagonals = numbers_from_formula(|n| n * (3*n - 1) / 2);
-  let hexagonals      = numbers_from_formula(|n| n * (2*n - 1));
+    let mut triangles   = numbers_from_formula(|n| n * (n + 1) / 2);
+    let mut pentagonals = numbers_from_formula(|n| n * (3*n - 1) / 2);
+    let hexagonals      = numbers_from_formula(|n| n * (2*n - 1));
 
-  for hex in hexagonals.skip_while(|&h| h <= TARGET) {
-    let pent = pentagonals.find(|&p| p >= hex).unwrap();
-    if pent != hex {
-      continue;
+    for hex in hexagonals.skip_while(|&h| h <= TARGET) {
+        let pent = pentagonals.find(|&p| p >= hex).unwrap();
+        if pent != hex {
+            continue;
+        }
+
+        let trig = triangles.find(|&t| t >= hex).unwrap();
+        if trig != hex {
+            continue;
+        }
+
+        println!("{}", hex);
+        return;
     }
-
-    let trig = triangles.find(|&t| t >= hex).unwrap();
-    if trig != hex {
-      continue;
-    }
-
-    println!("{}", hex);
-    return;
-  }
 }
 
 fn numbers_from_formula<'a>(formula: |uint|: 'a -> uint) -> NumbersFromFormula<'a> {
-  NumbersFromFormula {
-    last_n: 0,
-    formula: formula
-  }
+    NumbersFromFormula {
+        last_n: 0,
+        formula: formula
+    }
 }
 
 struct NumbersFromFormula<'a> {
-  last_n: uint,
-  formula: |uint|: 'a -> uint,
+    last_n: uint,
+    formula: |uint|: 'a -> uint,
 }
 
 impl<'a> Iterator<uint> for NumbersFromFormula<'a> {
-  fn next(&mut self) -> Option<uint> {
-    let n = self.last_n + 1;
-    self.last_n = n;
+    fn next(&mut self) -> Option<uint> {
+        let n = self.last_n + 1;
+        self.last_n = n;
 
-    Some((self.formula)(n))
-  }
+        Some((self.formula)(n))
+    }
 }

@@ -19,35 +19,35 @@ use std::num::pow;
 static POWER: uint = 5;
 
 fn main() {
-  let one_digit_max = pow(9u, POWER);
+    let one_digit_max = pow(9u, POWER);
 
-  let max_digits = count(2u, 1).find(|&digits| {
-    let min_with_digits = pow(10u, digits);
-    one_digit_max * digits < min_with_digits
-  }).unwrap();
+    let max_digits = count(2u, 1).find(|&digits| {
+        let min_with_digits = pow(10u, digits);
+        one_digit_max * digits < min_with_digits
+    }).unwrap();
 
-  let result = range(2, pow(10u, max_digits)).filter_map(|num| {
-    let sum = sum_of_digits_to_power(num, POWER);
+    let result = range(2, pow(10u, max_digits)).filter_map(|num| {
+        let sum = sum_of_digits_to_power(num, POWER);
 
-     if sum == num {
-       Some(sum)
-     } else {
-       None
-     }
-  }).sum();
+         if sum == num {
+             Some(sum)
+         } else {
+             None
+         }
+    }).sum();
 
-  println!("{}", result);
+    println!("{}", result);
 }
 
 fn sum_of_digits_to_power(num: uint, power: uint) -> uint {
-  let mut result = 0;
-  let mut rest = num;
+    let mut result = 0;
+    let mut rest = num;
 
-  while rest > 0 {
-    let digit = rest % 10;
-    result += pow(digit, power);
-    rest /= 10;
-  }
+    while rest > 0 {
+        let digit = rest % 10;
+        result += pow(digit, power);
+        rest /= 10;
+    }
 
-  result
+    result
 }

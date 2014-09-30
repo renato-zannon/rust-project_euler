@@ -23,25 +23,25 @@ static MAX_N: uint     = 100;
 static MIN_VALUE: uint = 1_000_000;
 
 fn main() {
-  let count = range_inclusive(1u, MAX_N).map(|n| {
-    let mut value = 1u;
+    let count = range_inclusive(1u, MAX_N).map(|n| {
+        let mut value = 1u;
 
-    // Multiplicative formula from:
-    // http://en.wikipedia.org/wiki/Binomial_coefficient#Multiplicative_formula
-    let first_k = range_inclusive(1u, n / 2).find(|&k| {
-      let old_value = value;
-      value = old_value * (n + 1 - k) / k;
+        // Multiplicative formula from:
+        // http://en.wikipedia.org/wiki/Binomial_coefficient#Multiplicative_formula
+        let first_k = range_inclusive(1u, n / 2).find(|&k| {
+            let old_value = value;
+            value = old_value * (n + 1 - k) / k;
 
-      return value > MIN_VALUE;
-    });
+            return value > MIN_VALUE;
+        });
 
-    // Since the binomial is symmetrical, we can easily know how many results > 1_000_000 are there,
-    // given we know what the first one is.
-    match first_k {
-      Some(k) => n + 1 - 2*k,
-      None    => 0,
-    }
-  }).sum();
+        // Since the binomial is symmetrical, we can easily know how many results > 1_000_000 are there,
+        // given we know what the first one is.
+        match first_k {
+            Some(k) => n + 1 - 2*k,
+            None    => 0,
+        }
+    }).sum();
 
-  println!("{}", count);
+    println!("{}", count);
 }

@@ -35,22 +35,22 @@ static MAX: uint = 10_000;
 static MAX_ITERATIONS: uint = 50;
 
 fn main() {
-  let mut lychrel_count = 0u;
+    let mut lychrel_count = 0u;
 
-  for num in range_inclusive(1u, MAX) {
-    let first_palindrome = Unfold::new(num, |current| {
-      *current += current.reverse();
-      Some(*current)
-    }).take(MAX_ITERATIONS).find(|number| number.is_palindrome());
+    for num in range_inclusive(1u, MAX) {
+        let first_palindrome = Unfold::new(num, |current| {
+            *current += current.reverse();
+            Some(*current)
+        }).take(MAX_ITERATIONS).find(|number| number.is_palindrome());
 
-    match first_palindrome {
-      Some(_) => continue,
+        match first_palindrome {
+            Some(_) => continue,
 
-      None => {
-        lychrel_count += 1;
-      }
+            None => {
+                lychrel_count += 1;
+            }
+        }
     }
-  }
 
-  println!("{}", lychrel_count);
+    println!("{}", lychrel_count);
 }

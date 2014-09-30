@@ -13,43 +13,43 @@ use std::num::pow;
 use shared::digits;
 
 fn main() {
-  let max_number = {
-    let max_single_digit_factorial = factorial(9);
+    let max_number = {
+        let max_single_digit_factorial = factorial(9);
 
-    let max_digits = count(1u, 1u).find(|&digits| {
-      max_single_digit_factorial * digits < max_number_with_digits(digits)
-    }).unwrap();
+        let max_digits = count(1u, 1u).find(|&digits| {
+            max_single_digit_factorial * digits < max_number_with_digits(digits)
+        }).unwrap();
 
-    max_single_digit_factorial * max_digits
-  };
+        max_single_digit_factorial * max_digits
+    };
 
-  let result = range(3u, max_number).filter(|&number| {
-    number_eqls_fact_sum(number)
-  }).sum();
+    let result = range(3u, max_number).filter(|&number| {
+        number_eqls_fact_sum(number)
+    }).sum();
 
-  println!("{}", result);
+    println!("{}", result);
 }
 
 fn number_eqls_fact_sum(number: uint) -> bool {
-  let mut fact_sum = 0;
+    let mut fact_sum = 0;
 
-  for digit in digits::new(number) {
-    fact_sum += factorial(digit);
+    for digit in digits::new(number) {
+        fact_sum += factorial(digit);
 
-    if fact_sum > number {
-      return false;
+        if fact_sum > number {
+            return false;
+        }
     }
-  }
 
-  fact_sum == number
+    fact_sum == number
 }
 
 fn factorial(n: uint) -> uint {
-  range_inclusive(1, n).fold(1, |num, result| {
-    num * result
-  })
+    range_inclusive(1, n).fold(1, |num, result| {
+        num * result
+    })
 }
 
 fn max_number_with_digits(digit_count: uint) -> uint {
-  pow(10u, digit_count) - 1
+    pow(10u, digit_count) - 1
 }

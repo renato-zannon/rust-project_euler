@@ -16,22 +16,22 @@ use shared::digits;
 use std::iter::{count, MultiplicativeIterator};
 
 fn main() {
-  let mut sequence = count(1u, 1)
-    .flat_map(|number| digits::new(number))
-    .enumerate();
+    let mut sequence = count(1u, 1)
+        .flat_map(|number| digits::new(number))
+        .enumerate();
 
-  let get_digit = |number: uint| {
-    let (_, digit) = sequence
-      .find(|&(idx, _)| idx == number - 1)
-      .unwrap();
+    let get_digit = |number: uint| {
+        let (_, digit) = sequence
+            .find(|&(idx, _)| idx == number - 1)
+            .unwrap();
 
-    digit
-  };
+        digit
+    };
 
-  let result = [1, 10, 100, 1000, 10000, 100000, 1000000]
-    .iter()
-    .map(|&position| get_digit(position))
-    .product();
+    let result = [1, 10, 100, 1000, 10000, 100000, 1000000]
+        .iter()
+        .map(|&position| get_digit(position))
+        .product();
 
-  println!("{}", result);
+    println!("{}", result);
 }

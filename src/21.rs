@@ -18,42 +18,42 @@ use std::iter::range_inclusive as irange;
 use std::iter::AdditiveIterator;
 
 fn main() {
-  let mut divisor_sums: HashMap<uint, uint> = HashMap::new();
-  let mut amicables = TreeSet::new();
+    let mut divisor_sums: HashMap<uint, uint> = HashMap::new();
+    let mut amicables = TreeSet::new();
 
-  for num in range(1u, 10_000) {
-    if amicables.contains(&num) { continue; }
+    for num in range(1u, 10_000) {
+        if amicables.contains(&num) { continue; }
 
-    let sum = match divisor_sums.entry(num) {
-      Vacant(entry)   => * entry.set(divisor_sum(num)),
-      Occupied(entry) => entry.take(),
-    };
+        let sum = match divisor_sums.entry(num) {
+            Vacant(entry)   => * entry.set(divisor_sum(num)),
+            Occupied(entry) => entry.take(),
+        };
 
-    let reverse_sum = match divisor_sums.entry(sum) {
-      Vacant(entry)   => * entry.set(divisor_sum(sum)),
-      Occupied(entry) => entry.take(),
-    };
+        let reverse_sum = match divisor_sums.entry(sum) {
+            Vacant(entry)   => * entry.set(divisor_sum(sum)),
+            Occupied(entry) => entry.take(),
+        };
 
-    if num == reverse_sum && sum != num {
-      amicables.insert(num);
-      amicables.insert(sum);
+        if num == reverse_sum && sum != num {
+            amicables.insert(num);
+            amicables.insert(sum);
+        }
     }
-  }
 
-  println!("{}", amicables.iter().map(|&x| x).sum());
+    println!("{}", amicables.iter().map(|&x| x).sum());
 }
 
 fn divisor_sum(num: uint) -> uint {
-  let num_sqrt = (num as f64).sqrt() as uint;
+    let num_sqrt = (num as f64).sqrt() as uint;
 
-  irange(2u, num_sqrt).fold(1, |sum, candidate| {
-    let (divided, remainder) = num.div_rem(&candidate);
-    if remainder > 0 { return sum; }
+    irange(2u, num_sqrt).fold(1, |sum, candidate| {
+        let (divided, remainder) = num.div_rem(&candidate);
+        if remainder > 0 { return sum; }
 
-    if candidate != divided {
-      sum + candidate + divided
-    } else {
-      sum + candidate
-    }
-  })
+        if candidate != divided {
+            sum + candidate + divided
+        } else {
+            sum + candidate
+        }
+    })
 }

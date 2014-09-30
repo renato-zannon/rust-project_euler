@@ -9,41 +9,41 @@
 * the sum of the even-valued terms. */
 
 fn main() {
-  let result = fibs()
-    .take_while(|&n| n < 4_000_000)
-    .filter(|num| num % 2 == 0)
-    .fold(0, |acc, num| acc + num);
+    let result = fibs()
+        .take_while(|&n| n < 4_000_000)
+        .filter(|num| num % 2 == 0)
+        .fold(0, |acc, num| acc + num);
 
-  println!("{}", result);
+    println!("{}", result);
 }
 
 fn fibs() -> Fibonacci {
-  Fibonacci { pprev: None, prev: None }
+    Fibonacci { pprev: None, prev: None }
 }
 
 struct Fibonacci {
-  prev:  Option<u64>,
-  pprev: Option<u64>
+    prev:  Option<u64>,
+    pprev: Option<u64>
 }
 
 impl Iterator<u64> for Fibonacci {
-  fn next(&mut self) -> Option<u64> {
-    let pprev = self.pprev;
-    let prev  = self.prev;
+    fn next(&mut self) -> Option<u64> {
+        let pprev = self.pprev;
+        let prev  = self.prev;
 
-    if pprev.is_none() {
-      self.pprev = Some(1);
-      Some(1)
-    } else if prev.is_none() {
-      self.prev = Some(2);
-      Some(2)
-    } else {
-      let current = Some(prev.unwrap() + pprev.unwrap());
+        if pprev.is_none() {
+            self.pprev = Some(1);
+            Some(1)
+        } else if prev.is_none() {
+            self.prev = Some(2);
+            Some(2)
+        } else {
+            let current = Some(prev.unwrap() + pprev.unwrap());
 
-      self.pprev = prev;
-      self.prev  = current;
+            self.pprev = prev;
+            self.prev  = current;
 
-      current
+            current
+        }
     }
-  }
 }

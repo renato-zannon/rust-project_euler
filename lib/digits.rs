@@ -4,121 +4,121 @@ use std::fmt::Show;
 use std::io::IoResult;
 
 pub struct Digits<A> {
-  remaining: A,
-  remaining_digits: uint,
+    remaining: A,
+    remaining_digits: uint,
 }
 
 impl<A: Integer + FromPrimitive + ToPrimitive> Iterator<A> for Digits<A> {
-  fn next(&mut self) -> Option<A> {
-    let divisor: A = FromPrimitive::from_uint(self.current_divisor()).unwrap();
+    fn next(&mut self) -> Option<A> {
+        let divisor: A = FromPrimitive::from_uint(self.current_divisor()).unwrap();
 
-    self.consume_remaining(divisor).map(|(digit, remainder)| {
-      self.remaining = remainder;
-      self.remaining_digits -= 1;
+        self.consume_remaining(divisor).map(|(digit, remainder)| {
+            self.remaining = remainder;
+            self.remaining_digits -= 1;
 
-      digit
-    })
-  }
-
-  fn size_hint(&self) -> (uint, Option<uint>) {
-    match self.remaining.to_f64() {
-      Some(as_float) => {
-        let log = as_float.log10();
-        (log.floor() as uint, Some(log.ceil() as uint))
-      },
-
-      None => (0, None)
+            digit
+        })
     }
-  }
 
-  fn count(&mut self) -> uint {
-    let prev_count = self.remaining_digits;
+    fn size_hint(&self) -> (uint, Option<uint>) {
+        match self.remaining.to_f64() {
+            Some(as_float) => {
+                let log = as_float.log10();
+                (log.floor() as uint, Some(log.ceil() as uint))
+            },
 
-    self.remaining_digits = 0;
-    self.remaining = FromPrimitive::from_uint(0u).unwrap();
+            None => (0, None)
+        }
+    }
 
-    prev_count
-  }
+    fn count(&mut self) -> uint {
+        let prev_count = self.remaining_digits;
+
+        self.remaining_digits = 0;
+        self.remaining = FromPrimitive::from_uint(0u).unwrap();
+
+        prev_count
+    }
 }
 
 impl<A: Integer + FromPrimitive + ToPrimitive> DoubleEndedIterator<A> for Digits<A> {
-  fn next_back(&mut self) -> Option<A> {
-    let ten: A = FromPrimitive::from_uint(10u).unwrap();
+    fn next_back(&mut self) -> Option<A> {
+        let ten: A = FromPrimitive::from_uint(10u).unwrap();
 
-    self.consume_remaining(ten).map(|(remainder, digit)| {
-      self.remaining = remainder;
-      self.remaining_digits -= 1;
+        self.consume_remaining(ten).map(|(remainder, digit)| {
+            self.remaining = remainder;
+            self.remaining_digits -= 1;
 
-      digit
-    })
-  }
+            digit
+        })
+    }
 }
 
 pub fn new<A: ToPrimitive + Show>(number: A) -> Digits<A> {
-  Digits {
-    remaining_digits: number_of_digits(&number),
-    remaining: number,
-  }
+    Digits {
+        remaining_digits: number_of_digits(&number),
+        remaining: number,
+    }
 }
 
 impl<A: Integer + FromPrimitive + ToPrimitive> Digits<A> {
-  fn consume_remaining(&mut self, divisor: A) -> Option<(A, A)> {
-    if self.remaining_digits == 0 {
-      None
-    } else {
-      Some(self.remaining.div_rem(&divisor))
+    fn consume_remaining(&mut self, divisor: A) -> Option<(A, A)> {
+        if self.remaining_digits == 0 {
+            None
+        } else {
+            Some(self.remaining.div_rem(&divisor))
+        }
     }
-  }
 
-  fn current_divisor(&self) -> uint {
-    pow(10u, self.remaining_digits - 1)
-  }
+    fn current_divisor(&self) -> uint {
+        pow(10u, self.remaining_digits - 1)
+    }
 }
 
 fn number_of_digits<A: ToPrimitive + Show>(number: &A) -> uint {
-  let mut counter = DigitCounter { count: 0 };
-  (write!(&mut counter, "{}", number)).unwrap();
+    let mut counter = DigitCounter { count: 0 };
+    (write!(&mut counter, "{}", number)).unwrap();
 
-  counter.count
+    counter.count
 }
 
 struct DigitCounter {
-  count: uint,
+    count: uint,
 }
 
 impl Writer for DigitCounter {
-  fn write(&mut self, buf: &[u8]) -> IoResult<()> {
-    self.count += buf.len();
+    fn write(&mut self, buf: &[u8]) -> IoResult<()> {
+        self.count += buf.len();
 
-    Ok(())
-  }
+        Ok(())
+    }
 }
 
 #[cfg(test)]
 mod tests {
-  use super::new;
+    use super::new;
 
-  #[test]
-  fn test_digits_in_order() {
-    let digits = new(12345u).collect::<Vec<uint>>();
-    assert_eq!(digits[], [1, 2, 3, 4, 5][]);
-  }
+    #[test]
+    fn test_digits_in_order() {
+        let digits = new(12345u).collect::<Vec<uint>>();
+        assert_eq!(digits[], [1, 2, 3, 4, 5][]);
+    }
 
-  #[test]
-  fn test_digits_in_reverse() {
-    let digits = new(12345u).rev().collect::<Vec<uint>>();
-    assert_eq!(digits[], [5, 4, 3, 2, 1][]);
-  }
+    #[test]
+    fn test_digits_in_reverse() {
+        let digits = new(12345u).rev().collect::<Vec<uint>>();
+        assert_eq!(digits[], [5, 4, 3, 2, 1][]);
+    }
 
-  #[test]
-  fn test_digits_in_order_with_zero() {
-    let digits = new(123450u).collect::<Vec<uint>>();
-    assert_eq!(digits[], [1, 2, 3, 4, 5, 0][]);
-  }
+    #[test]
+    fn test_digits_in_order_with_zero() {
+        let digits = new(123450u).collect::<Vec<uint>>();
+        assert_eq!(digits[], [1, 2, 3, 4, 5, 0][]);
+    }
 
-  #[test]
-  fn test_digits_in_reverse_with_zero() {
-    let digits = new(123450u).rev().collect::<Vec<uint>>();
-    assert_eq!(digits[], [0, 5, 4, 3, 2, 1][]);
-  }
+    #[test]
+    fn test_digits_in_reverse_with_zero() {
+        let digits = new(123450u).rev().collect::<Vec<uint>>();
+        assert_eq!(digits[], [0, 5, 4, 3, 2, 1][]);
+    }
 }

@@ -15,29 +15,29 @@ use shared::data_reader;
 use std::iter::AdditiveIterator;
 
 fn main() {
-  let names: Vec<String> = get_name_list();
+    let names: Vec<String> = get_name_list();
 
-  let mut values: Vec<Vec<uint>> = names.into_iter().map(|name| {
-    alphabetical_value(name[])
-  }).collect();
+    let mut values: Vec<Vec<uint>> = names.into_iter().map(|name| {
+        alphabetical_value(name[])
+    }).collect();
 
-  values.sort();
+    values.sort();
 
-  let result = values.into_iter().enumerate().fold(0, |sum, (index, score)| {
-    sum + ((index + 1) * score.into_iter().sum())
-  });
+    let result = values.into_iter().enumerate().fold(0, |sum, (index, score)| {
+        sum + ((index + 1) * score.into_iter().sum())
+    });
 
-  println!("{}", result);
+    println!("{}", result);
 }
 
 fn alphabetical_value(name: &str) -> Vec<uint> {
-  name.chars().map(|chr| {
-    let result = (chr as u8) - ('A' as u8) + 1;
+    name.chars().map(|chr| {
+        let result = (chr as u8) - ('A' as u8) + 1;
 
-    result as uint
-  }).collect::<Vec<uint>>()
+        result as uint
+    }).collect::<Vec<uint>>()
 }
 
 fn get_name_list() -> Vec<String> {
-  data_reader::for_path("./data/22-names.txt").collect()
+    data_reader::for_path("./data/22-names.txt").collect()
 }

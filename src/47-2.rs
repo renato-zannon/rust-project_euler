@@ -24,135 +24,135 @@ static CONSECUTIVE_COUNT: uint = 4;
 
 // Alternatvie, Dynamic programming-based implementation
 fn main() {
-  let mut sieve = sieve::new();
+    let mut sieve = sieve::new();
 
-  for segment_start in count(2, SEGMENT_SIZE) {
-    let mut segment = Segment::new(segment_start);
-    let segment_end = segment.last_number();
+    for segment_start in count(2, SEGMENT_SIZE) {
+        let mut segment = Segment::new(segment_start);
+        let segment_end = segment.last_number();
 
-    sieve.compute_until(segment_end);
+        sieve.compute_until(segment_end);
 
-    for prime in sieve.found_primes().iter().take_while(|&&p| p <= segment_end) {
-      let prime = *prime;
+        for prime in sieve.found_primes().iter().take_while(|&&p| p <= segment_end) {
+            let prime = *prime;
 
-      let first_composite = match prime.cmp(&segment_start) {
-        Equal | Greater => prime,
-        Less => segment_start + (prime - (segment_start % prime)) % prime,
-      };
+            let first_composite = match prime.cmp(&segment_start) {
+                Equal | Greater => prime,
+                Less => segment_start + (prime - (segment_start % prime)) % prime,
+            };
 
-      for composite in range_step_inclusive(first_composite, segment_end, prime) {
-        segment.add_factor(composite, prime);
-      }
+            for composite in range_step_inclusive(first_composite, segment_end, prime) {
+                segment.add_factor(composite, prime);
+            }
+        }
+
+        let mut head = None;
+        let mut consecutive_count = 0;
+
+        for (number, factor_count) in segment.number_factors() {
+            if factor_count == FACTOR_COUNT {
+                head = head.or(Some(number));
+                consecutive_count += 1;
+            } else {
+                head = None;
+                consecutive_count = 0;
+            }
+
+            if consecutive_count == CONSECUTIVE_COUNT {
+                println!("{}", head.unwrap());
+                return;
+            }
+        }
     }
-
-    let mut head = None;
-    let mut consecutive_count = 0;
-
-    for (number, factor_count) in segment.number_factors() {
-      if factor_count == FACTOR_COUNT {
-        head = head.or(Some(number));
-        consecutive_count += 1;
-      } else {
-        head = None;
-        consecutive_count = 0;
-      }
-
-      if consecutive_count == CONSECUTIVE_COUNT {
-        println!("{}", head.unwrap());
-        return;
-      }
-    }
-  }
 }
 
 struct Segment {
-  start: uint,
-  values: [FactorCount, ..SEGMENT_SIZE],
+    start: uint,
+    values: [FactorCount, ..SEGMENT_SIZE],
 }
 
 struct FactorCount {
-  factors: [Option<uint>, ..FACTOR_COUNT],
-  count: uint,
+    factors: [Option<uint>, ..FACTOR_COUNT],
+    count: uint,
 }
 
 struct NumberFactors<'a> {
-  start: uint,
-  values: &'a [FactorCount],
+    start: uint,
+    values: &'a [FactorCount],
 }
 
 impl Segment {
-  fn new(start: uint) -> Segment {
-    let factor_count = FactorCount {
-      factors: [None, ..FACTOR_COUNT],
-      count: 0,
-    };
+    fn new(start: uint) -> Segment {
+        let factor_count = FactorCount {
+            factors: [None, ..FACTOR_COUNT],
+            count: 0,
+        };
 
-    Segment {
-      start: start,
-      values: [factor_count, ..SEGMENT_SIZE],
+        Segment {
+            start: start,
+            values: [factor_count, ..SEGMENT_SIZE],
+        }
     }
-  }
 
-  fn add_factor(&mut self, number: uint, factor: uint) {
-    let first = self.first_number();
-    let last  = self.last_number();
+    fn add_factor(&mut self, number: uint, factor: uint) {
+        let first = self.first_number();
+        let last  = self.last_number();
 
-    assert!(number >= first && number <= last,
-      "Number {} outside allowed range - [{}, {}]", number, first, last);
+        assert!(number >= first && number <= last,
+            "Number {} outside allowed range - [{}, {}]", number, first, last);
 
-    let factor_count = &mut self.values[number - first];
-    factor_count.add_factor(factor);
-  }
-
-  fn number_factors(&self) -> NumberFactors {
-    NumberFactors {
-      start: self.start,
-      values: self.values[],
+        let factor_count = &mut self.values[number - first];
+        factor_count.add_factor(factor);
     }
-  }
 
-  fn first_number(&self) -> uint {
-    self.start
-  }
+    fn number_factors(&self) -> NumberFactors {
+        NumberFactors {
+            start: self.start,
+            values: self.values[],
+        }
+    }
 
-  fn last_number(&self) -> uint {
-    self.start + SEGMENT_SIZE - 1
-  }
+    fn first_number(&self) -> uint {
+        self.start
+    }
+
+    fn last_number(&self) -> uint {
+        self.start + SEGMENT_SIZE - 1
+    }
 }
 
 impl FactorCount {
-  fn add_factor(&mut self, factor: uint) {
-    if self.count == FACTOR_COUNT {
-      return;
-    }
+    fn add_factor(&mut self, factor: uint) {
+        if self.count == FACTOR_COUNT {
+            return;
+        }
 
-    for maybe_factor in self.factors.iter_mut() {
-      match *maybe_factor {
-        None => {
-          self.count += 1;
-          *maybe_factor = Some(factor);
-          return;
-        },
+        for maybe_factor in self.factors.iter_mut() {
+            match *maybe_factor {
+                None => {
+                    self.count += 1;
+                    *maybe_factor = Some(factor);
+                    return;
+                },
 
-        Some(fact) if fact == factor => return,
-        _ => continue,
-      }
+                Some(fact) if fact == factor => return,
+                _ => continue,
+            }
+        }
     }
-  }
 }
 
 impl<'a> Iterator<(uint, uint)> for NumberFactors<'a> {
-  fn next(&mut self) -> Option<(uint, uint)> {
-    match self.values.head() {
-      Some(factor_count) => {
-        let number = self.start;
-        self.start += 1;
-        self.values = self.values.tail();
+    fn next(&mut self) -> Option<(uint, uint)> {
+        match self.values.head() {
+            Some(factor_count) => {
+                let number = self.start;
+                self.start += 1;
+                self.values = self.values.tail();
 
-        Some((number, factor_count.count))
-      },
+                Some((number, factor_count.count))
+            },
 
-      None => None,
+            None => None,
+        }
     }
-  }
 }

@@ -17,48 +17,48 @@ use std::iter::range_step_inclusive;
 
 #[cfg(not(test))]
 fn main() {
-  use std::iter::AdditiveIterator;
+    use std::iter::AdditiveIterator;
 
-  println!("{}", diagonals(1001).into_iter().sum());
+    println!("{}", diagonals(1001).into_iter().sum());
 }
 
 fn diagonals(square_size: uint) -> Vec<uint> {
-  assert!(square_size % 2 == 1);
+    assert!(square_size % 2 == 1);
 
-  let mut result  = vec!(1);
-  let mut current = 1;
+    let mut result  = vec!(1);
+    let mut current = 1;
 
-  for size in range_step_inclusive(3, square_size, 2) {
-    for _ in range(0u, 4) {
-      current += size - 1;
-      result.push(current);
+    for size in range_step_inclusive(3, square_size, 2) {
+        for _ in range(0u, 4) {
+            current += size - 1;
+            result.push(current);
+        }
     }
-  }
 
-  result
+    result
 }
 
 #[cfg(test)]
 mod tests {
-  use super::diagonals;
+    use super::diagonals;
 
-  #[test]
-  fn test_width_1() {
-    assert_eq!(diagonals(1), vec!(1));
-  }
+    #[test]
+    fn test_width_1() {
+        assert_eq!(diagonals(1), vec!(1));
+    }
 
-  #[test]
-  fn test_width_3() {
-    assert_eq!(diagonals(3), vec!(1, 3, 5, 7, 9));
-  }
+    #[test]
+    fn test_width_3() {
+        assert_eq!(diagonals(3), vec!(1, 3, 5, 7, 9));
+    }
 
-  #[test]
-  fn test_width_5() {
-    assert_eq!(diagonals(5), vec!(1, 3, 5, 7, 9, 13, 17, 21, 25));
-  }
+    #[test]
+    fn test_width_5() {
+        assert_eq!(diagonals(5), vec!(1, 3, 5, 7, 9, 13, 17, 21, 25));
+    }
 
-  #[test]
-  fn test_width_7() {
-    assert_eq!(diagonals(7), vec!(1, 3, 5, 7, 9, 13, 17, 21, 25, 31, 37, 43, 49));
-  }
+    #[test]
+    fn test_width_7() {
+        assert_eq!(diagonals(7), vec!(1, 3, 5, 7, 9, 13, 17, 21, 25, 31, 37, 43, 49));
+    }
 }

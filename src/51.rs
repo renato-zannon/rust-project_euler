@@ -15,132 +15,132 @@ extern crate shared;
 use shared::{digits, sieve};
 
 fn main() {
-  let mut sieve = sieve::new();
+    let mut sieve = sieve::new();
 
-  loop {
-    let prime = sieve.next().unwrap();
-    let prime_digits = digits::new(prime).collect::<Vec<uint>>();
+    loop {
+        let prime = sieve.next().unwrap();
+        let prime_digits = digits::new(prime).collect::<Vec<uint>>();
 
-    let mut families = range(1, prime_digits.len()).flat_map(|variable_count| {
-      families_from_variables(variable_count, &prime_digits).into_iter()
-    });
+        let mut families = range(1, prime_digits.len()).flat_map(|variable_count| {
+            families_from_variables(variable_count, &prime_digits).into_iter()
+        });
 
-    for family_iter in families {
-      let family = family_iter.filter(|&num| sieve.is_prime(num)).collect::<Vec<uint>>();
+        for family_iter in families {
+            let family = family_iter.filter(|&num| sieve.is_prime(num)).collect::<Vec<uint>>();
 
-      if family.len() == 8 {
-        println!("{}", prime);
-        return;
-      }
+            if family.len() == 8 {
+                println!("{}", prime);
+                return;
+            }
+        }
     }
-  }
 }
 
 fn families_from_variables(count: uint, digits: &Vec<uint>) -> Vec<FamilyIterator> {
-  let mut result    = Vec::new();
-  let mut variables = Vec::from_fn(count, |index| index);
+    let mut result    = Vec::new();
+    let mut variables = Vec::from_fn(count, |index| index);
 
-  let digit_count = digits.len();
-
-  loop {
-    result.push(FamilyIterator {
-      variables: variables.clone(),
-      template:  digits.clone(),
-      last_used: None,
-    });
-
-    let mut max_index  = digit_count - 1;
-    let mut current_index = variables.len();
-
-    let var_slice = variables.as_mut_slice();
+    let digit_count = digits.len();
 
     loop {
-      current_index = current_index - 1;
+        result.push(FamilyIterator {
+            variables: variables.clone(),
+            template:  digits.clone(),
+            last_used: None,
+        });
 
-      let current = match var_slice.get(current_index) {
-        Some(value) => value.clone(),
-        None        => return result,
-      };
+        let mut max_index  = digit_count - 1;
+        let mut current_index = variables.len();
 
-      let next_value = current + 1;
+        let var_slice = variables.as_mut_slice();
 
-      if next_value > max_index {
-        var_slice[current_index] = match var_slice.get(current_index - 1) {
-          Some(prev_var) => prev_var + 2,
-          None           => return result,
-        };
+        loop {
+            current_index = current_index - 1;
 
-        max_index -= 1;
-      } else {
-        var_slice[current_index] = next_value;
-        break;
-      }
+            let current = match var_slice.get(current_index) {
+                Some(value) => value.clone(),
+                None        => return result,
+            };
+
+            let next_value = current + 1;
+
+            if next_value > max_index {
+                var_slice[current_index] = match var_slice.get(current_index - 1) {
+                    Some(prev_var) => prev_var + 2,
+                    None           => return result,
+                };
+
+                max_index -= 1;
+            } else {
+                var_slice[current_index] = next_value;
+                break;
+            }
+        }
     }
-  }
 }
 
 struct FamilyIterator {
-  variables: Vec<uint>,
-  template:  Vec<uint>,
-  last_used: Option<uint>,
+    variables: Vec<uint>,
+    template:  Vec<uint>,
+    last_used: Option<uint>,
 }
 
 impl Iterator<uint> for FamilyIterator {
-  fn next(&mut self) -> Option<uint> {
-    let last_used = match self.last_used {
-      val @ Some(_) => val,
-      None          => return self.init_pattern(),
-    };
+    fn next(&mut self) -> Option<uint> {
+        let last_used = match self.last_used {
+            val @ Some(_) => val,
+            None          => return self.init_pattern(),
+        };
 
-    match last_used {
-      None | Some(9) => None,
+        match last_used {
+            None | Some(9) => None,
 
-      Some(prev) => {
-        let new   = prev + 1;
-        let templ = self.template.as_mut_slice();
+            Some(prev) => {
+                let new   = prev + 1;
+                let templ = self.template.as_mut_slice();
 
-        for &var_index in self.variables.iter() {
-          templ[var_index] = new;
+                for &var_index in self.variables.iter() {
+                    templ[var_index] = new;
+                }
+                let new_value = FamilyIterator::to_number(templ);
+
+                self.last_used = Some(new);
+                Some(new_value)
+            }
         }
-        let new_value = FamilyIterator::to_number(templ);
-
-        self.last_used = Some(new);
-        Some(new_value)
-      }
     }
-  }
 }
 
 impl FamilyIterator {
-  fn to_number(digits: &[uint]) -> uint {
-    digits.iter().fold(0, |acc, &digit| {
-      acc * 10 + digit
-    })
-  }
-
-  fn init_pattern(&mut self) -> Option<uint> {
-    let mut found_variable = None;
-    let templ = self.template[];
-
-    for &var_index in self.variables.iter() {
-      let on_template = match templ.get(var_index) {
-        Some(&value) => value,
-        None         => return None,
-      };
-
-      match found_variable {
-        None       => found_variable = Some(on_template),
-        Some(prev) => {
-          if prev != on_template {
-            return None;
-          }
-        }
-      }
+    fn to_number(digits: &[uint]) -> uint {
+        digits.iter().fold(0, |acc, &digit| {
+            acc * 10 + digit
+        })
     }
 
-    self.last_used = found_variable;
-    found_variable.map(|_| {
-      FamilyIterator::to_number(self.template[])
-    })
-  }
+    fn init_pattern(&mut self) -> Option<uint> {
+        let mut found_variable = None;
+        let templ = self.template[];
+
+        for &var_index in self.variables.iter() {
+            let on_template = match templ.get(var_index) {
+                Some(&value) => value,
+                None         => return None,
+            };
+
+            match found_variable {
+                None       => found_variable = Some(on_template),
+                Some(prev) => {
+                    if prev != on_template {
+                        return None;
+                    }
+                }
+            }
+        }
+
+        self.last_used = found_variable;
+        found_variable.map(|_| {
+            FamilyIterator::to_number(self.template[])
+        })
+    }
 }

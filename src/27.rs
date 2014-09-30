@@ -27,33 +27,33 @@ use shared::sieve;
 use std::iter::count;
 
 fn main() {
-  let mut primes = sieve::new();
+    let mut primes = sieve::new();
 
-  let mut max_product = 0;
-  let mut max_prime_count = 0;
+    let mut max_product = 0;
+    let mut max_prime_count = 0;
 
-  // Make n = 0 in n² + an + b = p and you get b = p. So, unless b is a prime, the search will stop
-  // on the very first iteration. Since I already have a eratosthenes sieve, I might as well use it
-  // here to generate the possible values of b and speed things up a bit.
-  let possible_bs: Vec<uint> = primes.by_ref().take_while(|&prime| prime < 1000).collect();
+    // Make n = 0 in n² + an + b = p and you get b = p. So, unless b is a prime, the search will stop
+    // on the very first iteration. Since I already have a eratosthenes sieve, I might as well use it
+    // here to generate the possible values of b and speed things up a bit.
+    let possible_bs: Vec<uint> = primes.by_ref().take_while(|&prime| prime < 1000).collect();
 
-  for b in possible_bs.into_iter() {
-    let b = b as int;
+    for b in possible_bs.into_iter() {
+        let b = b as int;
 
-    for a in range(-999i, 999) {
-      let prime_count = count(0i, 1).take_while(|&n| {
-        let value = n * n + a * n + b;
-        if value < 0 { return false; }
+        for a in range(-999i, 999) {
+            let prime_count = count(0i, 1).take_while(|&n| {
+                let value = n * n + a * n + b;
+                if value < 0 { return false; }
 
-        primes.is_prime(value as uint)
-      }).count();
+                primes.is_prime(value as uint)
+            }).count();
 
-      if prime_count > max_prime_count {
-        max_product = a * b;
-        max_prime_count = prime_count;
-      }
+            if prime_count > max_prime_count {
+                max_product = a * b;
+                max_prime_count = prime_count;
+            }
+        }
     }
-  }
 
-  println!("{}", max_product);
+    println!("{}", max_product);
 }

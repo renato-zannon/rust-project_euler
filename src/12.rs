@@ -22,40 +22,40 @@
 static NUMBER_OF_DIVISORS: uint = 500;
 
 fn main() {
-  let result = triangular_numbers::new().find(|&num| {
-    let divisor_count = range(1, (num as f64).sqrt() as u64).fold(0, |sum, candidate| {
-      if num % candidate == 0 {
-        sum + 2
-      } else {
-        sum
-      }
+    let result = triangular_numbers::new().find(|&num| {
+        let divisor_count = range(1, (num as f64).sqrt() as u64).fold(0, |sum, candidate| {
+            if num % candidate == 0 {
+                sum + 2
+            } else {
+                sum
+            }
+        });
+
+        divisor_count > NUMBER_OF_DIVISORS
     });
 
-    divisor_count > NUMBER_OF_DIVISORS
-  });
-
-  println!("{}", result);
+    println!("{}", result);
 }
 
 mod triangular_numbers {
-  use std::iter::count;
+    use std::iter::count;
 
-  pub struct TriangularNumbers<'a> {
-    iter: Box<Iterator<u64> + 'a>
-  }
-
-  impl<'a> Iterator<u64> for TriangularNumbers<'a> {
-    fn next(&mut self) -> Option<u64> {
-      self.iter.next()
+    pub struct TriangularNumbers<'a> {
+        iter: Box<Iterator<u64> + 'a>
     }
-  }
 
-  pub fn new<'a>() -> TriangularNumbers<'a> {
-    let iter = count(1u64, 1).scan(0u64, |sum, number| {
-      *sum = *sum + number;
-      Some(*sum)
-    });
+    impl<'a> Iterator<u64> for TriangularNumbers<'a> {
+        fn next(&mut self) -> Option<u64> {
+            self.iter.next()
+        }
+    }
 
-    TriangularNumbers { iter: box iter }
-  }
+    pub fn new<'a>() -> TriangularNumbers<'a> {
+        let iter = count(1u64, 1).scan(0u64, |sum, number| {
+            *sum = *sum + number;
+            Some(*sum)
+        });
+
+        TriangularNumbers { iter: box iter }
+    }
 }

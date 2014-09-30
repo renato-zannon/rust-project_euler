@@ -16,21 +16,21 @@ use std::iter::range_inclusive;
 static DENOMINATIONS: &'static [uint] = &[200, 100, 50, 20, 10, 5, 2, 1];
 
 fn main() {
-  println!("{}", ways_to_make(200, DENOMINATIONS));
+    println!("{}", ways_to_make(200, DENOMINATIONS));
 }
 
 // Dynamic programming solution, adapted from the overview PDF
 fn ways_to_make(value: uint, denominations: &[uint]) -> uint {
-  let mut ways = Vec::from_elem(value + 1, 0u);
-  let ways = ways.as_mut_slice();
+    let mut ways = Vec::from_elem(value + 1, 0u);
+    let ways = ways.as_mut_slice();
 
-  ways[0] = 1;
+    ways[0] = 1;
 
-  for &denom in denominations.iter() {
-    for current in range_inclusive(denom, value) {
-      ways[current] += ways[current - denom];
+    for &denom in denominations.iter() {
+        for current in range_inclusive(denom, value) {
+            ways[current] += ways[current - denom];
+        }
     }
-  }
 
-  *ways.last().unwrap()
+    *ways.last().unwrap()
 }

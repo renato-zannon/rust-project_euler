@@ -11,7 +11,7 @@ use std::iter::range_inclusive as irange;
 use num::integer::lcm;
 
 fn main() {
-  let n = irange(1u, 20u).fold(1, lcm);
+    let n = irange(1u, 20u).fold(1, lcm);
 
-  println!("{}", n);
+    println!("{}", n);
 }

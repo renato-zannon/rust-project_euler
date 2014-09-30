@@ -21,47 +21,47 @@ use shared::digits;
 use std::iter::{count, range_inclusive};
 
 fn main() {
-  let mut largest = 0u;
+    let mut largest = 0u;
 
-  for n in range(2u, 9) {
-    for start in count(1u, 1) {
-      let prod = concat_product(start, n);
+    for n in range(2u, 9) {
+        for start in count(1u, 1) {
+            let prod = concat_product(start, n);
 
-      match is_9_pandigital(prod[]) {
-        IsPandigital => {
-          let num_prod = to_num(prod);
+            match is_9_pandigital(prod[]) {
+                IsPandigital => {
+                    let num_prod = to_num(prod);
 
-          if num_prod > largest {
-            largest = num_prod;
-          }
-        },
+                    if num_prod > largest {
+                        largest = num_prod;
+                    }
+                },
 
-        TooLarge => break,
-        _        => (),
-      }
+                TooLarge => break,
+                _        => (),
+            }
+        }
     }
-  }
 
-  println!("{}", largest);
+    println!("{}", largest);
 }
 
 fn concat_product(number: uint, max_factor: uint) -> Vec<uint> {
-  range_inclusive(1u, max_factor).map(|factor| {
-    number * factor
-  }).fold(Vec::with_capacity(9), |mut result, n| {
-    result.extend(digits::new(n));
-    result
-  })
+    range_inclusive(1u, max_factor).map(|factor| {
+        number * factor
+    }).fold(Vec::with_capacity(9), |mut result, n| {
+        result.extend(digits::new(n));
+        result
+    })
 }
 
 fn to_num(digits: Vec<uint>) -> uint {
-  let mut multiplier = 1;
-  let mut result = 0;
+    let mut multiplier = 1;
+    let mut result = 0;
 
-  for digit in digits.into_iter().rev() {
-    result += digit * multiplier;
-    multiplier *= 10;
-  }
+    for digit in digits.into_iter().rev() {
+        result += digit * multiplier;
+        multiplier *= 10;
+    }
 
-  result
+    result
 }

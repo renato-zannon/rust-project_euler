@@ -23,91 +23,91 @@ use shared::digits;
 static DIVISORS: &'static [uint] = &[2, 3, 5, 7, 11, 13, 17];
 
 fn main() {
-  // Start with a collection of all 3-digit numbers divisible by 17 that don't
-  // that don't have repeated digits
-  let bases = range_step(102u, 1000, 17).filter_map(|multiple| {
-    let mut found_digits = [false, ..10];
-    let num_digits = digits::new(multiple).collect::<Vec<uint>>();
+    // Start with a collection of all 3-digit numbers divisible by 17 that don't
+    // that don't have repeated digits
+    let bases = range_step(102u, 1000, 17).filter_map(|multiple| {
+        let mut found_digits = [false, ..10];
+        let num_digits = digits::new(multiple).collect::<Vec<uint>>();
 
-    for &digit in num_digits.iter() {
-      if found_digits[digit] {
-        return None;
-      } else {
-        found_digits[digit] = true;
-      }
-    }
+        for &digit in num_digits.iter() {
+            if found_digits[digit] {
+                return None;
+            } else {
+                found_digits[digit] = true;
+            }
+        }
 
-    Some(num_digits)
-  }).collect::<Vec<_>>();
+        Some(num_digits)
+    }).collect::<Vec<_>>();
 
-  let divisible_by_all = DIVISORS.init().iter().rev().fold(bases, |numbers, &divisor| {
-    let mut next_digits: Vec<Vec<uint>> = Vec::new();
+    let divisible_by_all = DIVISORS.init().iter().rev().fold(bases, |numbers, &divisor| {
+        let mut next_digits: Vec<Vec<uint>> = Vec::new();
 
-    for digits in numbers.into_iter() {
-      let next = plus_one_digit(digits).filter(|more_digits| {
-        to_number(more_digits.slice_to(3)) % divisor == 0
-      });
+        for digits in numbers.into_iter() {
+            let next = plus_one_digit(digits).filter(|more_digits| {
+                to_number(more_digits.slice_to(3)) % divisor == 0
+            });
 
-      next_digits.extend(next);
-    }
+            next_digits.extend(next);
+        }
 
-    next_digits
-  });
+        next_digits
+    });
 
-  let result = divisible_by_all.into_iter()
-    .map(|digits| to_number(digits[]))
-    .sum();
+    let result = divisible_by_all.into_iter()
+        .map(|digits| to_number(digits[]))
+        .sum();
 
-  println!("{}", result);
+    println!("{}", result);
 }
 
 fn to_number(digits: &[uint]) -> uint {
-  digits.iter().fold(0u, |acc, &digit| {
-    acc * 10 + digit
-  })
+    digits.iter().fold(0u, |acc, &digit| {
+        acc * 10 + digit
+    })
 }
 
 fn plus_one_digit(base: Vec<uint>) -> PlusOneDigit {
-  let mut used_digits = [false, ..10];
+    let mut used_digits = [false, ..10];
 
-  for &digit in base.iter() {
-    used_digits[digit] = true;
-  }
+    for &digit in base.iter() {
+        used_digits[digit] = true;
+    }
 
-  PlusOneDigit {
-    used_digits: used_digits,
-    base: base,
-  }
+    PlusOneDigit {
+        used_digits: used_digits,
+        base: base,
+    }
 }
 
 struct PlusOneDigit {
-  used_digits: [bool, ..10],
-  base: Vec<uint>,
+    used_digits: [bool, ..10],
+    base: Vec<uint>,
 }
 
 impl Iterator<Vec<uint>> for PlusOneDigit {
-  fn next(&mut self) -> Option<Vec<uint>> {
-    self.get_next_digit().map(|next_digit| {
-      let mut combination = Vec::with_capacity(self.base.capacity() + 1);
+    fn next(&mut self) -> Option<Vec<uint>> {
+        self.get_next_digit().map(|next_digit| {
+            let mut combination = Vec::with_capacity(self.base.capacity() + 1);
 
-      combination.push(next_digit);
-      combination.push_all(self.base[]);
+            combination.push(next_digit);
+            combination.push_all(self.base[]);
 
-      self.used_digits[next_digit] = true;
+            self.used_digits[next_digit] = true;
 
-      combination
-    })
-  }
+            combination
+        })
+    }
 }
 
 impl PlusOneDigit {
-  fn get_next_digit(&self) -> Option<uint> {
-    for (digit, &was_used) in self.used_digits.iter().enumerate() {
-      if !was_used {
-        return Some(digit)
-      }
-    }
+    fn get_next_digit(&self) -> Option<uint> {
+        for (digit, &was_used) in self.used_digits.iter().enumerate() {
+            if !was_used {
+                return Some(digit)
+            }
+        }
 
-    None
-  }
+        None
+    }
 }

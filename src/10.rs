@@ -10,9 +10,9 @@ use shared::sieve;
 static PRIME_MAX: uint = 2_000_000;
 
 fn main() {
-  let result = sieve::new()
-    .take_while(|&prime| prime < PRIME_MAX)
-    .fold(0u64, |acc, num| acc + (num as u64));
+    let result = sieve::new()
+        .take_while(|&prime| prime < PRIME_MAX)
+        .fold(0u64, |acc, num| acc + (num as u64));
 
-  println!("{}", result);
+    println!("{}", result);
 }

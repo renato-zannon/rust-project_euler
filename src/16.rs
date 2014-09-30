@@ -11,17 +11,17 @@ use std::num::pow;
 use num::bigint::BigUint;
 
 fn main() {
-  let strnum = power_of_2(1_000).to_string();
+    let strnum = power_of_2(1_000).to_string();
 
-  let result = strnum[].chars().fold(0, |digit, sum| digit + to_i(sum));
-  println!("{}", result);
+    let result = strnum[].chars().fold(0, |digit, sum| digit + to_i(sum));
+    println!("{}", result);
 }
 
 fn power_of_2(power: uint) -> BigUint {
-  let num: BigUint = FromPrimitive::from_uint(2).unwrap();
-  pow(num, power)
+    let num: BigUint = FromPrimitive::from_uint(2).unwrap();
+    pow(num, power)
 }
 
 fn to_i(chr: char) -> uint {
-  chr.to_digit(10).unwrap()
+    chr.to_digit(10).unwrap()
 }

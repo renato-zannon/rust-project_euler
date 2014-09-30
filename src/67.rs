@@ -26,41 +26,41 @@ use std::from_str::from_str;
 use shared::triangle;
 
 fn main() {
-  let mut triangle = triangle::new(deep_slice(&read_triangle())[]);
-  let result = triangle.maximum_total();
+    let mut triangle = triangle::new(deep_slice(&read_triangle())[]);
+    let result = triangle.maximum_total();
 
-  println!("{}", result);
+    println!("{}", result);
 }
 
 fn read_triangle() -> Vec<Vec<uint>> {
-  let path = &Path::new("./data/67-triangle.txt");
-  let mut file = BufferedReader::new(File::open(path));
+    let path = &Path::new("./data/67-triangle.txt");
+    let mut file = BufferedReader::new(File::open(path));
 
-  let mut result = Vec::new();
+    let mut result = Vec::new();
 
-  for line in file.lines() {
-    let line_text = line.unwrap();
-    let mut parsed_line = Vec::new();
+    for line in file.lines() {
+        let line_text = line.unwrap();
+        let mut parsed_line = Vec::new();
 
-    for atom in line_text[].trim().split(' ') {
-      match from_str::<uint>(atom) {
-        Some(num) => { parsed_line.push(num); },
-        None      => { () }
-      }
+        for atom in line_text[].trim().split(' ') {
+            match from_str::<uint>(atom) {
+                Some(num) => { parsed_line.push(num); },
+                None      => { () }
+            }
+        }
+
+        result.push(parsed_line);
     }
 
-    result.push(parsed_line);
-  }
-
-  result
+    result
 }
 
 fn deep_slice(v: &Vec<Vec<uint>>) -> Vec<&[uint]> {
-  let mut result: Vec<&[uint]> = Vec::new();
+    let mut result: Vec<&[uint]> = Vec::new();
 
-  for row in v.iter() {
-    result.push(row[]);
-  }
+    for row in v.iter() {
+        result.push(row[]);
+    }
 
-  result
+    result
 }

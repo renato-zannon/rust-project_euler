@@ -10,60 +10,60 @@
  * Find the product abc. */
 
 fn main() {
-  let (result, (a, b, c)) = triplets::new().find(|&(a, b, c)| {
-    a + b + c == 1000
-  }).map(|(a, b, c)| {
-    (a * b * c, (a, b, c))
-  }).unwrap();
+    let (result, (a, b, c)) = triplets::new().find(|&(a, b, c)| {
+        a + b + c == 1000
+    }).map(|(a, b, c)| {
+        (a * b * c, (a, b, c))
+    }).unwrap();
 
 
-  println!("{} ({}, {}, {})", result, a, b, c);
+    println!("{} ({}, {}, {})", result, a, b, c);
 }
 
 pub mod triplets {
-  pub struct Triplets {
-    counter: Counter,
-  }
-
-  impl Iterator<(uint, uint, uint)> for Triplets {
-    fn next(&mut self) -> Option<(uint, uint, uint)> {
-      self.counter.find(is_triplet)
+    pub struct Triplets {
+        counter: Counter,
     }
-  }
 
-  fn is_triplet(&(a, b, c): &(uint, uint, uint)) -> bool {
-    (c * c) == (a * a) + (b * b)
-  }
-
-  pub fn new() -> Triplets {
-    let counter = Counter { last_c: 1, last_b: 0, last_a: 0 };
-    Triplets { counter: counter }
-  }
-
-  struct Counter {
-    last_c: uint,
-    last_b: uint,
-    last_a: uint
-  }
-
-  impl Iterator<(uint, uint, uint)> for Counter {
-    fn next(&mut self) -> Option<(uint, uint, uint)> {
-      if self.last_a > 0 {
-        self.last_a -= 1;
-      } else if self.last_b > 1 {
-        let new_b = self.last_b - 1;
-
-        self.last_b = new_b;
-        self.last_a = new_b - 1;
-      } else {
-        let new_c = self.last_c + 1;
-
-        self.last_c = new_c;
-        self.last_b = new_c - 1;
-        self.last_a = new_c - 2;
-      }
-
-      Some((self.last_a, self.last_b, self.last_c))
+    impl Iterator<(uint, uint, uint)> for Triplets {
+        fn next(&mut self) -> Option<(uint, uint, uint)> {
+            self.counter.find(is_triplet)
+        }
     }
-  }
+
+    fn is_triplet(&(a, b, c): &(uint, uint, uint)) -> bool {
+        (c * c) == (a * a) + (b * b)
+    }
+
+    pub fn new() -> Triplets {
+        let counter = Counter { last_c: 1, last_b: 0, last_a: 0 };
+        Triplets { counter: counter }
+    }
+
+    struct Counter {
+        last_c: uint,
+        last_b: uint,
+        last_a: uint
+    }
+
+    impl Iterator<(uint, uint, uint)> for Counter {
+        fn next(&mut self) -> Option<(uint, uint, uint)> {
+            if self.last_a > 0 {
+                self.last_a -= 1;
+            } else if self.last_b > 1 {
+                let new_b = self.last_b - 1;
+
+                self.last_b = new_b;
+                self.last_a = new_b - 1;
+            } else {
+                let new_c = self.last_c + 1;
+
+                self.last_c = new_c;
+                self.last_b = new_c - 1;
+                self.last_a = new_c - 2;
+            }
+
+            Some((self.last_a, self.last_b, self.last_c))
+        }
+    }
 }

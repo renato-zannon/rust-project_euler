@@ -15,48 +15,48 @@ use shared::{digits, sieve};
 static MEMBER_GAP: uint = 3330;
 
 fn main() {
-  let mut sieve = sieve::new();
+    let mut sieve = sieve::new();
 
-  let primes = sieve.clone()
-    .skip_while(|&prime| prime < 999)
-    .take_while(|&prime| prime <= 9999);
+    let primes = sieve.clone()
+        .skip_while(|&prime| prime < 999)
+        .take_while(|&prime| prime <= 9999);
 
-  let sequences = primes.filter_map(|prime| {
-    let digits: Vec<uint> = digits::new(prime).rev().collect();
+    let sequences = primes.filter_map(|prime| {
+        let digits: Vec<uint> = digits::new(prime).rev().collect();
 
-    let mut matching_permutations = digits[].permutations()
-      .map(|digits| to_number(digits[]))
-      .filter(|&perm| {
-        perm > prime &&
-          (perm - prime) % MEMBER_GAP == 0 &&
-          sieve.is_prime(perm)
-      });
+        let mut matching_permutations = digits[].permutations()
+            .map(|digits| to_number(digits[]))
+            .filter(|&perm| {
+                perm > prime &&
+                    (perm - prime) % MEMBER_GAP == 0 &&
+                    sieve.is_prime(perm)
+            });
 
-    let mut sequence: Vec<uint> = matching_permutations.collect();
-    sequence.push(prime);
+        let mut sequence: Vec<uint> = matching_permutations.collect();
+        sequence.push(prime);
 
-    sequence.sort();
-    sequence.dedup();
+        sequence.sort();
+        sequence.dedup();
 
-    if sequence.len() == 3 {
-      Some(sequence)
-    } else {
-      None
-    }
-  });
+        if sequence.len() == 3 {
+            Some(sequence)
+        } else {
+            None
+        }
+    });
 
-  let sequence = sequences.filter(|seq| seq[0] != 1487).next().unwrap();
+    let sequence = sequences.filter(|seq| seq[0] != 1487).next().unwrap();
 
-  let result = sequence.into_iter()
-    .map(|num| num.to_string())
-    .collect::<Vec<String>>()
-    .concat();
+    let result = sequence.into_iter()
+        .map(|num| num.to_string())
+        .collect::<Vec<String>>()
+        .concat();
 
-  println!("{}", result);
+    println!("{}", result);
 }
 
 fn to_number(digits: &[uint]) -> uint {
-  digits.iter().fold(0, |result, &digit| {
-    result * 10 + digit
-  })
+    digits.iter().fold(0, |result, &digit| {
+        result * 10 + digit
+    })
 }

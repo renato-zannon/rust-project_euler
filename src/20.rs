@@ -12,24 +12,24 @@ use std::num::One;
 use num::bigint::{BigUint, ToBigUint};
 
 fn main() {
-  let strnum = factorial(100).to_string();
+    let strnum = factorial(100).to_string();
 
-  let result = strnum[].chars().fold(0, |digit, sum| digit + to_i(sum));
-  println!("{}", result);
+    let result = strnum[].chars().fold(0, |digit, sum| digit + to_i(sum));
+    println!("{}", result);
 }
 
 fn factorial(n: uint) -> BigUint {
-  let mut result: BigUint = One::one();
-  let mut remaining: uint = n;
+    let mut result: BigUint = One::one();
+    let mut remaining: uint = n;
 
-  while remaining > 0 {
-    result = result * remaining.to_biguint().unwrap();
-    remaining -= 1;
-  }
+    while remaining > 0 {
+        result = result * remaining.to_biguint().unwrap();
+        remaining -= 1;
+    }
 
-  result
+    result
 }
 
 fn to_i(chr: char) -> uint {
-  chr.to_digit(10).unwrap()
+    chr.to_digit(10).unwrap()
 }

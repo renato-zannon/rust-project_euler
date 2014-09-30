@@ -9,42 +9,42 @@
 
 #[cfg(not(test))]
 fn main() {
-  let result = range(1u, 1_000)
-    .max_by(|&perimeter| solution_count(perimeter))
-    .unwrap();
+    let result = range(1u, 1_000)
+        .max_by(|&perimeter| solution_count(perimeter))
+        .unwrap();
 
-  println!("{}", result);
+    println!("{}", result);
 }
 
 fn solution_count(perimeter: uint) -> uint {
-  let mut count = 0;
-  let perimeter_by_3 = perimeter / 3;
-  let half_perimeter = perimeter / 2;
+    let mut count = 0;
+    let perimeter_by_3 = perimeter / 3;
+    let half_perimeter = perimeter / 2;
 
-  for a in range(1, perimeter_by_3) {
-    let a_squared = a * a;
+    for a in range(1, perimeter_by_3) {
+        let a_squared = a * a;
 
-    for b in range(half_perimeter - a, perimeter_by_3 + a) {
-      let c = perimeter - (a + b);
+        for b in range(half_perimeter - a, perimeter_by_3 + a) {
+            let c = perimeter - (a + b);
 
-      let b_squared = b * b;
-      let c_squared = c * c;
+            let b_squared = b * b;
+            let c_squared = c * c;
 
-      if a_squared + b_squared == c_squared {
-        count += 1;
-      }
+            if a_squared + b_squared == c_squared {
+                count += 1;
+            }
+        }
     }
-  }
 
-  return count;
+    return count;
 }
 
 #[cfg(test)]
 mod tests {
-  use super::solution_count;
+    use super::solution_count;
 
-  #[test]
-  fn test_example_solution_count() {
-    assert_eq!(solution_count(120), 3);
-  }
+    #[test]
+    fn test_example_solution_count() {
+        assert_eq!(solution_count(120), 3);
+    }
 }

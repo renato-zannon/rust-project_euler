@@ -9,26 +9,26 @@ extern crate collections;
 use collections::treemap::TreeMap;
 
 fn main() {
-  let result = ways_to_reach(20, 20, &mut TreeMap::new());
-  println!("{}", result);
+    let result = ways_to_reach(20, 20, &mut TreeMap::new());
+    println!("{}", result);
 }
 
 fn ways_to_reach(row: uint, column: uint, cache: &mut TreeMap<(uint, uint), uint>) -> uint {
-  return match cache.find(&(row, column)) {
-    Some(&value) => value,
+    return match cache.find(&(row, column)) {
+        Some(&value) => value,
 
-    None => {
-      let value = compute(row, column, cache);
-      cache.insert((row, column), value);
-      value
-    }
-  };
+        None => {
+            let value = compute(row, column, cache);
+            cache.insert((row, column), value);
+            value
+        }
+    };
 }
 
 fn compute(row: uint, column: uint, cache: &mut TreeMap<(uint, uint), uint>) -> uint {
-  match (row, column) {
-    (_, 0)        => 1,
-    (0, _)        => 1,
-    (row, column) => ways_to_reach(row - 1, column, cache) + ways_to_reach(row, column - 1, cache)
-  }
+    match (row, column) {
+        (_, 0)        => 1,
+        (0, _)        => 1,
+        (row, column) => ways_to_reach(row - 1, column, cache) + ways_to_reach(row, column - 1, cache)
+    }
 }

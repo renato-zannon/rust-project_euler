@@ -17,72 +17,72 @@ use std::iter::AdditiveIterator;
 use shared::data_reader;
 
 fn main() {
-  let reader = data_reader::for_path("./data/42-words.txt");
+    let reader = data_reader::for_path("./data/42-words.txt");
 
-  let result = reader.filter(|word| {
-    is_triangular_word(word[])
-  }).count();
+    let result = reader.filter(|word| {
+        is_triangular_word(word[])
+    }).count();
 
-  println!("{}", result);
+    println!("{}", result);
 }
 
 fn is_triangular_word(word: &str) -> bool {
-  let as_number = word.chars().map(|chr| {
-    (chr as uint) - ('A' as uint) + 1
-  }).sum();
+    let as_number = word.chars().map(|chr| {
+        (chr as uint) - ('A' as uint) + 1
+    }).sum();
 
-  triangular_index(as_number).is_some()
+    triangular_index(as_number).is_some()
 }
 
 // Deduced by solving x = n(n + 1)/2
 fn triangular_index(number: uint) -> Option<uint> {
-  if number == 1 {
-    return Some(1);
-  }
-
-  let delta = 1 + 8 * number;
-
-  return take_sqrt(delta)
-    .and_then(ensure_integer)
-    .and_then(ensure_divisible);
-
-  fn take_sqrt(delta: uint) -> Option<f64> {
-    delta.to_f64().map(|as_float| {
-      as_float.sqrt()
-    })
-  }
-
-  fn ensure_integer(delta_sqrt: f64) -> Option<uint> {
-    let is_integer = delta_sqrt == delta_sqrt.floor();
-
-    if is_integer {
-      delta_sqrt.to_uint()
-    } else {
-      None
+    if number == 1 {
+        return Some(1);
     }
-  }
 
-  fn ensure_divisible(integer_sqrt: uint) -> Option<uint> {
-    let (divided, remainder) = num::div_rem(integer_sqrt - 1, 2);
+    let delta = 1 + 8 * number;
 
-    if remainder == 0 {
-      Some(divided)
-    } else {
-      None
+    return take_sqrt(delta)
+        .and_then(ensure_integer)
+        .and_then(ensure_divisible);
+
+    fn take_sqrt(delta: uint) -> Option<f64> {
+        delta.to_f64().map(|as_float| {
+            as_float.sqrt()
+        })
     }
-  }
+
+    fn ensure_integer(delta_sqrt: f64) -> Option<uint> {
+        let is_integer = delta_sqrt == delta_sqrt.floor();
+
+        if is_integer {
+            delta_sqrt.to_uint()
+        } else {
+            None
+        }
+    }
+
+    fn ensure_divisible(integer_sqrt: uint) -> Option<uint> {
+        let (divided, remainder) = num::div_rem(integer_sqrt - 1, 2);
+
+        if remainder == 0 {
+            Some(divided)
+        } else {
+            None
+        }
+    }
 }
 
 #[test]
 fn test_triangular_index() {
-  let examples = [1u, 3, 6, 10, 15, 21, 28, 36, 45, 55];
+    let examples = [1u, 3, 6, 10, 15, 21, 28, 36, 45, 55];
 
-  for (index, &example) in examples.iter().enumerate() {
-    assert_eq!(triangular_index(example), Some(index + 1));
-  }
+    for (index, &example) in examples.iter().enumerate() {
+        assert_eq!(triangular_index(example), Some(index + 1));
+    }
 }
 
 #[test]
 fn test_triangular_word() {
-  assert!(is_triangular_word("SKY"));
+    assert!(is_triangular_word("SKY"));
 }
