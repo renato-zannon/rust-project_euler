@@ -101,24 +101,24 @@ mod tests {
   #[test]
   fn test_digits_in_order() {
     let digits = new(12345u).collect::<Vec<uint>>();
-    assert_eq!(digits.as_slice(), &[1, 2, 3, 4, 5]);
+    assert_eq!(digits.as_slice(), [1, 2, 3, 4, 5].as_slice());
   }
 
   #[test]
   fn test_digits_in_reverse() {
     let digits = new(12345u).rev().collect::<Vec<uint>>();
-    assert_eq!(digits.as_slice(), &[5, 4, 3, 2, 1]);
+    assert_eq!(digits.as_slice(), [5, 4, 3, 2, 1].as_slice());
   }
 
   #[test]
   fn test_digits_in_order_with_zero() {
     let digits = new(123450u).collect::<Vec<uint>>();
-    assert_eq!(digits.as_slice(), &[1, 2, 3, 4, 5, 0]);
+    assert_eq!(digits.as_slice(), [1, 2, 3, 4, 5, 0].as_slice());
   }
 
   #[test]
   fn test_digits_in_reverse_with_zero() {
     let digits = new(123450u).rev().collect::<Vec<uint>>();
-    assert_eq!(digits.as_slice(), &[0, 5, 4, 3, 2, 1]);
+    assert_eq!(digits.as_slice(), [0, 5, 4, 3, 2, 1].as_slice());
   }
 }
