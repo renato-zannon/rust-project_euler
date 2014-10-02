@@ -42,29 +42,29 @@ fn letter_count(num: uint) -> uint {
         18 => 8, // "Eighteen"
         19 => 8, // "Nineteen"
 
-        20     => 6, // "Twenty"
-        21..29 => 6 + letter_count(num % 20), // "Twenty-XX",
+        20      => 6, // "Twenty"
+        21...29 => 6 + letter_count(num % 20), // "Twenty-XX",
 
-        30     => 6, // "Thirty"
-        31..39 => 6 + letter_count(num % 30), // "Thirty-XX",
+        30      => 6, // "Thirty"
+        31...39 => 6 + letter_count(num % 30), // "Thirty-XX",
 
-        40     => 5, // "Forty"
-        41..49 => 5 + letter_count(num % 40), // "Forty-XX",
+        40      => 5, // "Forty"
+        41...49 => 5 + letter_count(num % 40), // "Forty-XX",
 
-        50     => 5, // "Fifty"
-        51..59 => 5 + letter_count(num % 50), // "Fifty-XX",
+        50      => 5, // "Fifty"
+        51...59 => 5 + letter_count(num % 50), // "Fifty-XX",
 
-        60     => 5, // "Sixty"
-        61..69 => 5 + letter_count(num % 60), // "Sixty-XX",
+        60      => 5, // "Sixty"
+        61...69 => 5 + letter_count(num % 60), // "Sixty-XX",
 
-        70     => 7, // "Seventy"
-        71..79 => 7 + letter_count(num % 70), // "Seventy-XX",
+        70      => 7, // "Seventy"
+        71...79 => 7 + letter_count(num % 70), // "Seventy-XX",
 
-        80     => 6, // "Eighty"
-        81..89 => 6 + letter_count(num % 80), // "Eighty-XX",
+        80      => 6, // "Eighty"
+        81...89 => 6 + letter_count(num % 80), // "Eighty-XX",
 
-        90     => 6, // "Ninety"
-        91..99 => 6 + letter_count(num % 90), // "Ninety-XX",
+        90      => 6, // "Ninety"
+        91...99 => 6 + letter_count(num % 90), // "Ninety-XX",
 
         1000 => 11, // "One Thousand"
 

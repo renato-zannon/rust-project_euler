@@ -55,9 +55,9 @@ pub fn is_9_pandigital<U: Iterator<uint>, T: DigitCollection<U>>(mut digits: T) 
 
     let only_uniques = digits.digit_iter().all(|digit| {
         let found = match digit {
-            0    => return false,
-            1..9 => &mut found_numbers[digit - 1],
-            _    => unreachable!(),
+            0     => return false,
+            1...9 => &mut found_numbers[digit - 1],
+            _     => unreachable!(),
         };
 
         if *found {
