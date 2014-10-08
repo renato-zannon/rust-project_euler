@@ -9,6 +9,8 @@
  *
  * What is the total of all the name scores in the file? */
 
+#![feature(slicing_syntax)]
+
 extern crate shared;
 
 use shared::data_reader;

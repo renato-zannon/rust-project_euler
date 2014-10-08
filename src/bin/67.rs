@@ -18,6 +18,8 @@
  * every second it would take over twenty billion years to check them all. There is an efficient
  * algorithm to solve it. ;o) */
 
+#![feature(slicing_syntax)]
+
 extern crate shared;
 
 use std::io::{File, BufferedReader};

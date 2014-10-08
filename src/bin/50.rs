@@ -10,6 +10,8 @@
  *
  * Which prime, below one-million, can be written as the sum of the most consecutive primes? */
 
+#![feature(slicing_syntax)]
+
 extern crate shared;
 use shared::sieve;
 use shared::sieve::Sieve;

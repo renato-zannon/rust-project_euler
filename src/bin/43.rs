@@ -15,6 +15,8 @@
  *
  * Find the sum of all 0 to 9 pandigital numbers with this property. */
 
+#![feature(slicing_syntax)]
+
 extern crate shared;
 
 use std::iter::{AdditiveIterator, range_step};

@@ -5,6 +5,8 @@
  *
  * What is the largest n-digit pandigital prime that exists? */
 
+#![feature(slicing_syntax)]
+
 extern crate shared;
 use shared::primes;
 

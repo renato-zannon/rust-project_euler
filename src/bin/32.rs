@@ -12,6 +12,8 @@
  * HINT: Some products can be obtained in more than one way so be sure to only include it once in
  * your sum. */
 
+#![feature(slicing_syntax)]
+
 extern crate shared;
 use shared::digits;
 use shared::pandigital;

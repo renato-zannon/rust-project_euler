@@ -4,6 +4,8 @@
  *
  * What is the sum of the digits of the number 2^1000? */
 
+#![feature(slicing_syntax)]
+
 extern crate num;
 
 use std::num::FromPrimitive;

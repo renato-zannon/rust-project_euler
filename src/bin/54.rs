@@ -39,7 +39,7 @@
  *
  * How many hands does Player 1 win? */
 
-#![feature(macro_rules)]
+#![feature(slicing_syntax)]
 
 #[deriving(PartialEq, Eq, PartialOrd, Ord, Show)]
 enum Rank {

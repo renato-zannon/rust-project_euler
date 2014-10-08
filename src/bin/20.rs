@@ -7,6 +7,8 @@
  *
  * Find the sum of the digits in the number 100! */
 
+#![feature(slicing_syntax)]
+
 extern crate num;
 use std::num::One;
 use num::bigint::{BigUint, ToBigUint};
