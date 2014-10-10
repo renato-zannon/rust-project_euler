@@ -192,7 +192,7 @@ impl Hand {
 
 impl Hand {
     fn rank(&self) -> Rank {
-        static ROYAL_FLUSH: &'static [CardValue] = &[Ten, Jack, Queen, King, Ace];
+        const ROYAL_FLUSH: &'static [CardValue] = &[Ten, Jack, Queen, King, Ace];
 
         let cards_in_order = self.cards[];
 
@@ -296,7 +296,7 @@ impl Hand {
 
 #[cfg(not(test))]
 fn main() {
-    static HANDS: &'static str = include_str!("../../data/54-poker.txt");
+    const HANDS: &'static str = include_str!("../../data/54-poker.txt");
 
     let player_1_victories = HANDS.lines().filter(|line| {
         let maybe_hand1 = Hand::parse(line.slice_to(14));

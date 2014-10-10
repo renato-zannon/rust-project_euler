@@ -14,7 +14,7 @@
 extern crate shared;
 use shared::{digits, sieve};
 
-static MEMBER_GAP: uint = 3330;
+const MEMBER_GAP: uint = 3330;
 
 fn main() {
     let mut sieve = sieve::new();

@@ -20,7 +20,7 @@ use shared::sieve;
 use std::iter::count;
 use std::collections::{HashMap, HashSet};
 
-static CONSECUTIVE_COUNT: uint = 4;
+const CONSECUTIVE_COUNT: uint = 4;
 
 fn main() {
     let mut sieve = sieve::new();

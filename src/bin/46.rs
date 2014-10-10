@@ -21,7 +21,7 @@ use shared::sieve;
 use shared::sieve::Sieve as PrimeSieve;
 use std::iter::{count, range_inclusive};
 
-static SEGMENT_SIZE: uint = 101;
+const SEGMENT_SIZE: uint = 101;
 
 fn main() {
     let mut sieve = sieve::new();

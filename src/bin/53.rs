@@ -19,8 +19,8 @@
 use std::iter::AdditiveIterator;
 use std::iter::range_inclusive;
 
-static MAX_N: uint     = 100;
-static MIN_VALUE: uint = 1_000_000;
+const MAX_N: uint     = 100;
+const MIN_VALUE: uint = 1_000_000;
 
 fn main() {
     let count = range_inclusive(1u, MAX_N).map(|n| {

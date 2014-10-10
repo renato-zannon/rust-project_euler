@@ -7,7 +7,7 @@
  *
  * For which value of p ≤ 1000, is the number of solutions maximised? */
 
-static MAX_PERIMETER: f64 = 1_000.0;
+const MAX_PERIMETER: f64 = 1_000.0;
 
 // Alternative implementation for problem 39. Much faster
 fn main() {

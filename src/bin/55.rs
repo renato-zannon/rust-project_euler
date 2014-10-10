@@ -31,8 +31,8 @@ extern crate shared;
 use shared::IntegerExtensions;
 use std::iter::{range_inclusive, Unfold};
 
-static MAX: uint = 10_000;
-static MAX_ITERATIONS: uint = 50;
+const MAX: uint = 10_000;
+const MAX_ITERATIONS: uint = 50;
 
 fn main() {
     let mut lychrel_count = 0u;

@@ -22,7 +22,7 @@ extern crate shared;
 use std::iter::{AdditiveIterator, range_step};
 use shared::digits;
 
-static DIVISORS: &'static [uint] = &[2, 3, 5, 7, 11, 13, 17];
+const DIVISORS: &'static [uint] = &[2, 3, 5, 7, 11, 13, 17];
 
 fn main() {
     // Start with a collection of all 3-digit numbers divisible by 17 that don't

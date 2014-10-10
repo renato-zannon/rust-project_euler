@@ -10,7 +10,7 @@
  *
  * Find the next triangle number that is also pentagonal and hexagonal. */
 
-static TARGET: uint = 40755;
+const TARGET: uint = 40755;
 
 fn main() {
     let mut triangles   = numbers_from_formula(|n| n * (n + 1) / 2);

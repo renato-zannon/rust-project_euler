@@ -26,7 +26,7 @@ static GRID: [[uint, ..20], ..20] = [
     [01, 70, 54, 71, 83, 51, 54, 69, 16, 92, 33, 48, 61, 43, 52, 01, 89, 19, 67, 48],
 ];
 
-static SLICE_LENGTH: uint = 4;
+const SLICE_LENGTH: uint = 4;
 
 fn main() {
     let result = coordinates().iter().flat_map(|&(row, column)| {

@@ -13,7 +13,7 @@
 
 use std::iter::range_inclusive;
 
-static DENOMINATIONS: &'static [uint] = &[200, 100, 50, 20, 10, 5, 2, 1];
+const DENOMINATIONS: &'static [uint] = &[200, 100, 50, 20, 10, 5, 2, 1];
 
 fn main() {
     println!("{}", ways_to_make(200, DENOMINATIONS));

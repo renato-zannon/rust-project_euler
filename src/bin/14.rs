@@ -21,7 +21,7 @@
 extern crate num;
 use num::Integer;
 
-static MAX: uint = 1_000_000;
+const MAX: uint = 1_000_000;
 
 fn main() {
     let master_rx = spawn_workers(MAX);

@@ -23,7 +23,7 @@ use std::iter::AdditiveIterator;
 use num::Integer;
 use std::collections::hashmap::HashSet;
 
-static MAX_NON_ABUNDANT: uint = 28123;
+const MAX_NON_ABUNDANT: uint = 28123;
 
 fn main() {
     println!("{}", non_abundant_number_sums());

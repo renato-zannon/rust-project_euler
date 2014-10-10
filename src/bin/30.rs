@@ -16,7 +16,7 @@
 use std::iter::{count, AdditiveIterator};
 use std::num::pow;
 
-static POWER: uint = 5;
+const POWER: uint = 5;
 
 fn main() {
     let one_digit_max = pow(9u, POWER);

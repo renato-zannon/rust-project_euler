@@ -20,9 +20,9 @@ extern crate shared;
 use shared::sieve;
 use std::iter::{range_step_inclusive, count};
 
-static SEGMENT_SIZE: uint = 1_000;
-static FACTOR_COUNT: uint = 4;
-static CONSECUTIVE_COUNT: uint = 4;
+const SEGMENT_SIZE: uint = 1_000;
+const FACTOR_COUNT: uint = 4;
+const CONSECUTIVE_COUNT: uint = 4;
 
 // Alternatvie, Dynamic programming-based implementation
 fn main() {

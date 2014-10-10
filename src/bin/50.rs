@@ -17,7 +17,7 @@ use shared::sieve;
 use shared::sieve::Sieve;
 use std::iter::AdditiveIterator;
 
-static MAX_PRIME: uint = 1_000_000;
+const MAX_PRIME: uint = 1_000_000;
 
 
 fn main() {
