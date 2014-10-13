@@ -86,6 +86,6 @@ impl<A: Ord+Clone> SEPA<A> {
             from_start += 1;
         }
 
-        current_perm.into_vec()
+        current_perm.to_vec()
     }
 }
