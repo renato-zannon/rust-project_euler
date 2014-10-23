@@ -13,8 +13,8 @@ use std::mem;
 
 const MAX_DIGITS: uint = 200;
 
-const MAX_BASE: uint = 100;
-const MAX_EXP:  uint = 100;
+const MAX_BASE: u8 = 100;
+const MAX_EXP:  u8 = 100;
 
 fn main() {
     let mut max_sum = 0;
@@ -28,20 +28,20 @@ fn main() {
         for _ in range(2, MAX_EXP) {
             buffer.clear();
 
-            let mut carry: uint = 0;
-            let mut sum:   uint = 0;
+            let mut carry: u16 = 0;
+            let mut sum:   u16 = 0;
 
             for &old_digit in prev_buffer.iter() {
                 let result = multiply_digit(old_digit, base, carry);
 
                 carry = result.carry;
-                sum  += result.digit;
+                sum  += result.digit as u16;
                 buffer.push(result.digit);
             }
 
             if carry > 0 {
                 for carry_digit in digits::new(carry).rev() {
-                    buffer.push(carry_digit);
+                    buffer.push(carry_digit as u8);
                     sum += carry_digit;
                 }
             }
@@ -58,14 +58,14 @@ fn main() {
 }
 
 struct MultiplicationResult {
-    digit: uint,
-    carry: uint,
+    digit: u8,
+    carry: u16,
 }
 
-fn multiply_digit(digit: uint, multiplier: uint, carry: uint) -> MultiplicationResult {
-    let value = digit * multiplier + carry;
+fn multiply_digit(digit: u8, multiplier: u8, carry: u16) -> MultiplicationResult {
+    let value = (digit as u16) * (multiplier as u16) + carry;
 
-    let new_digit = value % 10;
+    let new_digit = (value % 10) as u8;
     let new_carry = value / 10;
 
     MultiplicationResult { digit: new_digit, carry: new_carry }
