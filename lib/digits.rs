@@ -8,7 +8,8 @@ pub struct Digits<A> {
     remaining_digits: uint,
 }
 
-impl<A: Integer + FromPrimitive + ToPrimitive> Iterator<A> for Digits<A> {
+impl<A> Iterator<A> for Digits<A>
+    where A: Integer + FromPrimitive + ToPrimitive {
     fn next(&mut self) -> Option<A> {
         let divisor: A = FromPrimitive::from_uint(self.current_divisor()).unwrap();
 
@@ -41,7 +42,8 @@ impl<A: Integer + FromPrimitive + ToPrimitive> Iterator<A> for Digits<A> {
     }
 }
 
-impl<A: Integer + FromPrimitive + ToPrimitive> DoubleEndedIterator<A> for Digits<A> {
+impl<A> DoubleEndedIterator<A> for Digits<A>
+    where A: Integer + FromPrimitive + ToPrimitive {
     fn next_back(&mut self) -> Option<A> {
         let ten: A = FromPrimitive::from_uint(10u).unwrap();
 
@@ -54,14 +56,16 @@ impl<A: Integer + FromPrimitive + ToPrimitive> DoubleEndedIterator<A> for Digits
     }
 }
 
-pub fn new<A: ToPrimitive + Show>(number: A) -> Digits<A> {
+pub fn new<A>(number: A) -> Digits<A>
+    where A: ToPrimitive + Show {
     Digits {
         remaining_digits: number_of_digits(&number),
         remaining: number,
     }
 }
 
-impl<A: Integer + FromPrimitive + ToPrimitive> Digits<A> {
+impl<A> Digits<A>
+    where A: Integer + FromPrimitive + ToPrimitive {
     fn consume_remaining(&mut self, divisor: A) -> Option<(A, A)> {
         if self.remaining_digits == 0 {
             None
