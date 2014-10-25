@@ -1,20 +1,32 @@
 use std::iter::{range_step_inclusive, Unfold};
 
 // Adapted from the problem 07 overview PDF
-pub fn is_prime(num: uint) -> bool {
-    if num == 1           { return false }
-    else if num < 4       { return true  }
-    else if num % 2 == 0  { return false }
-    else if num < 9       { return true  }
-    else if num % 3 == 0  { return false }
+pub fn is_prime<T>(num: T) -> bool
+    where T : Num + Eq + Ord + FromPrimitive + Clone + CheckedAdd + ToPrimitive {
 
-    let r = num.to_f64()
+    let zero:  T = FromPrimitive::from_u8(0).unwrap();
+    let one:   T = FromPrimitive::from_u8(1).unwrap();
+    let two:   T = FromPrimitive::from_u8(2).unwrap();
+    let three: T = FromPrimitive::from_u8(3).unwrap();
+    let four:  T = FromPrimitive::from_u8(4).unwrap();
+    let five:  T = FromPrimitive::from_u8(5).unwrap();
+    let six:   T = FromPrimitive::from_u8(6).unwrap();
+    let nine:  T = FromPrimitive::from_u8(9).unwrap();
+
+    if num == one               { return false }
+    else if num < four          { return true  }
+    else if num % two == zero   { return false }
+    else if num < nine          { return true  }
+    else if num % three == zero { return false }
+
+    let r = num.to_f32()
         .map(|as_float| as_float.sqrt())
-        .and_then(|result| result.ceil().to_uint())
+        .map(|result| result.ceil())
+        .and_then(|result| FromPrimitive::from_f32(result))
         .unwrap();
 
-    range_step_inclusive(5, r, 6).all(|f| {
-        num % f != 0 && num % (f + 2) != 0
+    range_step_inclusive(five, r, six).all(|f| {
+        num % f != zero && num % (f + two) != zero
     })
 }
 
