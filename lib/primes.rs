@@ -4,14 +4,14 @@ use std::iter::{range_step_inclusive, Unfold};
 pub fn is_prime<T>(num: T) -> bool
     where T : Num + Eq + Ord + FromPrimitive + Clone + CheckedAdd + ToPrimitive {
 
-    let zero:  T = FromPrimitive::from_u8(0).unwrap();
-    let one:   T = FromPrimitive::from_u8(1).unwrap();
-    let two:   T = FromPrimitive::from_u8(2).unwrap();
-    let three: T = FromPrimitive::from_u8(3).unwrap();
-    let four:  T = FromPrimitive::from_u8(4).unwrap();
-    let five:  T = FromPrimitive::from_u8(5).unwrap();
-    let six:   T = FromPrimitive::from_u8(6).unwrap();
-    let nine:  T = FromPrimitive::from_u8(9).unwrap();
+    let zero:  T = literal(0);
+    let one:   T = literal(1);
+    let two:   T = literal(2);
+    let three: T = literal(3);
+    let four:  T = literal(4);
+    let five:  T = literal(5);
+    let six:   T = literal(6);
+    let nine:  T = literal(9);
 
     if num == one               { return false }
     else if num < four          { return true  }
@@ -25,9 +25,14 @@ pub fn is_prime<T>(num: T) -> bool
         .and_then(|result| FromPrimitive::from_f32(result))
         .unwrap();
 
-    range_step_inclusive(five, r, six).all(|f| {
+    return range_step_inclusive(five, r, six).all(|f| {
         num % f != zero && num % (f + two) != zero
-    })
+    });
+
+    #[inline]
+    fn literal<T: FromPrimitive>(num: u8) -> T {
+        FromPrimitive::from_u8(num).unwrap()
+    }
 }
 
 pub type PrimeFactors = Unfold<'static, uint, (uint, uint)>;
