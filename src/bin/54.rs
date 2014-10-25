@@ -270,7 +270,7 @@ impl Hand {
         let mut suites = [0, ..4];
         let mut values = [0, ..13];
 
-        for &Card { suit: suit, value: value} in self.cards.iter() {
+        for &Card { suit, value } in self.cards.iter() {
             suites[suit as uint]  += 1;
             values[value as uint] += 1;
         }
