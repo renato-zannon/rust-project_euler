@@ -34,7 +34,7 @@ fn main() {
 }
 
 struct Square {
-    size: u32,
+    size: u16,
     diagonal: [u32, ..4],
     prime_count: u32,
 }
@@ -67,7 +67,7 @@ impl Square {
 
         self.diagonal[dest] = value;
 
-        if primes::is_prime(value as uint) {
+        if primes::is_prime(value) {
             self.prime_count += 1;
         }
     }
