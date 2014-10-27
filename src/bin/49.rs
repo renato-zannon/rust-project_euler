@@ -17,7 +17,7 @@ use shared::{digits, sieve};
 const MEMBER_GAP: uint = 3330;
 
 fn main() {
-    let mut sieve = sieve::new();
+    let mut sieve = sieve::new::<uint>();
 
     let primes = sieve.clone()
         .skip_while(|&prime| prime < 999)

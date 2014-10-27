@@ -11,7 +11,7 @@ extern crate shared;
 use shared::{digits, sieve};
 
 fn main() {
-    let mut sieve = sieve::new();
+    let mut sieve = sieve::new::<uint>();
     let search_space: Vec<uint> = sieve.by_ref().take_while(|&prime| prime < 1_000_000).collect();
 
     let result = search_space.into_iter().filter(|&prime| {
@@ -21,7 +21,7 @@ fn main() {
     println!("{}", result);
 }
 
-fn is_circular(prime: uint, sieve: &mut sieve::Sieve) -> bool {
+fn is_circular(prime: uint, sieve: &mut sieve::Sieve<uint>) -> bool {
     rotations_of(prime).into_iter().all(|rotation| {
         sieve.is_prime(rotation)
     })

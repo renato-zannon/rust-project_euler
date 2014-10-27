@@ -39,7 +39,7 @@ fn main() {
     }
 }
 
-fn mark_odd_composites(segment: &mut OddNumberSegment, sieve: &mut PrimeSieve) {
+fn mark_odd_composites(segment: &mut OddNumberSegment, sieve: &mut PrimeSieve<uint>) {
     let segment_start = segment.first();
     let segment_end   = segment.last();
 

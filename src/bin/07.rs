@@ -10,12 +10,12 @@
 extern crate shared;
 
 use std::iter::{count, range_step_inclusive};
-use shared::sieve;
+use shared::sieve::{mod, Sieve};
 
 fn main() {
 //let mut all_primes = count(1u, 1).filter(naive_is_prime);
 //let mut all_primes = count(1u, 1).filter(smart_is_prime);
-    let mut all_primes = sieve::new();
+    let mut all_primes: Sieve<uint> = sieve::new();
 
     let result = all_primes.nth(10_000).unwrap();
     println!("{}", result);

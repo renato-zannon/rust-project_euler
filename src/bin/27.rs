@@ -27,7 +27,7 @@ use shared::sieve;
 use std::iter::count;
 
 fn main() {
-    let mut primes = sieve::new();
+    let mut primes: sieve::Sieve<uint> = sieve::new();
 
     let mut max_product = 0;
     let mut max_prime_count = 0;

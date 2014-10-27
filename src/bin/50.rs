@@ -19,9 +19,8 @@ use std::iter::AdditiveIterator;
 
 const MAX_PRIME: uint = 1_000_000;
 
-
 fn main() {
-    let mut sieve = sieve::new();
+    let mut sieve = sieve::new::<uint>();
 
     let primes: Vec<uint> = sieve.by_ref()
         .take_while(|&prime| prime < MAX_PRIME)
@@ -44,11 +43,11 @@ fn main() {
     println!("{}", sequence.value);
 }
 
-fn suitable_prime(value: uint, sieve: &mut Sieve) -> bool {
+fn suitable_prime(value: uint, sieve: &mut Sieve<uint>) -> bool {
     value < MAX_PRIME && sieve.is_prime(value)
 }
 
-fn longest_after_advancing<'a>(seq: PrimeSequenceSum<'a>, sieve: &mut Sieve) -> PrimeSequenceSum<'a> {
+fn longest_after_advancing<'a>(seq: PrimeSequenceSum<'a>, sieve: &mut Sieve<uint>) -> PrimeSequenceSum<'a> {
     let mut longest_sequence = seq.clone();
     let mut prev_try = seq.clone();
 
@@ -70,7 +69,7 @@ fn longest_after_advancing<'a>(seq: PrimeSequenceSum<'a>, sieve: &mut Sieve) -> 
     longest_sequence
 }
 
-fn longest_after_expanding<'a>(seq: PrimeSequenceSum<'a>, sieve: &mut Sieve) -> PrimeSequenceSum<'a> {
+fn longest_after_expanding<'a>(seq: PrimeSequenceSum<'a>, sieve: &mut Sieve<uint>) -> PrimeSequenceSum<'a> {
     let mut longest = seq.clone();
     let mut longest_prime = seq;
 
