@@ -72,6 +72,6 @@ fn letter_count(num: uint) -> uint {
 
         num if num < 1000 => letter_count(num / 100) + 10 + letter_count(num % 100), // "XX hundred and YY"
 
-        _ => fail!("Number too big")
+        _ => panic!("Number too big")
     }
 }

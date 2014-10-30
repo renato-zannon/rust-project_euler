@@ -305,7 +305,7 @@ fn main() {
         match (maybe_hand1, maybe_hand2) {
             (Some(hand1), Some(ref hand2)) => hand1.beats(hand2),
 
-            _ => fail!("Parsing problem on line:\n{}", line)
+            _ => panic!("Parsing problem on line:\n{}", line)
         }
     }).count();
 

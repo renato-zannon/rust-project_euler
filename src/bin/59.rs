@@ -97,7 +97,7 @@ const LAST_LOWERCASE:  u8 = b'z';
 impl LowerCaseCharacter {
     fn from_byte(byte: u8) -> LowerCaseCharacter {
         if byte < FIRST_LOWERCASE || byte > LAST_LOWERCASE {
-            fail!("Invalid byte: {}", byte);
+            panic!("Invalid byte: {}", byte);
         } else {
             LowerCaseCharacter { byte: byte }
         }
