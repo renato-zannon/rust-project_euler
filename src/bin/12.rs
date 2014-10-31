@@ -38,24 +38,24 @@ fn main() {
 }
 
 mod triangular_numbers {
-    use std::iter::count;
-
-    pub struct TriangularNumbers<'a> {
-        iter: Box<Iterator<u64> + 'a>
+    pub struct TriangularNumbers {
+        last_number: u64,
+        sum: u64,
     }
 
-    impl<'a> Iterator<u64> for TriangularNumbers<'a> {
+    impl Iterator<u64> for TriangularNumbers {
         fn next(&mut self) -> Option<u64> {
-            self.iter.next()
+            self.last_number += 1;
+            self.sum += self.last_number;
+
+            Some(self.sum)
         }
     }
 
-    pub fn new<'a>() -> TriangularNumbers<'a> {
-        let iter = count(1u64, 1).scan(0u64, |sum, number| {
-            *sum = *sum + number;
-            Some(*sum)
-        });
-
-        TriangularNumbers { iter: box iter }
+    pub fn new() -> TriangularNumbers {
+        TriangularNumbers {
+            last_number: 0,
+            sum: 0,
+        }
     }
 }
