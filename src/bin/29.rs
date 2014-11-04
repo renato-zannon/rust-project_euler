@@ -1,4 +1,4 @@
-use std::collections::hashmap::HashSet;
+use std::collections::HashSet;
 
 fn main() {
     let mut powers: HashSet<(uint, uint)> = HashSet::new();

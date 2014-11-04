@@ -11,8 +11,8 @@
 
 extern crate num;
 
-use std::collections::hashmap::{HashMap, Occupied, Vacant};
-use std::collections::treemap::TreeSet;
+use std::collections::{HashMap, TreeSet};
+use std::collections::hash_map::{Occupied, Vacant};
 use num::Integer;
 use std::iter::range_inclusive as irange;
 use std::iter::AdditiveIterator;

@@ -1,6 +1,4 @@
-extern crate collections;
-
-use self::collections::treemap::TreeMap;
+use std::collections::TreeMap;
 use std::cell::RefCell;
 use std::cmp::{Eq, PartialEq};
 

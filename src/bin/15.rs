@@ -5,8 +5,7 @@
  *
  * How many such routes are there through a 20×20 grid? */
 
-extern crate collections;
-use collections::treemap::TreeMap;
+use std::collections::TreeMap;
 
 fn main() {
     let result = ways_to_reach(20, 20, &mut TreeMap::new());

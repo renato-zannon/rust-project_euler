@@ -16,7 +16,7 @@ extern crate shared;
 extern crate num;
 
 use shared::digits;
-use std::collections::hashmap::HashSet;
+use std::collections::HashSet;
 use num::integer::gcd;
 
 fn main() {
