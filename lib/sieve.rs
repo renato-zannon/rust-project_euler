@@ -178,7 +178,7 @@ impl<T: Primeable> Sieve<T> {
 #[test]
 fn test_first_few_primes() {
     let first_primes = [2, 3, 5, 7, 11, 13, 17, 19, 23];
-    let mut iter = new();
+    let mut iter: Sieve<uint> = new();
 
     for &prime in first_primes.iter() {
         assert_eq!(iter.next(), Some(prime));
