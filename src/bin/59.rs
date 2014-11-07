@@ -78,7 +78,7 @@ impl<'a> Iterator<Ascii> for Decryptor<'a> {
     fn next(&mut self) -> Option<Ascii> {
         let pos = self.position;
 
-        self.source.get(pos).map(|value| {
+        self.source.get(pos).map(|&value| {
             let result = value ^ self.key[pos % KEY_LEN].byte;
             self.position += 1;
 

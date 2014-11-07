@@ -13,7 +13,7 @@ fn main() {
 }
 
 fn ways_to_reach(row: uint, column: uint, cache: &mut TreeMap<(uint, uint), uint>) -> uint {
-    return match cache.find(&(row, column)) {
+    return match cache.get(&(row, column)) {
         Some(&value) => value,
 
         None => {

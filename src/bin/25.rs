@@ -79,7 +79,7 @@ fn number_of_digits(num: &BigInt, minimum_digits: uint) -> uint {
         buf.grow(minimum_digits, '0');
 
         let minimum = from_str(buf[]).unwrap();
-        num / minimum
+        *num / minimum
     };
 
     while remaining > bigzero {

@@ -50,9 +50,9 @@ fn mark_odd_composites(segment: &mut OddNumberSegment, sieve: &mut PrimeSieve<ui
         .iter()
         .take_while(|prime| **prime < segment_end);
 
-    for prime in primes {
-        let min_squared_number = min_half_square(*prime, segment_start, RoundUp);
-        let max_squared_number = min_half_square(*prime, segment_end, RoundDown);
+    for &prime in primes {
+        let min_squared_number = min_half_square(prime, segment_start, RoundUp);
+        let max_squared_number = min_half_square(prime, segment_end, RoundDown);
 
         for number in range_inclusive(min_squared_number, max_squared_number) {
             let result = prime + 2 * number * number;

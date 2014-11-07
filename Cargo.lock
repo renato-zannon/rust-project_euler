@@ -9,7 +9,7 @@ dependencies = [
 [[package]]
 name = "num"
 version = "0.0.1"
-source = "git+https://github.com/rust-lang/num#c0cf374c4ae3a4d102ead0ab6f9d31d9646d454d"
+source = "git+https://github.com/rust-lang/num#1690a26544b33c973d67e600f379298cd63fb2e1"
 
 [[package]]
 name = "shared"

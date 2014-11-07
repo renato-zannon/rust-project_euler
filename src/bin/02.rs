@@ -11,7 +11,7 @@
 fn main() {
     let result = fibs()
         .take_while(|&n| n < 4_000_000)
-        .filter(|num| num % 2 == 0)
+        .filter(|&num| num % 2 == 0)
         .fold(0, |acc, num| acc + num);
 
     println!("{}", result);

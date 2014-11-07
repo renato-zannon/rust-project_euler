@@ -1,6 +1,6 @@
 use std::collections::TreeMap;
 use std::cell::RefCell;
-use std::cmp::{Eq, PartialEq};
+use std::cmp::Eq;
 
 #[deriving(Eq, PartialEq, Show)]
 struct Value {
@@ -87,7 +87,7 @@ impl Triangle {
     }
 
     fn get_coord(&self, coord: (uint, uint)) -> &RefCell<Value> {
-        self.values.find(&coord).unwrap()
+        self.values.get(&coord).unwrap()
     }
 
     fn values_below(&self, (row, col): (uint, uint)) -> Option<(&RefCell<Value>, &RefCell<Value>)> {

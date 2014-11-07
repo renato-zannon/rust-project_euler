@@ -68,8 +68,8 @@ fn families_from_variables(count: uint, digits: &Vec<uint>) -> Vec<FamilyIterato
 
             if next_value > max_index {
                 var_slice[current_index] = match var_slice.get(current_index - 1) {
-                    Some(prev_var) => prev_var + 2,
-                    None           => return result,
+                    Some(&prev_var) => prev_var + 2,
+                    None            => return result,
                 };
 
                 max_index -= 1;

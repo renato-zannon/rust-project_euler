@@ -7,7 +7,7 @@
 
 fn main() {
     let result = range(1u, 1000)
-        .filter(|num| (num % 3 == 0) || (num % 5 == 0))
+        .filter(|&num| (num % 3 == 0) || (num % 5 == 0))
         .fold(0, |acc, num| acc + num);
 
     println!("{}", result);
