@@ -91,7 +91,7 @@ fn concats_generate_primes(p1: Prime, p2: Prime) -> bool {
     return primes::is_prime(concat(p1, p2)) && primes::is_prime(concat(p2, p1));
 
     fn concat(start: Prime, end: Prime) -> Prime {
-        let end_len = digits::new(end).count();
+        let end_len = digits::new::<Prime, u8>(end).count();
         return start * num::pow(10, end_len) + end;
     }
 }

@@ -76,16 +76,16 @@ fn build_candidates() -> Vec<NumberInfo> {
 
         for candidate in iter_candidates {
             if !map.contains_key(& candidate) {
-                let mut value_digits = digits::new(candidate);
+                let mut value_digits = digits::new::<_, u8>(candidate);
 
                 let first_digits = [
-                    value_digits.next().unwrap() as u8,
-                    value_digits.next().unwrap() as u8,
+                    value_digits.next().unwrap(),
+                    value_digits.next().unwrap(),
                 ];
 
                 let last_digits  = [
-                    value_digits.next().unwrap() as u8,
-                    value_digits.next().unwrap() as u8,
+                    value_digits.next().unwrap(),
+                    value_digits.next().unwrap(),
                 ];
 
                 let classifications = EnumSet::new();

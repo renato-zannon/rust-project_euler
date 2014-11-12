@@ -22,8 +22,8 @@ pub trait DigitCollection<T: Iterator<uint>> {
     fn digit_len(&mut self) -> uint;
 }
 
-impl DigitCollection<digits::Digits<uint>> for digits::Digits<uint> {
-    fn digit_iter(self) -> digits::Digits<uint> {
+impl DigitCollection<digits::Digits<uint, uint>> for digits::Digits<uint, uint> {
+    fn digit_iter(self) -> digits::Digits<uint, uint> {
         return self
     }
 

@@ -31,7 +31,7 @@ fn is_truncatable(prime: uint, sieve: &mut sieve::Sieve<uint>) -> bool {
 }
 
 fn truncatable_from_left(prime: uint, sieve: &mut sieve::Sieve<uint>) -> bool {
-    let prime_digits = digits::new(prime);
+    let prime_digits = digits::new::<_, uint>(prime);
 
     prime_digits.rev().scan((0, 1), |state, digit| {
         let (previous, multiplier) = *state;

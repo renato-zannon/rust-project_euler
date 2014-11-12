@@ -3,22 +3,25 @@ use std::num::pow;
 use std::fmt::Show;
 use std::io::IoResult;
 
-pub struct Digits<A> {
+pub struct Digits<A, B> {
     remaining: A,
     remaining_digits: uint,
 }
 
-impl<A> Iterator<A> for Digits<A>
-    where A: Integer + FromPrimitive + ToPrimitive {
-    fn next(&mut self) -> Option<A> {
+impl<A, B> Iterator<B> for Digits<A, B>
+    where A: Integer + FromPrimitive + ToPrimitive, B: FromPrimitive {
+    fn next(&mut self) -> Option<B> {
+        if self.remaining_digits == 0 {
+            return None;
+        }
+
         let divisor: A = FromPrimitive::from_uint(self.current_divisor()).unwrap();
+        let (digit, remainder) = self.remaining.div_rem(&divisor);
 
-        self.consume_remaining(divisor).map(|(digit, remainder)| {
-            self.remaining = remainder;
-            self.remaining_digits -= 1;
+        self.remaining = remainder;
+        self.remaining_digits -= 1;
 
-            digit
-        })
+        digit.to_u8().and_then(FromPrimitive::from_u8)
     }
 
     fn size_hint(&self) -> (uint, Option<uint>) {
@@ -42,21 +45,24 @@ impl<A> Iterator<A> for Digits<A>
     }
 }
 
-impl<A> DoubleEndedIterator<A> for Digits<A>
-    where A: Integer + FromPrimitive + ToPrimitive {
-    fn next_back(&mut self) -> Option<A> {
-        let ten: A = FromPrimitive::from_uint(10u).unwrap();
+impl<A, B> DoubleEndedIterator<B> for Digits<A, B>
+    where A: Integer + FromPrimitive + ToPrimitive, B: FromPrimitive {
+    fn next_back(&mut self) -> Option<B> {
+        if self.remaining_digits == 0 {
+            return None;
+        }
 
-        self.consume_remaining(ten).map(|(remainder, digit)| {
-            self.remaining = remainder;
-            self.remaining_digits -= 1;
+        let ten: A = FromPrimitive::from_u8(10).unwrap();
+        let (remainder, digit) = self.remaining.div_rem(&ten);
 
-            digit
-        })
+        self.remaining = remainder;
+        self.remaining_digits -= 1;
+
+        digit.to_u8().and_then(FromPrimitive::from_u8)
     }
 }
 
-pub fn new<A>(number: A) -> Digits<A>
+pub fn new<A, B>(number: A) -> Digits<A, B>
     where A: ToPrimitive + Show {
     Digits {
         remaining_digits: number_of_digits(&number),
@@ -64,15 +70,8 @@ pub fn new<A>(number: A) -> Digits<A>
     }
 }
 
-impl<A> Digits<A>
+impl<A, B> Digits<A, B>
     where A: Integer + FromPrimitive + ToPrimitive {
-    fn consume_remaining(&mut self, divisor: A) -> Option<(A, A)> {
-        if self.remaining_digits == 0 {
-            None
-        } else {
-            Some(self.remaining.div_rem(&divisor))
-        }
-    }
 
     fn current_divisor(&self) -> uint {
         pow(10u, self.remaining_digits - 1)

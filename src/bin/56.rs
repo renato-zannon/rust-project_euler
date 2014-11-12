@@ -40,7 +40,7 @@ fn main() {
             }
 
             if carry > 0 {
-                for carry_digit in digits::new(carry).rev() {
+                for carry_digit in digits::new::<u16, u16>(carry).rev() {
                     buffer.push(carry_digit as u8);
                     sum += carry_digit;
                 }

@@ -17,7 +17,7 @@ use std::iter::{count, MultiplicativeIterator};
 
 fn main() {
     let mut sequence = count(1u, 1)
-        .flat_map(|number| digits::new(number))
+        .flat_map(|number| digits::new::<uint, uint>(number))
         .enumerate();
 
     let get_digit = |number: uint| {
