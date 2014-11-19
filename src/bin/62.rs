@@ -27,13 +27,17 @@ fn main() {
             ord
         };
 
-        if !map.contains_key(&cube_digits) {
-            map.insert(cube_digits.clone(), TreeSet::new());
-        }
+        let set: &mut TreeSet<u64> = {
+            if !map.contains_key(&cube_digits) {
+                map.insert(cube_digits.clone(), TreeSet::new());
+            }
 
-        map[cube_digits].insert(cube);
-        if map[cube_digits].len() == PERMUTATION_COUNT {
-            println!("{}", map[cube_digits].iter().next().unwrap());
+            &mut map[cube_digits]
+        };
+        set.insert(cube);
+
+        if set.len() == PERMUTATION_COUNT {
+            println!("{}", set.iter().next().unwrap());
             return;
         }
     }

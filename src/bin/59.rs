@@ -29,7 +29,7 @@ use std::str::from_str;
 
 const CIPHER: &'static str = include_str!("../../data/59-cipher.txt");
 const KEY_LEN: uint = 3;
-const COMMON_WORDS: &'static [&'static str] = ["the", "be", "to", "of", "and"];
+const COMMON_WORDS: &'static [&'static str] = &["the", "be", "to", "of", "and"];
 
 fn main() {
     let cipher: Vec<u8> = CIPHER.split(',')

@@ -281,7 +281,7 @@ impl Hand {
             values[value as uint] += 1;
         }
 
-        return (into_sorted_vec(suites), into_sorted_vec(values));
+        return (into_sorted_vec(&suites), into_sorted_vec(&values));
 
         fn into_sorted_vec<T: FromPrimitive + Ord>(values: &[uint]) -> Vec<(T, uint)> {
             let mut vec: Vec<(T, uint)> = values.iter().enumerate().map(|(idx, &count)| {
