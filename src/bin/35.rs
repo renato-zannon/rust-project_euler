@@ -28,11 +28,11 @@ fn is_circular(prime: uint, sieve: &mut sieve::Sieve<uint>) -> bool {
 }
 
 fn rotations_of(number: uint) -> Vec<uint> {
-    use std::num::pow;
+    use std::num::Int;
 
     let number_count = digits::new::<uint, uint>(number).count();
 
-    let biggest_unit = pow(10u, number_count - 1);
+    let biggest_unit = 10u.pow(number_count - 1);
 
     range(0, number_count).scan(number, |state, _| {
         let prev_rotation = *state;

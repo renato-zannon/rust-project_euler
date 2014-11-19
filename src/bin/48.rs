@@ -4,11 +4,11 @@
  *
  * Find the last ten digits of the series, 1¹ + 2² + 3³ + ... + 1000¹⁰⁰⁰ */
 
-use std::num::pow;
+use std::num::Int;
 use std::iter::range_inclusive;
 
 fn main() {
-    let ten_to_ten = pow(10u, 10u) as u64;
+    let ten_to_ten = 10u.pow(10u) as u64;
     let take_10_digits = |number: u64| {
         number % ten_to_ten
     };

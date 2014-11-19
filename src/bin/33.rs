@@ -69,7 +69,7 @@ fn cancel_fraction(numerator: uint, denominator: uint) -> CancelResult {
 }
 
 fn build_from_digits(digits: Vec<uint>, except: &HashSet<uint>) -> uint {
-    use std::num::pow;
+    use std::num::Int;
 
     let mut used_shared = HashSet::with_capacity(except.len());
 
@@ -83,7 +83,7 @@ fn build_from_digits(digits: Vec<uint>, except: &HashSet<uint>) -> uint {
     });
 
     used_digits.enumerate().fold(0, |sum, (power, digit)| {
-        sum + digit * pow(10u, power)
+        sum + digit * 10u.pow(power)
     })
 }
 

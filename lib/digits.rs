@@ -1,5 +1,5 @@
 use num::Integer;
-use std::num::{Float, pow};
+use std::num::{Int, Float};
 use std::fmt::Show;
 use std::io::IoResult;
 
@@ -74,7 +74,7 @@ impl<A, B> Digits<A, B>
     where A: Integer + FromPrimitive + ToPrimitive {
 
     fn current_divisor(&self) -> uint {
-        pow(10u, self.remaining_digits - 1)
+        10u.pow(self.remaining_digits - 1)
     }
 }
 

@@ -86,12 +86,12 @@ fn search_set(prev: &[Prime], prime: Prime, sets: &PrimeSets) -> Option<Vec<Prim
 }
 
 fn concats_generate_primes(p1: Prime, p2: Prime) -> bool {
-    use std::num;
+    use std::num::Int;
 
     return primes::is_prime(concat(p1, p2)) && primes::is_prime(concat(p2, p1));
 
     fn concat(start: Prime, end: Prime) -> Prime {
         let end_len = digits::new::<Prime, u8>(end).count();
-        return start * num::pow(10, end_len) + end;
+        return start * 10.pow(end_len) + end;
     }
 }

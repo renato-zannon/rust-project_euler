@@ -14,19 +14,19 @@
  * Find the sum of all the numbers that can be written as the sum of fifth powers of their digits */
 
 use std::iter::{count, AdditiveIterator};
-use std::num::pow;
+use std::num::Int;
 
 const POWER: uint = 5;
 
 fn main() {
-    let one_digit_max = pow(9u, POWER);
+    let one_digit_max = 9u.pow(POWER);
 
     let max_digits = count(2u, 1).find(|&digits| {
-        let min_with_digits = pow(10u, digits);
+        let min_with_digits = 10u.pow(digits);
         one_digit_max * digits < min_with_digits
     }).unwrap();
 
-    let result = range(2, pow(10u, max_digits)).filter_map(|num| {
+    let result = range(2, 10u.pow(max_digits)).filter_map(|num| {
         let sum = sum_of_digits_to_power(num, POWER);
 
         if sum == num {
@@ -45,7 +45,7 @@ fn sum_of_digits_to_power(num: uint, power: uint) -> uint {
 
     while rest > 0 {
         let digit = rest % 10;
-        result += pow(digit, power);
+        result += digit.pow(power);
         rest /= 10;
     }
 

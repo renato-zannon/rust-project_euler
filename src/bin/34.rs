@@ -9,7 +9,7 @@
 extern crate shared;
 
 use std::iter::{range_inclusive, AdditiveIterator, count};
-use std::num::pow;
+use std::num::Int;
 use shared::digits;
 
 fn main() {
@@ -51,5 +51,5 @@ fn factorial(n: uint) -> uint {
 }
 
 fn max_number_with_digits(digit_count: uint) -> uint {
-    pow(10u, digit_count) - 1
+    10u.pow(digit_count) - 1
 }
