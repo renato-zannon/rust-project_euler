@@ -16,6 +16,7 @@ use std::collections::hash_map::{Occupied, Vacant};
 use num::Integer;
 use std::iter::range_inclusive as irange;
 use std::iter::AdditiveIterator;
+use std::num::Float;
 
 fn main() {
     let mut divisor_sums: HashMap<uint, uint> = HashMap::new();

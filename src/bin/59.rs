@@ -25,7 +25,7 @@
 
 #![feature(slicing_syntax)]
 
-use std::from_str::from_str;
+use std::str::from_str;
 
 const CIPHER: &'static str = include_str!("../../data/59-cipher.txt");
 const KEY_LEN: uint = 3;

@@ -19,6 +19,8 @@
  *
  * What is the value of the first triangle number to have over five hundred divisors? */
 
+use std::num::Float;
+
 const NUMBER_OF_DIVISORS: uint = 500;
 
 fn main() {

@@ -22,8 +22,8 @@ use std::io::MemWriter;
 fn main() {
     let result = range(2u, 1_000).max_by(|&divisor| {
         match division_type(1, divisor) {
-            Terminating      => 0,
-            Recurring(cycle) => cycle.len()
+            DivisionType::Terminating      => 0,
+            DivisionType::Recurring(cycle) => cycle.len()
         }
     });
 
@@ -44,7 +44,7 @@ fn division_type(numerator: uint, denominator: uint) -> DivisionType {
         remaining = remaining % denominator;
 
         if remaining == 0 {
-            return Terminating;
+            return DivisionType::Terminating;
         }
 
         remaining *= 10;
@@ -55,7 +55,7 @@ fn division_type(numerator: uint, denominator: uint) -> DivisionType {
 
         match maybe_cycle {
             Some(start) => {
-                return Recurring(seen_to_str(seen.slice_from(start)));
+                return DivisionType::Recurring(seen_to_str(seen.slice_from(start)));
             },
 
             None => {

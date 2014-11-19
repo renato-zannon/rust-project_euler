@@ -23,7 +23,7 @@
 extern crate shared;
 
 use std::io::{File, BufferedReader};
-use std::from_str::from_str;
+use std::str::from_str;
 
 use shared::triangle;
 

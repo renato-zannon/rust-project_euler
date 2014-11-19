@@ -7,6 +7,8 @@
  *
  * For which value of p ≤ 1000, is the number of solutions maximised? */
 
+use std::num::Float;
+
 const MAX_PERIMETER: f64 = 1_000.0;
 
 // Alternative implementation for problem 39. Much faster
@@ -16,10 +18,13 @@ fn main() {
     let max_perimeter_by_3 = MAX_PERIMETER / 3.0;
     let two_thirds_of_max  = 2.0 * max_perimeter_by_3;
 
-    for a in range(1.0, max_perimeter_by_3) {
+    let mut a = 1.0;
+
+    while a < max_perimeter_by_3 {
         let a_squared = a * a;
 
-        for b in range(a + 1.0, two_thirds_of_max - a) {
+        let mut b = a + 1.0;
+        while b < two_thirds_of_max - a {
             let b_squared = b * b;
 
             let c = (a_squared + b_squared).sqrt();
@@ -32,7 +37,11 @@ fn main() {
             if perimeter < MAX_PERIMETER {
                 counts[(perimeter as uint) - 1] += 1;
             }
+
+            b += 1.0;
         }
+
+        a += 1.0;
     }
 
     let mut max_count = 0;

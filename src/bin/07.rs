@@ -11,6 +11,7 @@ extern crate shared;
 
 use std::iter::{count, range_step_inclusive};
 use shared::sieve::{mod, Sieve};
+use std::num::Float;
 
 fn main() {
 //let mut all_primes = count(1u, 1).filter(naive_is_prime);

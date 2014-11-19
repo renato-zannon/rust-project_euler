@@ -80,7 +80,7 @@ impl<'a> SlicesFromPoint<'a> {
 
     fn horizontal_slice(&mut self) -> Option<Vec<uint>> {
         let limit = 20 - self.length;
-        self.last_slice_type = Some(Horizontal);
+        self.last_slice_type = Some(SliceType::Horizontal);
 
         match (self.row, self.column) {
             (_, col) if col <= limit => {
@@ -94,7 +94,7 @@ impl<'a> SlicesFromPoint<'a> {
 
     fn vertical_slice(&mut self) -> Option<Vec<uint>> {
         let limit = 20 - self.length;
-        self.last_slice_type = Some(Vertical);
+        self.last_slice_type = Some(SliceType::Vertical);
 
         match (self.row, self.column) {
             (row, _) if row <= limit => {
@@ -108,7 +108,7 @@ impl<'a> SlicesFromPoint<'a> {
 
     fn diagonal_from_left_slice(&mut self) -> Option<Vec<uint>> {
         let limit = 20 - self.length;
-        self.last_slice_type = Some(DiagonalFromLeft);
+        self.last_slice_type = Some(SliceType::DiagonalFromLeft);
 
         match (self.row, self.column) {
             (row, col) if row <= limit && col <= limit => {
@@ -122,7 +122,7 @@ impl<'a> SlicesFromPoint<'a> {
 
     fn diagonal_from_right_slice(&mut self) -> Option<Vec<uint>> {
         let limit = 20 - self.length;
-        self.last_slice_type = Some(DiagonalFromRight);
+        self.last_slice_type = Some(SliceType::DiagonalFromRight);
 
         match (self.row, self.column) {
             (row, col) if row <= limit && col >= self.length => {
@@ -154,11 +154,11 @@ impl<'a> SlicesFromPoint<'a> {
 impl<'a> Iterator<Vec<uint>> for SlicesFromPoint<'a> {
     fn next(&mut self) -> Option<Vec<uint>> {
         match self.last_slice_type {
-            None                    => self.horizontal_slice(),
-            Some(Horizontal)        => self.vertical_slice(),
-            Some(Vertical)          => self.diagonal_from_left_slice(),
-            Some(DiagonalFromLeft)  => self.diagonal_from_right_slice(),
-            Some(DiagonalFromRight) => None
+            None                               => self.horizontal_slice(),
+            Some(SliceType::Horizontal)        => self.vertical_slice(),
+            Some(SliceType::Vertical)          => self.diagonal_from_left_slice(),
+            Some(SliceType::DiagonalFromLeft)  => self.diagonal_from_right_slice(),
+            Some(SliceType::DiagonalFromRight) => None
         }
     }
 }

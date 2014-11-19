@@ -1,4 +1,5 @@
 use std::collections::HashSet;
+use std::num::Float;
 
 fn main() {
     let mut powers: HashSet<(uint, uint)> = HashSet::new();
@@ -17,11 +18,13 @@ fn main() {
 fn factor_for(num: uint) -> (uint, uint) {
     let fnum:       f64 = num as f64;
 
-    let mut factor: f64 = 1.0;
-    let mut base:   f64 = fnum;
+    let mut factor: f64  = 1.0;
+    let mut base:   uint = num;
 
-    for potential_root in range(2f64, fnum) {
-        let exp = fnum.log(potential_root);
+    for potential_root in range(2, num) {
+        let exp = potential_root.to_f64().map(|root_f| {
+            fnum.log(root_f)
+        }).unwrap();
 
         if exp.fract() == 0f64 {
             factor = exp;
@@ -30,5 +33,5 @@ fn factor_for(num: uint) -> (uint, uint) {
         }
     }
 
-    (base as uint, factor as uint)
+    (base, factor as uint)
 }

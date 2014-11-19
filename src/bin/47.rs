@@ -57,7 +57,7 @@ struct FactorCount<'a> {
 }
 
 fn factors(mut count: FactorCount) -> (Memo, HashSet<uint>) {
-    match count.memo.find_copy(&count.remaining) {
+    match count.memo.get(&count.remaining).cloned() {
         Some(cached) => {
             return (count.memo, cached);
         },

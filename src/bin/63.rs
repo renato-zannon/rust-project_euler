@@ -5,6 +5,8 @@
  * 
  * How many n-digit positive integers exist which are also an nth power? */
 
+use std::num::Float;
+
 fn main() {
     let mut count = 0u8;
 

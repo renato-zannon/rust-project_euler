@@ -22,17 +22,22 @@ use num::Integer;
 use std::num::from_int;
 
 fn main() {
-    let initial_day = Day { number: 1, month: January, weekday: Monday, year: Year { number: 1900 } };
+    let initial_day = Day {
+        number: 1,
+        month: Month::January,
+        weekday: Weekday::Monday,
+        year: Year { number: 1900 }
+    };
 
     let mut current: Day = initial_day;
-    while !(current.month == December && current.number == 31) {
+    while !(current.month == Month::December && current.number == 31) {
         current = current.next();
     }
 
     let mut count = 0u;
 
-    while current.year.number < 2000 || current.month < December || current.number < 31 {
-        if current.number == 1 && current.weekday == Sunday {
+    while current.year.number < 2000 || current.month < Month::December || current.number < 31 {
+        if current.number == 1 && current.weekday == Weekday::Sunday {
             count += 1;
         }
 
@@ -63,8 +68,8 @@ impl Day {
             }
         } else {
             let year = match self.month {
-                December => self.year.next(),
-                _        => self.year
+                Month::December => self.year.next(),
+                _               => self.year
             };
 
             Day {
@@ -111,9 +116,9 @@ enum Month {
 impl Month {
     fn day_count(self, year: Year) -> uint {
         match self {
-            September | April | June | November => 30,
-            February => if year.is_leap() { 29 } else { 28 },
-            _        => 31,
+            Month::September | Month::April | Month::June | Month::November => 30,
+            Month::February => if year.is_leap() { 29 } else { 28 },
+            _               => 31,
         }
     }
 
@@ -123,7 +128,7 @@ impl Month {
 
         match converted {
             Some(month) => month,
-            None        => January,
+            None        => Month::January,
         }
     }
 }
@@ -146,7 +151,7 @@ impl Weekday {
 
         match converted {
             Some(day) => day,
-            None      => Sunday,
+            None      => Weekday::Sunday,
         }
     }
 }

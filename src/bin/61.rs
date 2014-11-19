@@ -194,7 +194,7 @@ macro_rules! polygonal_formulas(
                     PolygonalIterator {
                         current_index: 1,
                         formula: formula,
-                        classification: $name,
+                        classification: PolygonalClassification::$name,
                     }
                 }
             )+

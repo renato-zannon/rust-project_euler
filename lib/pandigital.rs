@@ -1,5 +1,6 @@
 use super::digits;
 use super::std::{slice, iter};
+use self::PandigitalResult::{IsPandigital, TooSmall, TooLarge, HasRepetitions};
 
 pub enum PandigitalResult {
     IsPandigital,

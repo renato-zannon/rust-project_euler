@@ -1,8 +1,9 @@
 use std::iter::{range_step_inclusive, Unfold};
+use std::num::{Float, Int};
 
 // Adapted from the problem 07 overview PDF
 pub fn is_prime<T>(num: T) -> bool
-    where T : Num + Eq + Ord + FromPrimitive + Clone + CheckedAdd + ToPrimitive {
+    where T : Int + Eq + Ord + FromPrimitive + Clone + ToPrimitive {
 
     let zero:  T = literal(0);
     let one:   T = literal(1);

@@ -14,6 +14,7 @@
 extern crate num;
 
 use std::iter::count;
+use std::num::Float;
 
 fn main() {
     let mut found: Vec<uint> = Vec::new();

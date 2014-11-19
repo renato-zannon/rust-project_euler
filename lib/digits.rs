@@ -1,5 +1,5 @@
 use num::Integer;
-use std::num::pow;
+use std::num::{Float, pow};
 use std::fmt::Show;
 use std::io::IoResult;
 

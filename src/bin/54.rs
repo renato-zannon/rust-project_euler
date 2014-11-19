@@ -75,19 +75,19 @@ enum CardValue {
 impl CardValue {
     fn parse(value: &str) -> Option<CardValue> {
         match value {
-            "2" => Some(Two),
-            "3" => Some(Three),
-            "4" => Some(Four),
-            "5" => Some(Five),
-            "6" => Some(Six),
-            "7" => Some(Seven),
-            "8" => Some(Eight),
-            "9" => Some(Nine),
-            "T" => Some(Ten),
-            "J" => Some(Jack),
-            "Q" => Some(Queen),
-            "K" => Some(King),
-            "A" => Some(Ace),
+            "2" => Some(CardValue::Two),
+            "3" => Some(CardValue::Three),
+            "4" => Some(CardValue::Four),
+            "5" => Some(CardValue::Five),
+            "6" => Some(CardValue::Six),
+            "7" => Some(CardValue::Seven),
+            "8" => Some(CardValue::Eight),
+            "9" => Some(CardValue::Nine),
+            "T" => Some(CardValue::Ten),
+            "J" => Some(CardValue::Jack),
+            "Q" => Some(CardValue::Queen),
+            "K" => Some(CardValue::King),
+            "A" => Some(CardValue::Ace),
             _   => None,
         }
     }
@@ -104,10 +104,10 @@ enum CardSuit {
 impl CardSuit {
     fn parse(suit: &str) -> Option<CardSuit> {
         match suit {
-            "H" => Some(Hearts),
-            "S" => Some(Spades),
-            "C" => Some(Clubs),
-            "D" => Some(Diamonds),
+            "H" => Some(CardSuit::Hearts),
+            "S" => Some(CardSuit::Spades),
+            "C" => Some(CardSuit::Clubs),
+            "D" => Some(CardSuit::Diamonds),
             _   => None
         }
     }
@@ -192,7 +192,13 @@ impl Hand {
 
 impl Hand {
     fn rank(&self) -> Rank {
-        const ROYAL_FLUSH: &'static [CardValue] = &[Ten, Jack, Queen, King, Ace];
+        const ROYAL_FLUSH: &'static [CardValue] = &[
+            CardValue::Ten,
+            CardValue::Jack,
+            CardValue::Queen,
+            CardValue::King,
+            CardValue::Ace
+        ];
 
         let cards_in_order = self.cards[];
 
@@ -207,9 +213,9 @@ impl Hand {
 
         if all_same_suit && all_consecutive {
             if ROYAL_FLUSH.iter().zip(values_in_order).all(|(&v1, v2)| v1 == v2) {
-                return RoyalFlush;
+                return Rank::RoyalFlush;
             } else {
-                return StraightFlush;
+                return Rank::StraightFlush;
             }
         }
 
@@ -217,22 +223,22 @@ impl Hand {
         let (second_value, second_value_count) = values[1];
 
         match (first_value_count, second_value_count) {
-            (4, _) => return FourOfAKind(first_value),
-            (3, 2) => return FullHouse(first_value, second_value),
+            (4, _) => return Rank::FourOfAKind(first_value),
+            (3, 2) => return Rank::FullHouse(first_value, second_value),
             _      => (),
         };
 
         if all_same_suit {
-            return Flush
+            return Rank::Flush;
         } else if all_consecutive {
-            return Straight;
+            return Rank::Straight;
         }
 
         return match (first_value_count, second_value_count) {
-            (3, _) => ThreeOfAKind(first_value),
-            (2, 2) => TwoPairs(first_value, second_value),
-            (2, _) => OnePair(first_value),
-            _      => HighCard(values_in_order.last().unwrap()),
+            (3, _) => Rank::ThreeOfAKind(first_value),
+            (2, 2) => Rank::TwoPairs(first_value, second_value),
+            (2, _) => Rank::OnePair(first_value),
+            _      => Rank::HighCard(values_in_order.last().unwrap()),
         };
     }
 
@@ -326,7 +332,7 @@ mod tests {
 
     #[test]
     fn test_royal_flush() {
-        use super::RoyalFlush;
+        use super::Rank::RoyalFlush;
 
         assert_eq!(RoyalFlush, rank("TH JH QH KH AH"));
         assert_eq!(RoyalFlush, rank("AH JH TH QH KH"));
@@ -334,7 +340,7 @@ mod tests {
 
     #[test]
     fn test_straight_flush() {
-        use super::StraightFlush;
+        use super::Rank::StraightFlush;
 
         assert_eq!(StraightFlush, rank("5H 6H 7H 8H 9H"));
         assert_eq!(StraightFlush, rank("9H TH JH QH KH"));
@@ -343,7 +349,8 @@ mod tests {
 
     #[test]
     fn test_four_of_a_kind() {
-        use super::{Five, Nine, FourOfAKind};
+        use super::Rank::FourOfAKind;
+        use super::CardValue::{Nine, Five};
 
         assert_eq!(FourOfAKind(Five), rank("5H 5C 5D 5S 9H"));
         assert_eq!(FourOfAKind(Nine), rank("9H 9D KH 9C 9S"));
@@ -351,17 +358,18 @@ mod tests {
 
     #[test]
     fn test_full_house() {
-        use super::{FullHouse, Five, Nine, Four, Two, Three};
+        use super::CardValue;
+        use super::Rank::FullHouse;
 
-        assert_eq!(FullHouse(Five, Nine),  rank("5H 5C 5D 9S 9H"));
-        assert_eq!(FullHouse(Nine, Five),  rank("9H 9D 5H 5C 9S"));
-        assert_eq!(FullHouse(Four, Two),   rank("2H 2D 4C 4D 4S"));
-        assert_eq!(FullHouse(Three, Nine), rank("3C 3D 3S 9S 9D"));
+        assert_eq!(FullHouse(CardValue::Five,  CardValue::Nine), rank("5H 5C 5D 9S 9H"));
+        assert_eq!(FullHouse(CardValue::Nine,  CardValue::Five), rank("9H 9D 5H 5C 9S"));
+        assert_eq!(FullHouse(CardValue::Four,  CardValue::Two),  rank("2H 2D 4C 4D 4S"));
+        assert_eq!(FullHouse(CardValue::Three, CardValue::Nine), rank("3C 3D 3S 9S 9D"));
     }
 
     #[test]
     fn test_flush() {
-        use super::Flush;
+        use super::Rank::Flush;
 
         assert_eq!(Flush, rank("3D 6D 7D TD QD"));
         assert_eq!(Flush, rank("9C TC 5C 2C AC"));
@@ -370,7 +378,7 @@ mod tests {
 
     #[test]
     fn test_straight() {
-        use super::Straight;
+        use super::Rank::Straight;
 
         assert_eq!(Straight, rank("3D 4D 5H 6S 7D"));
         assert_eq!(Straight, rank("2C 3S 4H 5C 6H"));
@@ -378,7 +386,8 @@ mod tests {
 
     #[test]
     fn test_three_of_a_kind() {
-        use super::{ThreeOfAKind, Nine, Five, Ace};
+        use super::Rank::ThreeOfAKind;
+        use super::CardValue::{Nine, Five, Ace};
 
         assert_eq!(ThreeOfAKind(Five), rank("5H 5C 5D 9S AH"));
         assert_eq!(ThreeOfAKind(Nine), rank("9H 2D 5H 9C 9S"));
@@ -387,7 +396,8 @@ mod tests {
 
     #[test]
     fn test_two_pairs() {
-        use super::{TwoPairs, Five, Nine};
+        use super::Rank::TwoPairs;
+        use super::CardValue::{Five, Nine};
 
         assert_eq!(TwoPairs(Nine, Five), rank("5H AC 5D 9S 9H"));
         assert_eq!(TwoPairs(Nine, Five), rank("9H 2D 5H 5C 9S"));
@@ -395,7 +405,8 @@ mod tests {
 
     #[test]
     fn test_one_pair() {
-        use super::{OnePair, Five, Nine, Eight, Queen};
+        use super::Rank::OnePair;
+        use super::CardValue::{Five, Nine, Eight, Queen};
 
         assert_eq!(OnePair(Five),  rank("2H AC 5D 9S 5H"));
         assert_eq!(OnePair(Nine),  rank("AH 2D 9H 5C 9S"));
@@ -407,7 +418,8 @@ mod tests {
 
     #[test]
     fn test_high_card() {
-        use super::{HighCard, Queen, King, Ace};
+        use super::Rank::HighCard;
+        use super::CardValue::{Queen, King, Ace};
 
         assert_eq!(HighCard(Queen), rank("2H QC 5D 9S TH"));
         assert_eq!(HighCard(King),  rank("KH 2D 9H 5C 3S"));
@@ -417,8 +429,8 @@ mod tests {
 
     #[test]
     fn test_rank_beats() {
-        use super::{RoyalFlush, StraightFlush, FourOfAKind, FullHouse};
-        use super::{King, Queen, Ace};
+        use super::Rank::{RoyalFlush, StraightFlush, FourOfAKind, FullHouse};
+        use super::CardValue::{King, Queen, Ace};
 
         assert!(RoyalFlush            > StraightFlush);
         assert!(StraightFlush         > FourOfAKind(Ace));

@@ -20,6 +20,7 @@ extern crate shared;
 use shared::sieve;
 use shared::sieve::Sieve as PrimeSieve;
 use std::iter::{count, range_inclusive};
+use std::num::Float;
 
 const SEGMENT_SIZE: uint = 101;
 
@@ -51,8 +52,8 @@ fn mark_odd_composites(segment: &mut OddNumberSegment, sieve: &mut PrimeSieve<ui
         .take_while(|prime| **prime < segment_end);
 
     for &prime in primes {
-        let min_squared_number = min_half_square(prime, segment_start, RoundUp);
-        let max_squared_number = min_half_square(prime, segment_end, RoundDown);
+        let min_squared_number = min_half_square(prime, segment_start, Rounding::Up);
+        let max_squared_number = min_half_square(prime, segment_end, Rounding::Down);
 
         for number in range_inclusive(min_squared_number, max_squared_number) {
             let result = prime + 2 * number * number;
@@ -62,8 +63,8 @@ fn mark_odd_composites(segment: &mut OddNumberSegment, sieve: &mut PrimeSieve<ui
 }
 
 enum Rounding {
-    RoundUp,
-    RoundDown,
+    Up,
+    Down,
 }
 
 fn min_half_square(prime: uint, end: uint, rounding: Rounding) -> uint {
@@ -74,8 +75,8 @@ fn min_half_square(prime: uint, end: uint, rounding: Rounding) -> uint {
         let result = (diff / 2.0).sqrt();
 
         let rounded = match rounding {
-            RoundUp   => result.ceil(),
-            RoundDown => result.floor(),
+            Rounding::Up   => result.ceil(),
+            Rounding::Down => result.floor(),
         };
 
         rounded as uint

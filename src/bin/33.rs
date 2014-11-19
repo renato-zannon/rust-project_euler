@@ -18,6 +18,7 @@ extern crate num;
 use shared::digits;
 use std::collections::HashSet;
 use num::integer::gcd;
+use self::CancelResult::{Cancelable, NonCancelable};
 
 fn main() {
     let mut result = (1, 1);

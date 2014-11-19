@@ -9,7 +9,7 @@
 extern crate num;
 
 use std::num::FromPrimitive;
-use std::num::pow;
+use num::pow;
 use num::bigint::BigUint;
 
 fn main() {

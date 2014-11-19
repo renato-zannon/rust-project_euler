@@ -22,6 +22,7 @@ use std::iter::{range_inclusive, range_step_inclusive};
 use std::iter::AdditiveIterator;
 use num::Integer;
 use std::collections::HashSet;
+use std::num::Float;
 
 const MAX_NON_ABUNDANT: uint = 28123;
 

@@ -28,7 +28,7 @@ use num::bigint::BigInt;
 
 fn main() {
     let fibonacci = {
-        use std::num::one;
+        use num::one;
         use std::iter::Unfold;
 
         // Rust's BigInt are notoriously inconvenient here: We can't use a literal '1',
@@ -66,7 +66,7 @@ fn fib_iteration(state: &mut (BigInt, BigInt)) -> Option<BigInt> {
 }
 
 fn number_of_digits(num: &BigInt, minimum_digits: uint) -> uint {
-    use std::num::zero;
+    use num::zero;
 
     let bigzero: BigInt = zero();
     let big10:   BigInt = from_str("10").unwrap();

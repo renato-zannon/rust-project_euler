@@ -10,7 +10,8 @@
 #![feature(slicing_syntax)]
 
 extern crate num;
-use std::num::One;
+
+use num::One;
 use num::bigint::{BigUint, ToBigUint};
 
 fn main() {
