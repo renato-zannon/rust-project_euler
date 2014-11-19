@@ -2,19 +2,19 @@
 name = "project_euler"
 version = "0.0.1"
 dependencies = [
- "num 0.0.1 (git+https://github.com/rust-lang/num)",
+ "num 0.0.3 (git+https://github.com/rust-lang/num)",
  "shared 0.0.1",
 ]
 
 [[package]]
 name = "num"
-version = "0.0.1"
-source = "git+https://github.com/rust-lang/num#d9fee8b5853d32bb50d4a97e1fd22b27d58671e0"
+version = "0.0.3"
+source = "git+https://github.com/rust-lang/num#c7757ce7d9c13635613a2cc4c9ae4a6232b68492"
 
 [[package]]
 name = "shared"
 version = "0.0.1"
 dependencies = [
- "num 0.0.1 (git+https://github.com/rust-lang/num)",
+ "num 0.0.3 (git+https://github.com/rust-lang/num)",
 ]
 
