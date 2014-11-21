@@ -3,8 +3,8 @@ name = "project_euler"
 version = "0.0.1"
 authors = ["Renato Zannon <renato@rrsz.com.br>"]
 
+[dependencies]
+num = "~0.0.4"
+
 [dependencies.shared]
 path = "lib"
-
-[dependencies.num]
-git = "https://github.com/rust-lang/num"
