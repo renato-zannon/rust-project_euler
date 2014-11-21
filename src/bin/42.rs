@@ -14,7 +14,7 @@
 
 extern crate shared;
 
-use std::num::{mod, Float};
+use std::num::Float;
 use std::iter::AdditiveIterator;
 use shared::data_reader;
 
@@ -65,9 +65,10 @@ fn triangular_index(number: uint) -> Option<uint> {
     }
 
     fn ensure_divisible(integer_sqrt: uint) -> Option<uint> {
-        let (divided, remainder) = num::div_rem(integer_sqrt - 1, 2);
+        let remainder = (integer_sqrt - 1) % 2;
 
         if remainder == 0 {
+            let divided = (integer_sqrt - 1) / 2;
             Some(divided)
         } else {
             None

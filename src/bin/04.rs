@@ -9,7 +9,6 @@ extern crate shared;
 
 use std::iter::range_inclusive;
 use std::iter::Unfold;
-use std::num::div_rem;
 
 use shared::combinations;
 
@@ -50,7 +49,9 @@ fn reverse(n: uint) -> uint {
             return None;
         }
 
-        let (new_remaining, div_remainder) = div_rem(remaining, 10);
+        let new_remaining = remaining / 10;
+        let div_remainder = remaining % 10;
+
         let new_reversed = reversed * 10 + div_remainder;
 
         *state_ptr = (new_remaining, new_reversed);
