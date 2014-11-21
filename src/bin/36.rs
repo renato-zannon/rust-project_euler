@@ -26,7 +26,7 @@ fn is_palindrome(number: uint, base: u8) -> bool {
     let slice = {
         let mut writer = BufWriter::new(buffer.as_mut_slice());
 
-        (write!(writer, "{}", fmt::radix(number, base))).and_then(|_| {
+        (write!(&mut writer, "{}", fmt::radix(number, base))).and_then(|_| {
             return writer.tell()
         })
     }.ok().and_then(|size| {
