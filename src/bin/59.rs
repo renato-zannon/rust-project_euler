@@ -55,7 +55,7 @@ fn main() {
     }
 
     let result: u32 = buffer[].iter().fold(0, |total, chr| {
-       total + (chr.to_byte() as u32)
+       total + (chr.as_byte() as u32)
     });
 
     println!("{}", result);
