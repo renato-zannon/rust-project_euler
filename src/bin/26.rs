@@ -17,8 +17,6 @@
  * Find the value of d < 1000 for which 1/d contains the longest recurring cycle in its decimal
  * fraction part. */
 
-use std::io::MemWriter;
-
 fn main() {
     let result = range(2u, 1_000).max_by(|&divisor| {
         match division_type(1, divisor) {
@@ -68,12 +66,12 @@ fn division_type(numerator: uint, denominator: uint) -> DivisionType {
 fn seen_to_str(vec: &[(uint, uint)]) -> String {
     let count = vec.len();
 
-    let mut buffer = MemWriter::with_capacity(count);
+    let mut buffer = Vec::with_capacity(count);
     for &(_, divided) in vec.iter() {
         (write!(&mut buffer, "{}", divided)).unwrap();
     }
 
-    String::from_utf8(buffer.unwrap()).unwrap()
+    String::from_utf8(buffer).unwrap()
 }
 
 #[deriving(Show)]
