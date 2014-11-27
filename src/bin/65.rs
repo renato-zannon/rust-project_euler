@@ -33,6 +33,7 @@ extern crate shared;
 use shared::digits;
 use std::num::Int;
 use std::cmp;
+use std::iter::repeat;
 
 const INITIAL_TERM: u32 = 2;
 const CONVERGENT_INDEX: uint = 99;
@@ -56,7 +57,7 @@ fn main() {
         vec![1]
     );
 
-    let mut rev_terms = terms.into_iter().rev();
+    let rev_terms = terms.into_iter().rev();
 
     // t + 1/(n/d) => t + d/n => (nt + d)/n
     let (result, _) = rev_terms.fold(last_fraction, |(last_numerator, last_denominator), term| {

@@ -26,7 +26,7 @@ fn main() {
     let sequences = primes.filter_map(|prime| {
         let digits: Vec<uint> = digits::new(prime).rev().collect();
 
-        let mut matching_permutations = digits[].permutations()
+        let matching_permutations = digits[].permutations()
             .map(|digits| to_number(digits[]))
             .filter(|&perm| {
                 perm > prime &&

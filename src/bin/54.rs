@@ -209,7 +209,7 @@ impl Hand {
         let all_same_suit   = suits[0].val1() == 5;
         let all_consecutive = consecutives == 5;
 
-        let mut values_in_order = cards_in_order.iter().map(|card| card.value);
+        let values_in_order = cards_in_order.iter().map(|card| card.value);
 
         if all_same_suit && all_consecutive {
             if ROYAL_FLUSH.iter().zip(values_in_order).all(|(&v1, v2)| v1 == v2) {

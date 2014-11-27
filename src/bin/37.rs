@@ -18,7 +18,7 @@ fn main() {
 
     let mut prime_checker = sieve::new();
 
-    let mut truncatable_primes = search_space
+    let truncatable_primes = search_space
         .filter(|&prime| is_truncatable(prime, &mut prime_checker))
         .take(11);
 

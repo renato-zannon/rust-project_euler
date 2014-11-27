@@ -35,14 +35,6 @@ impl<A, B> Iterator<B> for Digits<A, B>
         }
     }
 
-    fn count(&mut self) -> uint {
-        let prev_count = self.remaining_digits;
-
-        self.remaining_digits = 0;
-        self.remaining = FromPrimitive::from_uint(0u).unwrap();
-
-        prev_count
-    }
 }
 
 impl<A, B> DoubleEndedIterator<B> for Digits<A, B>
@@ -75,6 +67,10 @@ impl<A, B> Digits<A, B>
 
     fn current_divisor(&self) -> uint {
         10u.pow(self.remaining_digits - 1)
+    }
+
+    pub fn count(self) -> uint {
+        self.remaining_digits
     }
 }
 

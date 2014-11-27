@@ -18,7 +18,7 @@ fn main() {
         digit_slice.permutations()
     });
 
-    let mut primes = permutations.filter_map(|permutation| {
+    let primes = permutations.filter_map(|permutation| {
         let number = to_number(permutation[]);
 
         if primes::is_prime(number) {
