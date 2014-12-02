@@ -18,7 +18,7 @@
 #![feature(slicing_syntax)]
 
 extern crate shared;
-use shared::pandigital::{is_9_pandigital, IsPandigital, TooLarge};
+use shared::pandigital::{is_9_pandigital, PandigitalResult};
 use shared::digits;
 use std::iter::{count, range_inclusive};
 
@@ -30,7 +30,7 @@ fn main() {
             let prod = concat_product(start, n);
 
             match is_9_pandigital(prod[]) {
-                IsPandigital => {
+                PandigitalResult::IsPandigital => {
                     let num_prod = to_num(prod);
 
                     if num_prod > largest {
@@ -38,8 +38,8 @@ fn main() {
                     }
                 },
 
-                TooLarge => break,
-                _        => (),
+                PandigitalResult::TooLarge => break,
+                _                          => (),
             }
         }
     }

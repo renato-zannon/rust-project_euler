@@ -82,7 +82,7 @@ struct Segment<T> {
 
 impl<T: Primeable> Sieve<T> {
     pub fn is_prime(&mut self, number: T) -> bool {
-        use std::slice::{Found, NotFound};
+        use std::slice::BinarySearchResult::{Found, NotFound};
 
         self.compute_until(number);
 

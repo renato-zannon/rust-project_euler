@@ -16,7 +16,6 @@
 
 extern crate shared;
 use shared::digits;
-use shared::pandigital;
 use shared::pandigital::{is_9_pandigital, PandigitalResult};
 use std::iter::AdditiveIterator;
 
@@ -28,14 +27,14 @@ fn main() {
             let result = x * y;
 
             match pandigital_product(&[x, y, result]) {
-                pandigital::IsPandigital => {
+                PandigitalResult::IsPandigital => {
                     if !products.contains(&result) {
                         products.push(result);
                     }
                 },
 
-                pandigital::TooLarge => break,
-                _                    => continue
+                PandigitalResult::TooLarge => break,
+                _                          => continue
             }
         }
     }
