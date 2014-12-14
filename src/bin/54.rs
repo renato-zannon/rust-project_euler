@@ -55,7 +55,7 @@ enum Rank {
     RoyalFlush,                       // Royal Flush: Ten, Jack, Queen, King, Ace, in same suit.
 }
 
-#[deriving(PartialEq, Eq, PartialOrd, Ord, Clone, FromPrimitive, Show)]
+#[deriving(PartialEq, Eq, PartialOrd, Ord, Clone, FromPrimitive, Show, Copy)]
 enum CardValue {
     Two   = 0,
     Three = 1,
@@ -93,7 +93,7 @@ impl CardValue {
     }
 }
 
-#[deriving(PartialEq, Eq, PartialOrd, Ord, Clone, FromPrimitive)]
+#[deriving(PartialEq, Eq, PartialOrd, Ord, Clone, FromPrimitive, Copy)]
 enum CardSuit {
     Spades   = 0,
     Hearts   = 1,
@@ -113,7 +113,7 @@ impl CardSuit {
     }
 }
 
-#[deriving(PartialEq, Eq, Clone)]
+#[deriving(PartialEq, Eq, Clone, Copy)]
 struct Card {
     value: CardValue,
     suit: CardSuit,
@@ -309,7 +309,7 @@ fn main() {
         let maybe_hand2 = Hand::parse(line.slice_from(15));
 
         match (maybe_hand1, maybe_hand2) {
-            (Some(hand1), Some(ref hand2)) => hand1.beats(hand2),
+            (Some(ref hand1), Some(ref hand2)) => hand1.beats(hand2),
 
             _ => panic!("Parsing problem on line:\n{}", line)
         }

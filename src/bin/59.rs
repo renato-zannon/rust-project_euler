@@ -87,6 +87,7 @@ impl<'a> Iterator<Ascii> for Decryptor<'a> {
     }
 }
 
+#[deriving(Copy)]
 struct LowerCaseCharacter {
     byte: u8
 }

@@ -82,7 +82,7 @@ impl Day {
     }
 }
 
-#[deriving(Show)]
+#[deriving(Show, Copy)]
 struct Year {
     number: uint,
 }
@@ -97,7 +97,7 @@ impl Year {
     }
 }
 
-#[deriving(PartialEq, FromPrimitive, PartialOrd, Show)]
+#[deriving(PartialEq, FromPrimitive, PartialOrd, Show, Copy)]
 enum Month {
     January,
     February,
@@ -133,7 +133,7 @@ impl Month {
     }
 }
 
-#[deriving(PartialEq, FromPrimitive, Show)]
+#[deriving(PartialEq, FromPrimitive, Show, Copy)]
 enum Weekday {
     Sunday,
     Monday,

@@ -57,7 +57,7 @@ fn main() {
 }
 
 fn build_candidates() -> Vec<NumberInfo> {
-    let iterators = [
+    let iterators = vec![
         PolygonalIterator::triangle_numbers(),
         PolygonalIterator::square_numbers(),
         PolygonalIterator::pentagonal_numbers(),
@@ -68,7 +68,7 @@ fn build_candidates() -> Vec<NumberInfo> {
 
     let mut map: TreeMap<u32, NumberInfo> = TreeMap::new();
 
-    for iter in iterators.iter() {
+    for iter in iterators.into_iter() {
         let iter_classification = iter.classification;
         let mut iter_candidates = iter
             .skip_while(|&n| n < 1_000)
@@ -200,7 +200,7 @@ macro_rules! polygonal_formulas(
             )+
         }
 
-        #[deriving(Show, Clone)]
+        #[deriving(Show, Clone, Copy)]
         #[repr(uint)]
         enum PolygonalClassification {
             $($name),+

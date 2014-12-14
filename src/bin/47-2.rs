@@ -72,6 +72,7 @@ struct Segment {
     values: [FactorCount, ..SEGMENT_SIZE],
 }
 
+#[deriving(Copy)]
 struct FactorCount {
     factors: [Option<uint>, ..FACTOR_COUNT],
     count: uint,
