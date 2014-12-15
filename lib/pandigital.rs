@@ -2,6 +2,7 @@ use super::digits;
 use super::std::{slice, iter};
 use self::PandigitalResult::{IsPandigital, TooSmall, TooLarge, HasRepetitions};
 
+#[deriving(Copy)]
 pub enum PandigitalResult {
     IsPandigital,
     TooSmall,

@@ -36,6 +36,7 @@ pub fn is_prime<T>(num: T) -> bool
     }
 }
 
+#[allow(missing_copy_implementations)]
 pub struct PrimeFactors {
     remaining: uint,
     divisor: uint,

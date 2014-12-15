@@ -206,7 +206,7 @@ impl Hand {
 
         let (suits, values) = self.card_counts();
 
-        let all_same_suit   = suits[0].val1() == 5;
+        let all_same_suit   = suits[0].1 == 5;
         let all_consecutive = consecutives == 5;
 
         let values_in_order = cards_in_order.iter().map(|card| card.value);

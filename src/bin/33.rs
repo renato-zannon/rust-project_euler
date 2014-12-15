@@ -28,7 +28,7 @@ fn main() {
             match cancel_fraction(numerator, denominator) {
                 NonCancelable => continue,
                 Cancelable(num, den) => {
-                    result = (result.val0() * num, result.val1() * den);
+                    result = (result.0 * num, result.1 * den);
                 }
             }
         }
