@@ -55,7 +55,7 @@ fn spawn_workers(max: uint) -> Receiver<WorkResult> {
     for start in range_step_inclusive(1, max, per_task) {
         let master_tx_clone = master_tx.clone();
 
-        spawn(proc() {
+        spawn(move || {
             let end = start + per_task;
             collatz_worker((start, end), master_tx_clone);
         });

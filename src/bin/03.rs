@@ -6,25 +6,22 @@
 use std::iter::Unfold;
 
 fn main() {
-    println!("{}", prime_factors(600851475143).max());
+    let factors = Unfold::new((600851475143, 2), unfold_factors);
+    println!("{}", factors.max());
 }
 
-fn prime_factors(n: uint) -> Unfold<'static, uint, (uint, uint)> {
-    return Unfold::new((n, 2), unfold_factors);
+fn unfold_factors(state_ptr : &mut (uint, uint)) -> Option<uint> {
+    let (remaining, divisor) = *state_ptr;
 
-    fn unfold_factors(state_ptr : &mut (uint, uint)) -> Option<uint> {
-        let (remaining, divisor) = *state_ptr;
-
-        if remaining <= 1 {
-            return None;
-        }
-
-        let mut new_divisor = divisor;
-        while remaining % new_divisor > 0 {
-            new_divisor += 1;
-        }
-
-        *state_ptr = (remaining / new_divisor, new_divisor);
-        Some(new_divisor)
+    if remaining <= 1 {
+        return None;
     }
+
+    let mut new_divisor = divisor;
+    while remaining % new_divisor > 0 {
+        new_divisor += 1;
+    }
+
+    *state_ptr = (remaining / new_divisor, new_divisor);
+    Some(new_divisor)
 }

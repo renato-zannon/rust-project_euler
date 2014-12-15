@@ -33,11 +33,11 @@ impl DigitCollection<digits::Digits<uint, uint>> for digits::Digits<uint, uint> 
     }
 }
 
-pub type SliceDigits<'a> = iter::Map<'a, &'a uint, uint, slice::Items<'a, uint>>;
+pub type SliceDigits<'a> = iter::Cloned<slice::Items<'a, uint>>;
 
 impl<'a> DigitCollection<SliceDigits<'a>> for &'a [uint] {
     fn digit_iter(self) -> SliceDigits<'a> {
-        return self.iter().map(|&digit| digit)
+        return self.iter().cloned()
     }
 
     fn digit_len(&mut self) -> uint {

@@ -1,4 +1,4 @@
-use std::iter::{range_step_inclusive, Unfold};
+use std::iter::range_step_inclusive;
 use std::num::{Float, Int};
 
 // Adapted from the problem 07 overview PDF
@@ -36,26 +36,31 @@ pub fn is_prime<T>(num: T) -> bool
     }
 }
 
-pub type PrimeFactors = Unfold<'static, uint, (uint, uint)>;
+pub struct PrimeFactors {
+    remaining: uint,
+    divisor: uint,
+}
 
-pub fn prime_factors(n: uint) -> PrimeFactors {
-    return Unfold::new((n, 2), unfold_factors);
-
-    fn unfold_factors(state_ptr : &mut (uint, uint)) -> Option<uint> {
-        let (remaining, divisor) = *state_ptr;
-
-        if remaining <= 1 {
+impl Iterator<uint> for PrimeFactors {
+    fn next(&mut self) -> Option<uint> {
+        if self.remaining <= 1 {
             return None;
         }
 
-        let mut new_divisor = divisor;
-        while remaining % new_divisor > 0 {
+        let mut new_divisor = self.divisor;
+        while self.remaining % new_divisor > 0 {
             new_divisor += 1;
         }
 
-        *state_ptr = (remaining / new_divisor, new_divisor);
+        self.remaining = self.remaining / new_divisor;
+        self.divisor   = new_divisor;
+
         Some(new_divisor)
     }
+}
+
+pub fn prime_factors(n: uint) -> PrimeFactors {
+    return PrimeFactors { remaining: n, divisor: 2 }
 }
 
 pub type DistinctPrimeFactors = UniqueFilter<PrimeFactors>;
