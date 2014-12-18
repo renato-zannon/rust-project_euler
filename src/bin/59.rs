@@ -69,7 +69,7 @@ struct Decryptor<'a> {
 }
 
 impl<'a> Decryptor<'a> {
-    fn new<'a>(source: &'a [u8], key: &'a [LowerCaseCharacter]) -> Decryptor<'a> {
+    fn new(source: &'a [u8], key: &'a [LowerCaseCharacter]) -> Decryptor<'a> {
         Decryptor { source: source, key: key, position: 0 }
     }
 }

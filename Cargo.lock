@@ -2,19 +2,19 @@
 name = "project_euler"
 version = "0.0.1"
 dependencies = [
- "num 0.0.6 (registry+https://github.com/rust-lang/crates.io-index)",
+ "num 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "shared 0.0.1",
 ]
 
 [[package]]
 name = "num"
-version = "0.0.6"
+version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "shared"
 version = "0.0.1"
 dependencies = [
- "num 0.0.6 (registry+https://github.com/rust-lang/crates.io-index)",
+ "num 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 

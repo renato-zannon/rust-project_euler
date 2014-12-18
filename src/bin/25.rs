@@ -57,7 +57,7 @@ fn fib_iteration(state: &mut (BigInt, BigInt)) -> Option<BigInt> {
     use std::mem::swap;
 
     let &(ref mut pprev, ref mut prev) = state;
-    let result = *pprev + *prev;
+    let result = (&*pprev) + (&*prev);
 
     swap(pprev, prev);
     *prev = result.clone();
@@ -78,12 +78,12 @@ fn number_of_digits(num: &BigInt, minimum_digits: uint) -> uint {
         buf.push('1');
         buf.grow(minimum_digits, '0');
 
-        let minimum = from_str(buf[]).unwrap();
-        *num / minimum
+        let minimum = from_str::<BigInt>(buf[]).unwrap();
+        num / minimum
     };
 
     while remaining > bigzero {
-        remaining = remaining / big10;
+        remaining = remaining / &big10;
         digits += 1;
     }
 

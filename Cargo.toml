@@ -4,7 +4,7 @@ version = "0.0.1"
 authors = ["Renato Zannon <renato@rrsz.com.br>"]
 
 [dependencies]
-num = "~0.0.4"
+num = "^0.1.0"
 
 [dependencies.shared]
 path = "lib"
