@@ -25,15 +25,13 @@
 
 #![feature(slicing_syntax)]
 
-use std::str::from_str;
-
 const CIPHER: &'static str = include_str!("../../data/59-cipher.txt");
 const KEY_LEN: uint = 3;
 const COMMON_WORDS: &'static [&'static str] = &["the", "be", "to", "of", "and"];
 
 fn main() {
     let cipher: Vec<u8> = CIPHER.split(',')
-        .map(|num| from_str(num.trim_right_chars('\n')).unwrap())
+        .map(|num| num.trim_right_chars('\n').parse().unwrap())
         .collect();
 
     let mut buffer = Vec::with_capacity(cipher.len());

@@ -41,7 +41,7 @@
 
 use std::num::Float;
 use std::iter::count;
-use std::collections::TreeSet;
+use std::collections::BTreeSet;
 
 #[deriving(Show, PartialEq)]
 enum FractionType {
@@ -93,7 +93,7 @@ fn divide_square(number: u32) -> FractionType {
         rest: closest_square,
     };
 
-    let mut seen_steps = TreeSet::new();
+    let mut seen_steps = BTreeSet::new();
 
     loop {
         let (step_result, next_step) = step(prev_step);

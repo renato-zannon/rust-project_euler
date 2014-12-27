@@ -14,33 +14,33 @@ use shared::sieve::{mod, Sieve};
 use shared::primes;
 use shared::digits;
 
-use std::collections::{TreeMap, TreeSet};
+use std::collections::{BTreeMap, BTreeSet};
 use std::cell::{RefCell, RefMut};
 use std::iter::{count, AdditiveIterator};
 
 type Prime = u32;
-type PrimeSets = TreeMap<Prime, RefCell<TreeSet<Prime>>>;
+type PrimeSets = BTreeMap<Prime, RefCell<BTreeSet<Prime>>>;
 
 const SET_SIZE: uint     = 5;
 const SEGMENT_SIZE: uint = 200;
 
 fn main() {
     let mut sieve: Sieve<Prime> = sieve::new();
-    let mut sets:  PrimeSets = TreeMap::new();
+    let mut sets:  PrimeSets = BTreeMap::new();
 
     for (first_index, last_index) in count(0, SEGMENT_SIZE).zip(count(SEGMENT_SIZE, SEGMENT_SIZE)) {
         for prime in sieve.by_ref().take(SEGMENT_SIZE) {
-            sets.insert(prime, RefCell::new(TreeSet::new()));
+            sets.insert(prime, RefCell::new(BTreeSet::new()));
         }
 
         for &prime in sieve.found_primes().slice(first_index, last_index).iter() {
-            let mut prime_set: RefMut<TreeSet<Prime>> = sets[prime].borrow_mut();
+            let mut prime_set: RefMut<BTreeSet<Prime>> = sets[prime].borrow_mut();
 
             for (&other_prime, other_set_ref) in sets.iter() {
                 if other_prime >= prime { break }
                 if !concats_generate_primes(prime, other_prime) { continue }
 
-                let mut other_set: RefMut<TreeSet<Prime>> = other_set_ref.borrow_mut();
+                let mut other_set: RefMut<BTreeSet<Prime>> = other_set_ref.borrow_mut();
 
                 other_set.insert(prime);
                 prime_set.insert(other_prime);

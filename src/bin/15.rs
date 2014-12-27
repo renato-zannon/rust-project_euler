@@ -5,14 +5,14 @@
  *
  * How many such routes are there through a 20×20 grid? */
 
-use std::collections::TreeMap;
+use std::collections::BTreeMap;
 
 fn main() {
-    let result = ways_to_reach(20, 20, &mut TreeMap::new());
+    let result = ways_to_reach(20, 20, &mut BTreeMap::new());
     println!("{}", result);
 }
 
-fn ways_to_reach(row: uint, column: uint, cache: &mut TreeMap<(uint, uint), uint>) -> uint {
+fn ways_to_reach(row: uint, column: uint, cache: &mut BTreeMap<(uint, uint), uint>) -> uint {
     return match cache.get(&(row, column)) {
         Some(&value) => value,
 
@@ -24,7 +24,7 @@ fn ways_to_reach(row: uint, column: uint, cache: &mut TreeMap<(uint, uint), uint
     };
 }
 
-fn compute(row: uint, column: uint, cache: &mut TreeMap<(uint, uint), uint>) -> uint {
+fn compute(row: uint, column: uint, cache: &mut BTreeMap<(uint, uint), uint>) -> uint {
     match (row, column) {
         (_, 0)        => 1,
         (0, _)        => 1,

@@ -10,13 +10,13 @@ extern crate shared;
 
 use shared::digits;
 
-use std::collections::{TreeMap, TreeSet};
+use std::collections::{BTreeMap, BTreeSet};
 use std::iter::count;
 
 const PERMUTATION_COUNT: uint = 5;
 
 fn main() {
-    let mut map: TreeMap<Vec<u8>, TreeSet<u64>> = TreeMap::new();
+    let mut map: BTreeMap<Vec<u8>, BTreeSet<u64>> = BTreeMap::new();
 
     for base in count(2, 1) {
         let cube = base * base * base;
@@ -27,9 +27,9 @@ fn main() {
             ord
         };
 
-        let set: &mut TreeSet<u64> = {
+        let set: &mut BTreeSet<u64> = {
             if !map.contains_key(&cube_digits) {
-                map.insert(cube_digits.clone(), TreeSet::new());
+                map.insert(cube_digits.clone(), BTreeSet::new());
             }
 
             &mut map[cube_digits]

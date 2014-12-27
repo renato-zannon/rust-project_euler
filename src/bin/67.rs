@@ -23,7 +23,6 @@
 extern crate shared;
 
 use std::io::{File, BufferedReader};
-use std::str::from_str;
 
 use shared::triangle;
 
@@ -44,8 +43,8 @@ fn read_triangle() -> Vec<Vec<uint>> {
         let line_text = line.unwrap();
         let mut parsed_line = Vec::new();
 
-        for atom in line_text[].trim().split(' ') {
-            match from_str::<uint>(atom) {
+        for atom in line_text.trim().split(' ') {
+            match atom.parse::<uint>() {
                 Some(num) => { parsed_line.push(num); },
                 None      => { () }
             }

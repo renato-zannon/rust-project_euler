@@ -2,8 +2,6 @@
  *
  * Work out the first ten digits of the sum of the following one-hundred 50-digit numbers. */
 
-use std::str::from_str;
-
 const NUMBERS: [&'static str, ..100] = [
     "37107287533902102798797998220837590246510135740250",
     "46376937677490009712648124896970078050417018260538",
@@ -109,7 +107,7 @@ const NUMBERS: [&'static str, ..100] = [
 
 fn main() {
     let result = NUMBERS.iter().fold(0, |acc, num| {
-        let significant: u64 = from_str(num.slice(0, 11)).unwrap();
+        let significant: u64 = num.slice(0, 11).parse().unwrap();
         acc + significant
     });
 

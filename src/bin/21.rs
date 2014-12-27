@@ -11,8 +11,8 @@
 
 extern crate num;
 
-use std::collections::{HashMap, TreeSet};
-use std::collections::hash_map::{Occupied, Vacant};
+use std::collections::{HashMap, BTreeSet};
+use std::collections::hash_map::Entry;
 use num::Integer;
 use std::iter::range_inclusive as irange;
 use std::iter::AdditiveIterator;
@@ -20,19 +20,19 @@ use std::num::Float;
 
 fn main() {
     let mut divisor_sums: HashMap<uint, uint> = HashMap::new();
-    let mut amicables = TreeSet::new();
+    let mut amicables = BTreeSet::new();
 
     for num in range(1u, 10_000) {
         if amicables.contains(&num) { continue; }
 
         let sum = match divisor_sums.entry(num) {
-            Vacant(entry)   => * entry.set(divisor_sum(num)),
-            Occupied(entry) => entry.take(),
+            Entry::Vacant(entry)   => * entry.set(divisor_sum(num)),
+            Entry::Occupied(entry) => entry.take(),
         };
 
         let reverse_sum = match divisor_sums.entry(sum) {
-            Vacant(entry)   => * entry.set(divisor_sum(sum)),
-            Occupied(entry) => entry.take(),
+            Entry::Vacant(entry)   => * entry.set(divisor_sum(sum)),
+            Entry::Occupied(entry) => entry.take(),
         };
 
         if num == reverse_sum && sum != num {

@@ -28,7 +28,7 @@ use shared::digits;
 
 use std::mem;
 use std::iter::AdditiveIterator;
-use std::collections::TreeMap;
+use std::collections::BTreeMap;
 use std::collections::enum_set::{EnumSet, CLike};
 
 struct NumberInfo {
@@ -66,7 +66,7 @@ fn build_candidates() -> Vec<NumberInfo> {
         PolygonalIterator::octagonal_numbers(),
     ];
 
-    let mut map: TreeMap<u32, NumberInfo> = TreeMap::new();
+    let mut map: BTreeMap<u32, NumberInfo> = BTreeMap::new();
 
     for iter in iterators.into_iter() {
         let iter_classification = iter.classification;
@@ -180,7 +180,7 @@ impl Iterator<u32> for PolygonalIterator {
     }
 }
 
-macro_rules! polygonal_formulas(
+macro_rules! polygonal_formulas {
     ( $($name:ident, $fname:ident: $p:pat => $f:expr),+ ) => {
         impl PolygonalIterator {
             $(
@@ -216,13 +216,13 @@ macro_rules! polygonal_formulas(
             }
         }
     }
-)
+}
 
-polygonal_formulas!(
+polygonal_formulas! {
     Triangle,   triangle_numbers:    n => n * (n + 1) / 2,
     Square,     square_numbers:      n => n * n,
     Pentagonal, pentagonal_numbers:  n => n * (3*n - 1) / 2,
     Hexagonal,  hexagonal_numbers:   n => n * (2*n - 1),
     Heptagonal, heptagonal_numbers:  n => n * (5*n - 3) / 2,
     Octagonal,  octagonal_numbers:   n => n * (3*n - 2)
-)
+}

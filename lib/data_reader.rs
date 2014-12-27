@@ -1,4 +1,5 @@
 use std::io::{File, BufferedReader};
+use std::borrow::ToOwned;
 use std::str;
 
 pub struct DataReader {
@@ -15,8 +16,8 @@ impl Iterator<String> for DataReader {
 }
 
 fn trim_markup(bytes: Vec<u8>) -> Option<String> {
-    str::from_utf8(bytes[]).map(|slice| {
-        slice.trim_chars(['"', ','][]).into_string()
+    str::from_utf8(bytes[]).ok().map(|slice| {
+        slice.trim_chars(['"', ','][]).to_owned()
     })
 }
 

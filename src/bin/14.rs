@@ -20,6 +20,7 @@
 
 extern crate num;
 use num::Integer;
+use std::thread::Thread;
 
 const MAX: uint = 1_000_000;
 
@@ -46,7 +47,7 @@ fn spawn_workers(max: uint) -> Receiver<WorkResult> {
     let (master_tx, master_rx) = channel();
 
     let task_count: uint = match os::getenv("NPROC") {
-        Some(num) => from_str(num[]).unwrap(),
+        Some(num) => num.parse().unwrap(),
         None      => 4,
     };
 
@@ -55,10 +56,10 @@ fn spawn_workers(max: uint) -> Receiver<WorkResult> {
     for start in range_step_inclusive(1, max, per_task) {
         let master_tx_clone = master_tx.clone();
 
-        spawn(move || {
+        Thread::spawn(move || {
             let end = start + per_task;
             collatz_worker((start, end), master_tx_clone);
-        });
+        }).detach();
     }
 
     return master_rx;

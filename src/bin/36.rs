@@ -30,7 +30,7 @@ fn is_palindrome(number: uint, base: u8) -> bool {
             return writer.tell()
         })
     }.ok().and_then(|size| {
-        str::from_utf8(buffer.slice_to(size as uint))
+        str::from_utf8(buffer.slice_to(size as uint)).ok()
     }).unwrap();
 
     slice.chars().zip(slice.chars().rev()).all(|(from_start, from_end)| {

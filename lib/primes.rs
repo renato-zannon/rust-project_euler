@@ -112,7 +112,7 @@ mod tests {
 
             assert_eq!(expected_factors, returned);
         });
-    )
+    );
 
     #[test]
     fn test_prime_factors() {

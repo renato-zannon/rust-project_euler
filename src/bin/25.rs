@@ -69,7 +69,7 @@ fn number_of_digits(num: &BigInt, minimum_digits: uint) -> uint {
     use num::zero;
 
     let bigzero: BigInt = zero();
-    let big10:   BigInt = from_str("10").unwrap();
+    let big10:   BigInt = "10".parse().unwrap();
 
     let mut digits = minimum_digits;
 
@@ -78,7 +78,7 @@ fn number_of_digits(num: &BigInt, minimum_digits: uint) -> uint {
         buf.push('1');
         buf.grow(minimum_digits, '0');
 
-        let minimum = from_str::<BigInt>(buf[]).unwrap();
+        let minimum: BigInt = buf.parse().unwrap();
         num / minimum
     };
 

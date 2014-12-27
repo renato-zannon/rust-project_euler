@@ -1,4 +1,4 @@
-use std::collections::TreeMap;
+use std::collections::BTreeMap;
 use std::cell::RefCell;
 use std::cmp::Eq;
 
@@ -10,12 +10,12 @@ struct Value {
 }
 
 pub struct Triangle {
-    values: TreeMap<(uint, uint), RefCell<Value>>,
+    values: BTreeMap<(uint, uint), RefCell<Value>>,
     height: uint,
 }
 
 pub fn new(raw: &[&[uint]]) -> Triangle {
-    let mut values = TreeMap::new();
+    let mut values = BTreeMap::new();
 
     for (row_index, row) in raw.iter().enumerate() {
         assert_eq!(row.len(), row_index + 1);

@@ -34,7 +34,7 @@ impl DigitCollection<digits::Digits<uint, uint>> for digits::Digits<uint, uint> 
     }
 }
 
-pub type SliceDigits<'a> = iter::Cloned<slice::Items<'a, uint>>;
+pub type SliceDigits<'a> = iter::Cloned<slice::Iter<'a, uint>>;
 
 impl<'a> DigitCollection<SliceDigits<'a>> for &'a [uint] {
     fn digit_iter(self) -> SliceDigits<'a> {
