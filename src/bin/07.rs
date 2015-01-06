@@ -10,8 +10,8 @@
 extern crate shared;
 
 use std::iter::{count, range_step_inclusive};
-use shared::sieve::{mod, Sieve};
-use std::num::Float;
+use shared::sieve::{self, Sieve};
+use std::num::{ToPrimitive, Float};
 
 fn main() {
 //let mut all_primes = count(1u, 1).filter(naive_is_prime);

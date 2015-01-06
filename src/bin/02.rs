@@ -6,7 +6,9 @@
  * 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, ...
  *
  * By considering the terms in the Fibonacci sequence whose values do not exceed four million, find
-* the sum of the even-valued terms. */
+ * the sum of the even-valued terms. */
+
+#![feature(associated_types)]
 
 fn main() {
     let result = fibs()
@@ -26,7 +28,9 @@ struct Fibonacci {
     pprev: Option<u64>
 }
 
-impl Iterator<u64> for Fibonacci {
+impl Iterator for Fibonacci {
+    type Item = u64;
+
     fn next(&mut self) -> Option<u64> {
         let pprev = self.pprev;
         let prev  = self.prev;

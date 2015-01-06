@@ -39,11 +39,11 @@
  *
  * How many continued fractions for N ≤ 10000 have an odd period? */
 
-use std::num::Float;
+use std::num::{ToPrimitive, Float};
 use std::iter::count;
 use std::collections::BTreeSet;
 
-#[deriving(Show, PartialEq)]
+#[derive(Show, PartialEq)]
 enum FractionType {
     Exact,
     Periodic(u32, Vec<u32>)
@@ -110,7 +110,7 @@ fn divide_square(number: u32) -> FractionType {
     return FractionType::Periodic(closest_square, period);
 }
 
-#[deriving(Show, PartialEq, Eq, PartialOrd, Ord, Clone)]
+#[derive(Show, PartialEq, Eq, PartialOrd, Ord, Clone)]
 struct Step { closest_square: u32, numerator: u32, number: u32, rest: u32 }
 
 fn step(prev: Step) -> (u32, Step) {

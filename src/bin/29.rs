@@ -1,5 +1,5 @@
 use std::collections::HashSet;
-use std::num::Float;
+use std::num::{ToPrimitive, Float};
 
 fn main() {
     let mut powers: HashSet<(uint, uint)> = HashSet::new();

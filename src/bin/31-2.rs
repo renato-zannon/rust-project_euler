@@ -11,7 +11,7 @@
  *
  * How many different ways can £2 be made using any number of coins? */
 
-use std::iter::range_inclusive;
+use std::iter::{repeat, range_inclusive};
 
 const DENOMINATIONS: &'static [uint] = &[200, 100, 50, 20, 10, 5, 2, 1];
 
@@ -21,7 +21,7 @@ fn main() {
 
 // Dynamic programming solution, adapted from the overview PDF
 fn ways_to_make(value: uint, denominations: &[uint]) -> uint {
-    let mut ways = Vec::from_elem(value + 1, 0u);
+    let mut ways: Vec<uint> = repeat(0).take(value + 1).collect();
     let ways = ways.as_mut_slice();
 
     ways[0] = 1;

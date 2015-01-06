@@ -10,7 +10,7 @@
 
 extern crate shared;
 
-use shared::sieve::{mod, Sieve};
+use shared::sieve::{self, Sieve};
 use shared::primes;
 use shared::digits;
 

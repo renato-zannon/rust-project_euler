@@ -84,7 +84,7 @@ fn min_half_square(prime: uint, end: uint, rounding: Rounding) -> uint {
 }
 
 struct OddNumberSegment {
-    values: [bool, ..SEGMENT_SIZE],
+    values: [bool; SEGMENT_SIZE],
     start: uint,
     unmarked_count: uint,
 }
@@ -96,7 +96,7 @@ fn new_segment(start: uint) -> OddNumberSegment {
     assert!(end % 2 == 1,   "segment end is not odd: {}", end);
 
     OddNumberSegment {
-        values: [false, ..SEGMENT_SIZE],
+        values: [false; SEGMENT_SIZE],
         start: start,
         unmarked_count: SEGMENT_SIZE,
     }

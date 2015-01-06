@@ -5,6 +5,8 @@ authors = ["Renato Zannon <renato@rrsz.com.br>"]
 
 [dependencies]
 num = "^0.1.0"
+ascii = "*"
+collect = "*"
 
 [dependencies.shared]
 path = "lib"

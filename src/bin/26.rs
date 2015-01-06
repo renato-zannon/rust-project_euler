@@ -74,7 +74,7 @@ fn seen_to_str(vec: &[(uint, uint)]) -> String {
     String::from_utf8(buffer).unwrap()
 }
 
-#[deriving(Show)]
+#[derive(Show)]
 enum DivisionType {
     Terminating,
     Recurring(String)

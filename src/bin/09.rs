@@ -9,6 +9,8 @@
  *
  * Find the product abc. */
 
+#![feature(associated_types)]
+
 fn main() {
     let (result, (a, b, c)) = triplets::new().find(|&(a, b, c)| {
         a + b + c == 1000
@@ -25,7 +27,9 @@ pub mod triplets {
         counter: Counter,
     }
 
-    impl Iterator<(uint, uint, uint)> for Triplets {
+    impl Iterator for Triplets {
+        type Item = (uint, uint, uint);
+
         fn next(&mut self) -> Option<(uint, uint, uint)> {
             self.counter.find(is_triplet)
         }
@@ -46,7 +50,9 @@ pub mod triplets {
         last_a: uint
     }
 
-    impl Iterator<(uint, uint, uint)> for Counter {
+    impl Iterator for Counter {
+        type Item = (uint, uint, uint);
+
         fn next(&mut self) -> Option<(uint, uint, uint)> {
             if self.last_a > 0 {
                 self.last_a -= 1;

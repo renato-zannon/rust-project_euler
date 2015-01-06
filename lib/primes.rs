@@ -1,5 +1,5 @@
 use std::iter::range_step_inclusive;
-use std::num::{Float, Int};
+use std::num::{Float, Int, FromPrimitive, ToPrimitive};
 
 // Adapted from the problem 07 overview PDF
 pub fn is_prime<T>(num: T) -> bool
@@ -42,7 +42,9 @@ pub struct PrimeFactors {
     divisor: uint,
 }
 
-impl Iterator<uint> for PrimeFactors {
+impl Iterator for PrimeFactors {
+    type Item = uint;
+
     fn next(&mut self) -> Option<uint> {
         if self.remaining <= 1 {
             return None;
@@ -78,7 +80,9 @@ struct UniqueFilter<T> {
     iter: T
 }
 
-impl<T: Iterator<uint>> Iterator<uint> for UniqueFilter<T> {
+impl<T: Iterator<Item = uint>> Iterator for UniqueFilter<T> {
+    type Item = <T as Iterator>::Item;
+
     fn next(&mut self) -> Option<uint> {
         loop {
             let new_value = match self.iter.next() {

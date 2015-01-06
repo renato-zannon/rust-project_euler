@@ -39,9 +39,12 @@
  *
  * How many hands does Player 1 win? */
 
-#![feature(slicing_syntax)]
+#![feature(globs, slicing_syntax)]
 
-#[deriving(PartialEq, Eq, PartialOrd, Ord, Show)]
+use std::cmp::Ordering;
+use std::num::FromPrimitive;
+
+#[derive(PartialEq, Eq, PartialOrd, Ord, Show)]
 enum Rank {
     HighCard(CardValue),              // High Card: Highest value card.
     OnePair(CardValue),               // One Pair: Two cards of the same value.
@@ -55,7 +58,7 @@ enum Rank {
     RoyalFlush,                       // Royal Flush: Ten, Jack, Queen, King, Ace, in same suit.
 }
 
-#[deriving(PartialEq, Eq, PartialOrd, Ord, Clone, FromPrimitive, Show, Copy)]
+#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, FromPrimitive, Show, Copy)]
 enum CardValue {
     Two   = 0,
     Three = 1,
@@ -93,7 +96,7 @@ impl CardValue {
     }
 }
 
-#[deriving(PartialEq, Eq, PartialOrd, Ord, Clone, FromPrimitive, Copy)]
+#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, FromPrimitive, Copy)]
 enum CardSuit {
     Spades   = 0,
     Hearts   = 1,
@@ -113,7 +116,7 @@ impl CardSuit {
     }
 }
 
-#[deriving(PartialEq, Eq, Clone, Copy)]
+#[derive(PartialEq, Eq, Clone, Copy)]
 struct Card {
     value: CardValue,
     suit: CardSuit,
@@ -147,24 +150,24 @@ impl Ord for Card {
 }
 
 struct Hand {
-    cards: [Card, ..5]
+    cards: [Card; 5]
 }
 
 impl Hand {
     fn beats(&self, other: &Hand) -> bool {
         match self.rank().cmp(&other.rank()) {
-            Less    => false,
-            Greater => true,
+            Ordering::Less    => false,
+            Ordering::Greater => true,
 
-            Equal => {
+            Ordering::Equal => {
                 let my_cards    = self.cards[];
                 let other_cards = other.cards[];
 
                 for (my, hers) in my_cards.iter().rev().zip(other_cards.iter().rev()) {
                     match my.cmp(hers) {
-                        Less    => return false,
-                        Greater => return true,
-                        Equal   => continue,
+                        Ordering::Less    => return false,
+                        Ordering::Greater => return true,
+                        Ordering::Equal   => continue,
                     }
                 }
 
@@ -273,8 +276,8 @@ impl Hand {
     }
 
     fn card_counts(&self) -> (Vec<(CardSuit, uint)>, Vec<(CardValue, uint)>) {
-        let mut suites = [0, ..4];
-        let mut values = [0, ..13];
+        let mut suites = [0; 4];
+        let mut values = [0; 13];
 
         for &Card { suit, value } in self.cards.iter() {
             suites[suit as uint]  += 1;
@@ -290,7 +293,7 @@ impl Hand {
 
             vec.sort_by(|&(ref k1, ref v1), &(ref k2, ref v2)| {
                 match v2.cmp(v1) {
-                    Equal => k2.cmp(k1),
+                    Ordering::Equal => k2.cmp(k1),
                     ord   => ord
                 }
             });

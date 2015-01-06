@@ -1,5 +1,5 @@
 use num::Integer;
-use std::num::{Int, Float};
+use std::num::{Int, Float, FromPrimitive, ToPrimitive};
 use std::fmt::Show;
 use std::io::IoResult;
 
@@ -8,8 +8,11 @@ pub struct Digits<A, B> {
     remaining_digits: uint,
 }
 
-impl<A, B> Iterator<B> for Digits<A, B>
+impl<A, B> Iterator for Digits<A, B>
     where A: Integer + FromPrimitive + ToPrimitive, B: FromPrimitive {
+
+    type Item = B;
+
     fn next(&mut self) -> Option<B> {
         if self.remaining_digits == 0 {
             return None;
@@ -37,7 +40,7 @@ impl<A, B> Iterator<B> for Digits<A, B>
 
 }
 
-impl<A, B> DoubleEndedIterator<B> for Digits<A, B>
+impl<A, B> DoubleEndedIterator for Digits<A, B>
     where A: Integer + FromPrimitive + ToPrimitive, B: FromPrimitive {
     fn next_back(&mut self) -> Option<B> {
         if self.remaining_digits == 0 {

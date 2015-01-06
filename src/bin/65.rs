@@ -27,6 +27,8 @@
  *
  * Find the sum of digits in the numerator of the 100th convergent of the continued fraction for e */
 
+#![feature(associated_types)]
+
 extern crate num;
 extern crate shared;
 
@@ -113,7 +115,9 @@ impl Term {
     }
 }
 
-impl Iterator<u32> for Term {
+impl Iterator for Term {
+    type Item = u32;
+
     fn next(&mut self) -> Option<u32> {
         let new_term = match *self {
             Term::LeadingOne(v)  => Some(Term::Multiple(v)),

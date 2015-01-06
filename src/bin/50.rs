@@ -90,7 +90,7 @@ fn longest_after_expanding<'a>(seq: PrimeSequenceSum<'a>, sieve: &mut Sieve<uint
     longest_prime
 }
 
-#[deriving(Show, Clone)]
+#[derive(Show, Clone)]
 struct PrimeSequenceSum<'a> {
     value:  uint,
 

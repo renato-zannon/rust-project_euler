@@ -15,7 +15,7 @@
  *
  * Find the sum of all 0 to 9 pandigital numbers with this property. */
 
-#![feature(slicing_syntax)]
+#![feature(slicing_syntax, associated_types)]
 
 extern crate shared;
 
@@ -28,7 +28,7 @@ fn main() {
     // Start with a collection of all 3-digit numbers divisible by 17 that don't
     // that don't have repeated digits
     let bases = range_step(102u, 1000, 17).filter_map(|multiple| {
-        let mut found_digits = [false, ..10];
+        let mut found_digits = [false; 10];
         let num_digits = digits::new(multiple).collect::<Vec<uint>>();
 
         for &digit in num_digits.iter() {
@@ -70,7 +70,7 @@ fn to_number(digits: &[uint]) -> uint {
 }
 
 fn plus_one_digit(base: Vec<uint>) -> PlusOneDigit {
-    let mut used_digits = [false, ..10];
+    let mut used_digits = [false; 10];
 
     for &digit in base.iter() {
         used_digits[digit] = true;
@@ -83,11 +83,13 @@ fn plus_one_digit(base: Vec<uint>) -> PlusOneDigit {
 }
 
 struct PlusOneDigit {
-    used_digits: [bool, ..10],
+    used_digits: [bool; 10],
     base: Vec<uint>,
 }
 
-impl Iterator<Vec<uint>> for PlusOneDigit {
+impl Iterator for PlusOneDigit {
+    type Item = Vec<uint>;
+
     fn next(&mut self) -> Option<Vec<uint>> {
         self.get_next_digit().map(|next_digit| {
             let mut combination = Vec::with_capacity(self.base.capacity() + 1);

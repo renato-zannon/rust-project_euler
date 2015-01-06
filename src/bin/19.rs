@@ -47,7 +47,7 @@ fn main() {
     println!("{}", count);
 }
 
-#[deriving(Show)]
+#[derive(Show)]
 struct Day {
     number: uint,
     weekday: Weekday,
@@ -82,7 +82,7 @@ impl Day {
     }
 }
 
-#[deriving(Show, Copy)]
+#[derive(Show, Copy)]
 struct Year {
     number: uint,
 }
@@ -97,7 +97,7 @@ impl Year {
     }
 }
 
-#[deriving(PartialEq, FromPrimitive, PartialOrd, Show, Copy)]
+#[derive(PartialEq, FromPrimitive, PartialOrd, Show, Copy)]
 enum Month {
     January,
     February,
@@ -133,7 +133,7 @@ impl Month {
     }
 }
 
-#[deriving(PartialEq, FromPrimitive, Show, Copy)]
+#[derive(PartialEq, FromPrimitive, Show, Copy)]
 enum Weekday {
     Sunday,
     Monday,

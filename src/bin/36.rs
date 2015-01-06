@@ -21,7 +21,7 @@ fn is_palindrome(number: uint, base: u8) -> bool {
     use std::io::BufWriter;
     use std::str;
 
-    let mut buffer = [0u8, ..50];
+    let mut buffer = [0u8; 50];
 
     let slice = {
         let mut writer = BufWriter::new(buffer.as_mut_slice());

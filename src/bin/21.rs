@@ -25,14 +25,14 @@ fn main() {
     for num in range(1u, 10_000) {
         if amicables.contains(&num) { continue; }
 
-        let sum = match divisor_sums.entry(num) {
-            Entry::Vacant(entry)   => * entry.set(divisor_sum(num)),
-            Entry::Occupied(entry) => entry.take(),
+        let sum = match divisor_sums.entry(&num) {
+            Entry::Vacant(entry)   => * entry.insert(divisor_sum(num)),
+            Entry::Occupied(entry) => entry.remove(),
         };
 
-        let reverse_sum = match divisor_sums.entry(sum) {
-            Entry::Vacant(entry)   => * entry.set(divisor_sum(sum)),
-            Entry::Occupied(entry) => entry.take(),
+        let reverse_sum = match divisor_sums.entry(&sum) {
+            Entry::Vacant(entry)   => * entry.insert(divisor_sum(sum)),
+            Entry::Occupied(entry) => entry.remove(),
         };
 
         if num == reverse_sum && sum != num {

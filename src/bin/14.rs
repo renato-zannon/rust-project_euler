@@ -21,6 +21,7 @@
 extern crate num;
 use num::Integer;
 use std::thread::Thread;
+use std::sync::mpsc::{Receiver, Sender, channel};
 
 const MAX: uint = 1_000_000;
 
@@ -85,7 +86,7 @@ fn collatz_worker(numbers: (uint, uint), tx: Sender<WorkResult>) {
         }
     }
 
-    tx.send(WorkResult { number: current, result: max });
+    tx.send(WorkResult { number: current, result: max }).unwrap();
 }
 
 fn collatz_length(number: u64) -> uint {

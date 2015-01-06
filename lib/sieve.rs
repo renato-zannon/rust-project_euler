@@ -2,7 +2,7 @@
 // https://github.com/ruby/ruby/blob/1aa54bebaf274bc08e72f9ad3854c7ad592c344a/lib/prime.rb#L423
 
 use std::iter::RandomAccessIterator;
-use std::num::{from_u8, from_f32, from_uint, Int, Float};
+use std::num::{from_u8, from_f32, from_uint, Int, Float, FromPrimitive, ToPrimitive};
 
 const WHEEL: &'static [uint] = &[2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101];
 
@@ -14,7 +14,7 @@ impl<T> Primeable for T
   where T: Int + Ord + FromPrimitive {}
 
 
-#[deriving(Clone)]
+#[derive(Clone)]
 pub struct Sieve<T> {
     last_prime_index: Option<uint>,
     max_checked: T,
@@ -33,7 +33,9 @@ pub fn new<T: Primeable>() -> Sieve<T> {
     }
 }
 
-impl<T: Primeable> Iterator<T> for Sieve<T> {
+impl<T: Primeable> Iterator for Sieve<T> {
+    type Item = T;
+
     fn next(&mut self) -> Option<T> {
         let index = match self.last_prime_index {
             Some(last_index) => last_index + 1,
@@ -53,7 +55,7 @@ impl<T: Primeable> Iterator<T> for Sieve<T> {
     }
 }
 
-impl<T: Primeable> RandomAccessIterator<T> for Sieve<T> {
+impl<T: Primeable> RandomAccessIterator for Sieve<T> {
     fn indexable(&self) -> uint {
         use std::uint;
 
@@ -82,14 +84,8 @@ struct Segment<T> {
 
 impl<T: Primeable> Sieve<T> {
     pub fn is_prime(&mut self, number: T) -> bool {
-        use std::slice::BinarySearchResult::{Found, NotFound};
-
         self.compute_until(number);
-
-        match self.primes[].binary_search_elem(&number) {
-            Found(_)    => true,
-            NotFound(_) => false,
-        }
+        self.primes.binary_search(&number).is_ok()
     }
 
     pub fn compute_until(&mut self, number: T) {

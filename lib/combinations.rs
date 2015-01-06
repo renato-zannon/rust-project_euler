@@ -10,7 +10,9 @@ pub fn new<A>(values: Vec<A>) -> Combinations<A> {
     }
 }
 
-impl<A: Clone> Iterator<(A, A)> for Combinations<A> {
+impl<A: Clone> Iterator for Combinations<A> {
+    type Item = (A, A);
+
     fn next(&mut self) -> Option<(A, A)> {
         let perm = self.next_pair();
         self.last_pair = perm;

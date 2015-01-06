@@ -19,6 +19,8 @@
  *
  * What is the value of the first triangle number to have over five hundred divisors? */
 
+#![feature(associated_types)]
+
 use std::num::Float;
 
 const NUMBER_OF_DIVISORS: uint = 500;
@@ -45,7 +47,9 @@ mod triangular_numbers {
         sum: u64,
     }
 
-    impl Iterator<u64> for TriangularNumbers {
+    impl Iterator for TriangularNumbers {
+        type Item = u64;
+
         fn next(&mut self) -> Option<u64> {
             self.last_number += 1;
             self.sum += self.last_number;

@@ -35,7 +35,7 @@ fn main() {
 
 struct Square {
     size: u16,
-    diagonal: [u32, ..4],
+    diagonal: [u32; 4],
     prime_count: u32,
 }
 

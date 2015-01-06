@@ -2,6 +2,8 @@
  *
  * Find the greatest product of five consecutive digits in the 1000-digit number. */
 
+#![feature(associated_types)]
+
 use std::iter::MultiplicativeIterator;
 
 const NUMBER: &'static str = include_str!("../../data/08-number.txt");
@@ -30,7 +32,9 @@ mod consecutive_digits {
         length: uint,
     }
 
-    impl<'a> Iterator<&'a str> for ConsecutiveDigits<'a> {
+    impl<'a> Iterator for ConsecutiveDigits<'a> {
+        type Item = &'a str;
+
         fn next(&mut self) -> Option<&'a str> {
             let start = self.current;
             let end   = start + self.length;

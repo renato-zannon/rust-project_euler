@@ -23,7 +23,11 @@
  * text must contain common English words, decrypt the message and find the sum of the ASCII values
  * in the original text. */
 
-#![feature(slicing_syntax)]
+#![feature(slicing_syntax, globs, associated_types)]
+
+extern crate ascii;
+
+use ascii::*;
 
 const CIPHER: &'static str = include_str!("../../data/59-cipher.txt");
 const KEY_LEN: uint = 3;
@@ -31,7 +35,7 @@ const COMMON_WORDS: &'static [&'static str] = &["the", "be", "to", "of", "and"];
 
 fn main() {
     let cipher: Vec<u8> = CIPHER.split(',')
-        .map(|num| num.trim_right_chars('\n').parse().unwrap())
+        .map(|num| num.trim_right_matches('\n').parse().unwrap())
         .collect();
 
     let mut buffer = Vec::with_capacity(cipher.len());
@@ -45,7 +49,7 @@ fn main() {
         buffer.extend(decryptor);
 
         let buffer_slice = buffer[];
-        let string = buffer_slice.as_str_ascii();
+        let string = buffer_slice.as_str();
 
         if COMMON_WORDS.iter().all(|&word| string.contains(word)) {
             break;
@@ -72,20 +76,22 @@ impl<'a> Decryptor<'a> {
     }
 }
 
-impl<'a> Iterator<Ascii> for Decryptor<'a> {
+impl<'a> Iterator for Decryptor<'a> {
+    type Item = Ascii;
+
     fn next(&mut self) -> Option<Ascii> {
         let pos = self.position;
 
-        self.source.get(pos).map(|&value| {
+        self.source.get(pos).and_then(|&value| {
             let result = value ^ self.key[pos % KEY_LEN].byte;
             self.position += 1;
 
-            result.to_ascii()
+            result.to_ascii().ok()
         })
     }
 }
 
-#[deriving(Copy)]
+#[derive(Copy)]
 struct LowerCaseCharacter {
     byte: u8
 }
@@ -116,7 +122,7 @@ impl LowerCaseCharacter {
 }
 
 struct KeysGenerator {
-    last: Option<[LowerCaseCharacter, ..KEY_LEN]>
+    last: Option<[LowerCaseCharacter; KEY_LEN]>
 }
 
 impl KeysGenerator {
@@ -129,7 +135,7 @@ impl KeysGenerator {
             Some(ref mut last) => last,
 
             None => {
-                self.last = Some([LowerCaseCharacter::first(), ..KEY_LEN]);
+                self.last = Some([LowerCaseCharacter::first(); KEY_LEN]);
                 return self.last.as_ref().map(|result| result.as_slice())
             }
         };

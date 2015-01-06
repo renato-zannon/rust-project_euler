@@ -21,20 +21,22 @@
  * triangle, square, pentagonal, hexagonal, heptagonal, and octagonal, is represented by a different
  * number in the set. */
 
-#![feature(macro_rules)]
+#![feature(macro_rules, associated_types)]
 
+extern crate collect;
 extern crate shared;
+
 use shared::digits;
 
 use std::mem;
 use std::iter::AdditiveIterator;
 use std::collections::BTreeMap;
-use std::collections::enum_set::{EnumSet, CLike};
+use collect::enum_set::{EnumSet, CLike};
 
 struct NumberInfo {
     value: u32,
-    first_digits: [u8, ..2],
-    last_digits: [u8, ..2],
+    first_digits: [u8; 2],
+    last_digits: [u8; 2],
     classifications: EnumSet<PolygonalClassification>,
 }
 
@@ -171,7 +173,9 @@ struct PolygonalIterator {
     classification: PolygonalClassification,
 }
 
-impl Iterator<u32> for PolygonalIterator {
+impl Iterator for PolygonalIterator {
+    type Item = u32;
+
     fn next(&mut self) -> Option<u32> {
         let value = (self.formula)(self.current_index);
         self.current_index += 1;
@@ -200,19 +204,19 @@ macro_rules! polygonal_formulas {
             )+
         }
 
-        #[deriving(Show, Clone, Copy)]
-        #[repr(uint)]
+        #[derive(Show, Clone, Copy)]
+        #[repr(u32)]
         enum PolygonalClassification {
             $($name),+
         }
 
         impl CLike for PolygonalClassification {
-            fn to_uint(&self) -> uint {
-                *self as uint
+            fn to_u32(&self) -> u32 {
+                *self as u32
             }
 
-            fn from_uint(v: uint) -> PolygonalClassification {
-                unsafe { mem::transmute(v) }
+            unsafe fn from_u32(v: u32) -> PolygonalClassification {
+                mem::transmute(v)
             }
         }
     }

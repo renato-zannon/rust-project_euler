@@ -25,6 +25,7 @@
 extern crate num;
 
 use num::bigint::BigInt;
+use std::iter::repeat;
 
 fn main() {
     let fibonacci = {
@@ -75,8 +76,9 @@ fn number_of_digits(num: &BigInt, minimum_digits: uint) -> uint {
 
     let mut remaining = {
         let mut buf = String::with_capacity(minimum_digits + 1);
+
         buf.push('1');
-        buf.grow(minimum_digits, '0');
+        buf.extend(repeat('0').take(minimum_digits));
 
         let minimum: BigInt = buf.parse().unwrap();
         num / minimum

@@ -6,7 +6,9 @@ pub struct DataReader {
     reader: BufferedReader<File>
 }
 
-impl Iterator<String> for DataReader {
+impl Iterator for DataReader {
+    type Item = String;
+
     fn next(&mut self) -> Option<String> {
         self.reader
             .read_until(',' as u8)
@@ -17,7 +19,7 @@ impl Iterator<String> for DataReader {
 
 fn trim_markup(bytes: Vec<u8>) -> Option<String> {
     str::from_utf8(bytes[]).ok().map(|slice| {
-        slice.trim_chars(['"', ','][]).to_owned()
+        slice.trim_matches(['"', ','][]).to_owned()
     })
 }
 

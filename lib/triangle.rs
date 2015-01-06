@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 use std::cell::RefCell;
 use std::cmp::Eq;
 
-#[deriving(Eq, PartialEq, Show)]
+#[derive(Eq, PartialEq, Show)]
 struct Value {
     coord: (uint, uint),
     value: uint,

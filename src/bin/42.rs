@@ -14,7 +14,7 @@
 
 extern crate shared;
 
-use std::num::Float;
+use std::num::{ToPrimitive, Float};
 use std::iter::AdditiveIterator;
 use shared::data_reader;
 

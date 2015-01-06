@@ -14,7 +14,7 @@
 extern crate num;
 
 use std::iter::count;
-use std::num::Float;
+use std::num::{ToPrimitive, Float};
 
 fn main() {
     let mut found: Vec<uint> = Vec::new();

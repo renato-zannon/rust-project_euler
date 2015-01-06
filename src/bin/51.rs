@@ -11,7 +11,7 @@
  * Find the smallest prime which, by replacing part of the number (not necessarily adjacent digits)
  * with the same digit, is part of an eight prime value family. */
 
-#![feature(slicing_syntax)]
+#![feature(slicing_syntax, associated_types)]
 
 extern crate shared;
 use shared::{digits, sieve};
@@ -39,8 +39,8 @@ fn main() {
 }
 
 fn families_from_variables(count: uint, digits: &Vec<uint>) -> Vec<FamilyIterator> {
-    let mut result    = Vec::new();
-    let mut variables = Vec::from_fn(count, |index| index);
+    let mut result:    Vec<FamilyIterator> = Vec::new();
+    let mut variables: Vec<uint>           = range(0, count).map(|index| index).collect();
 
     let digit_count = digits.len();
 
@@ -87,7 +87,9 @@ struct FamilyIterator {
     last_used: Option<uint>,
 }
 
-impl Iterator<uint> for FamilyIterator {
+impl Iterator for FamilyIterator {
+    type Item = uint;
+
     fn next(&mut self) -> Option<uint> {
         let last_used = match self.last_used {
             val @ Some(_) => val,

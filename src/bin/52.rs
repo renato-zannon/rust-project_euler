@@ -28,8 +28,8 @@ fn yields_same_digits(number: uint, digits: &[bool]) -> bool {
     digits::new(number).rev().all(|digit| digits[digit])
 }
 
-fn digit_set(number: uint) -> [bool, ..10] {
-    let mut found_numbers = [false, ..10];
+fn digit_set(number: uint) -> [bool; 10] {
+    let mut found_numbers = [false; 10];
     for digit in digits::new(number).rev() {
         found_numbers[digit] = true;
     }

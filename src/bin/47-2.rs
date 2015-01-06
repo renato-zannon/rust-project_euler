@@ -14,11 +14,12 @@
  * Find the first four consecutive integers to have four distinct prime factors. What is the first
  * of these numbers? */
 
-#![feature(slicing_syntax)]
+#![feature(slicing_syntax, associated_types)]
 
 extern crate shared;
 use shared::sieve;
 use std::iter::{range_step_inclusive, count};
+use std::cmp::Ordering;
 
 const SEGMENT_SIZE: uint = 1_000;
 const FACTOR_COUNT: uint = 4;
@@ -38,8 +39,8 @@ fn main() {
             let prime = *prime;
 
             let first_composite = match prime.cmp(&segment_start) {
-                Equal | Greater => prime,
-                Less => segment_start + (prime - (segment_start % prime)) % prime,
+                Ordering::Equal | Ordering::Greater => prime,
+                Ordering::Less => segment_start + (prime - (segment_start % prime)) % prime,
             };
 
             for composite in range_step_inclusive(first_composite, segment_end, prime) {
@@ -69,12 +70,12 @@ fn main() {
 
 struct Segment {
     start: uint,
-    values: [FactorCount, ..SEGMENT_SIZE],
+    values: [FactorCount; SEGMENT_SIZE],
 }
 
-#[deriving(Copy)]
+#[derive(Copy)]
 struct FactorCount {
-    factors: [Option<uint>, ..FACTOR_COUNT],
+    factors: [Option<uint>; FACTOR_COUNT],
     count: uint,
 }
 
@@ -86,13 +87,13 @@ struct NumberFactors<'a> {
 impl Segment {
     fn new(start: uint) -> Segment {
         let factor_count = FactorCount {
-            factors: [None, ..FACTOR_COUNT],
+            factors: [None; FACTOR_COUNT],
             count: 0,
         };
 
         Segment {
             start: start,
-            values: [factor_count, ..SEGMENT_SIZE],
+            values: [factor_count; SEGMENT_SIZE],
         }
     }
 
@@ -144,9 +145,11 @@ impl FactorCount {
     }
 }
 
-impl<'a> Iterator<(uint, uint)> for NumberFactors<'a> {
+impl<'a> Iterator for NumberFactors<'a> {
+    type Item = (uint, uint);
+
     fn next(&mut self) -> Option<(uint, uint)> {
-        match self.values.head() {
+        match self.values.first() {
             Some(factor_count) => {
                 let number = self.start;
                 self.start += 1;

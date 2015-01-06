@@ -2,7 +2,7 @@ use super::digits;
 use super::std::{slice, iter};
 use self::PandigitalResult::{IsPandigital, TooSmall, TooLarge, HasRepetitions};
 
-#[deriving(Copy)]
+#[derive(Copy)]
 pub enum PandigitalResult {
     IsPandigital,
     TooSmall,
@@ -19,7 +19,7 @@ impl PandigitalResult {
     }
 }
 
-pub trait DigitCollection<T: Iterator<uint>> {
+pub trait DigitCollection<T: Iterator<Item = uint>> {
     fn digit_iter(self)     -> T;
     fn digit_len(&mut self) -> uint;
 }
@@ -46,14 +46,16 @@ impl<'a> DigitCollection<SliceDigits<'a>> for &'a [uint] {
     }
 }
 
-pub fn is_9_pandigital<U: Iterator<uint>, T: DigitCollection<U>>(mut digits: T) -> PandigitalResult {
+pub fn is_9_pandigital<U: Iterator<Item = uint>, T: DigitCollection<U>>(mut digits: T) -> PandigitalResult {
+    use std::cmp::Ordering::{Less, Greater, Equal};
+
     match digits.digit_len().cmp(&9) {
         Less    => return TooSmall,
         Greater => return TooLarge,
         Equal   => (),
     }
 
-    let mut found_numbers = [false, ..9];
+    let mut found_numbers = [false; 9];
 
     let only_uniques = digits.digit_iter().all(|digit| {
         let found = match digit {
