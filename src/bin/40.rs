@@ -16,7 +16,7 @@ use shared::digits;
 use std::iter::{count, MultiplicativeIterator};
 
 fn main() {
-    let mut sequence = count(1u, 1)
+    let mut sequence = count(1us, 1)
         .flat_map(|number| digits::new::<usize, usize>(number))
         .enumerate();
 

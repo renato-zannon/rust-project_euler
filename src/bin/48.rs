@@ -8,7 +8,7 @@ use std::num::Int;
 use std::iter::range_inclusive;
 
 fn main() {
-    let ten_to_ten = 10u.pow(10u) as u64;
+    let ten_to_ten = 10us.pow(10us) as u64;
     let take_10_digits = |&: number: u64| {
         number % ten_to_ten
     };

@@ -38,10 +38,10 @@ fn main() {
     let possible_bs: Vec<usize> = primes.by_ref().take_while(|&prime| prime < 1000).collect();
 
     for b in possible_bs.into_iter() {
-        let b = b as int;
+        let b = b as isize;
 
-        for a in (-999i..999) {
-            let prime_count = count(0i, 1).take_while(|&n| {
+        for a in (-999is..999) {
+            let prime_count = count(0is, 1).take_while(|&n| {
                 let value = n * n + a * n + b;
                 if value < 0 { return false; }
 

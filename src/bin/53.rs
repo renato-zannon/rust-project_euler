@@ -23,12 +23,12 @@ const MAX_N: usize     = 100;
 const MIN_VALUE: usize = 1_000_000;
 
 fn main() {
-    let count = range_inclusive(1u, MAX_N).map(|n| {
-        let mut value = 1u;
+    let count = range_inclusive(1us, MAX_N).map(|n| {
+        let mut value = 1us;
 
         // Multiplicative formula from:
         // http://en.wikipedia.org/wiki/Binomial_coefficient#Multiplicative_formula
-        let first_k = range_inclusive(1u, n / 2).find(|&k| {
+        let first_k = range_inclusive(1us, n / 2).find(|&k| {
             let old_value = value;
             value = old_value * (n + 1 - k) / k;
 

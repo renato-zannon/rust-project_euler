@@ -26,7 +26,7 @@ fn main() {
     let mut sieve = sieve::new();
     let mut memo  = HashMap::new();
 
-    let result = count(1u, 1).find(|&first_number| {
+    let result = count(1us, 1).find(|&first_number| {
         (first_number..first_number + CONSECUTIVE_COUNT).all(|number| {
             sieve.compute_until(number);
 

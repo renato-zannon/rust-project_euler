@@ -14,8 +14,8 @@ use shared::sieve::{self, Sieve};
 use std::num::{ToPrimitive, Float};
 
 fn main() {
-//let mut all_primes = count(1u, 1).filter(naive_is_prime);
-//let mut all_primes = count(1u, 1).filter(smart_is_prime);
+//let mut all_primes = count(1us, 1).filter(naive_is_prime);
+//let mut all_primes = count(1us, 1).filter(smart_is_prime);
     let mut all_primes: Sieve<u32> = sieve::new();
 
     let result = all_primes.nth(10_000).unwrap();

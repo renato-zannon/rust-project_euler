@@ -14,7 +14,7 @@ use shared::{digits, sieve};
 use std::iter::AdditiveIterator;
 
 fn main() {
-    let search_space = sieve::new::<usize>().skip_while(|&prime| prime < 10u);
+    let search_space = sieve::new::<usize>().skip_while(|&prime| prime < 10us);
 
     let mut prime_checker = sieve::new();
 

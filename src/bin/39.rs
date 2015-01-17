@@ -9,7 +9,7 @@
 
 #[cfg(not(test))]
 fn main() {
-    let result = (1u..1_000)
+    let result = (1us..1_000)
         .max_by(|&perimeter| solution_count(perimeter))
         .unwrap();
 

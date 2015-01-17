@@ -34,7 +34,7 @@ fn main() {
         current = current.next();
     }
 
-    let mut count = 0u;
+    let mut count = 0us;
 
     while current.year.number < 2000 || current.month < Month::December || current.number < 31 {
         if current.number == 1 && current.weekday == Weekday::Sunday {
@@ -89,7 +89,7 @@ struct Year {
 
 impl Year {
     fn is_leap(&self) -> bool {
-        4u.is_multiple_of(&self.number) && !400u.is_multiple_of(&self.number)
+        4us.is_multiple_of(&self.number) && !400us.is_multiple_of(&self.number)
     }
 
     fn next(&self) -> Year {
@@ -123,7 +123,7 @@ impl Month {
     }
 
     fn next(self) -> Month {
-        let next_month = (self as int) + 1;
+        let next_month = (self as isize) + 1;
         let converted = from_int::<Month>(next_month);
 
         match converted {
@@ -146,7 +146,7 @@ enum Weekday {
 
 impl Weekday {
     fn next(self) -> Weekday {
-        let next_day = (self as int) + 1;
+        let next_day = (self as isize) + 1;
         let converted = from_int::<Weekday>(next_day);
 
         match converted {
