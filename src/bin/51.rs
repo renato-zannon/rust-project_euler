@@ -21,7 +21,7 @@ fn main() {
         let prime = sieve.next().unwrap();
         let prime_digits = digits::new(prime).collect::<Vec<usize>>();
 
-        let mut families = range(1, prime_digits.len()).flat_map(|variable_count| {
+        let mut families = (1..prime_digits.len()).flat_map(|variable_count| {
             families_from_variables(variable_count, &prime_digits).into_iter()
         });
 
@@ -38,7 +38,7 @@ fn main() {
 
 fn families_from_variables(count: usize, digits: &Vec<usize>) -> Vec<FamilyIterator> {
     let mut result:    Vec<FamilyIterator> = Vec::new();
-    let mut variables: Vec<usize>           = range(0, count).map(|index| index).collect();
+    let mut variables: Vec<usize>          = (0..count).map(|index| index).collect();
 
     let digit_count = digits.len();
 

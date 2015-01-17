@@ -42,7 +42,7 @@ mod consecutive_digits {
                 None
             } else {
                 self.current = start + 1;
-                Some(self.string.slice(start, end))
+                Some(&self.string[start..end])
             }
         }
     }

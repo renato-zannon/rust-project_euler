@@ -22,8 +22,8 @@ use std::iter::AdditiveIterator;
 fn main() {
     let mut products = Vec::new();
 
-    for x in range(1, 10_000) {
-        for y in range(1, x) {
+    for x in (1..10_000) {
+        for y in (1..x) {
             let result = x * y;
 
             match pandigital_product(&[x, y, result]) {

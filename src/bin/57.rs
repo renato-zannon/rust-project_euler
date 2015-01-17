@@ -23,7 +23,7 @@ fn main() {
     let mut b = vec![2u8];
 
     let mut count = 0u32;
-    for _ in range(0, ITERATION_COUNT) {
+    for _ in (0..ITERATION_COUNT) {
         advance(&mut a, &mut b);
 
         if a.len() > b.len() {
@@ -52,7 +52,7 @@ fn advance(a: &mut Vec<u8>, b: &mut Vec<u8>) {
         let mut carry: u8 = 0;
         let digit_count = cmp::max(source.len(), destination.len());
 
-        for index in range(0, digit_count) {
+        for index in (0..digit_count) {
             let result = {
                 let source_digit = *source.get(index).unwrap_or(&0);
                 let dest_digit   = *destination.as_slice().get(index).unwrap_or(&0);

@@ -11,7 +11,7 @@ fn main() {
     let mut count = 0u8;
 
     // x^n, for x >= 10, always has more than n digits, so the maximum base is 9
-    for base in range(1u8, 10) {
+    for base in (1u8..10) {
 
         // Solving 10^(x-1) <= b^x < 10^x gives x <= 1 / (1 - log10(b))
         let max_exp = base.to_f32().and_then(|as_float| {

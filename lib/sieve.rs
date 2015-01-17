@@ -1,17 +1,17 @@
 // Based on the ruby implementation:
 // https://github.com/ruby/ruby/blob/1aa54bebaf274bc08e72f9ad3854c7ad592c344a/lib/prime.rb#L423
 
-use std::iter::RandomAccessIterator;
+use std::iter::{self, RandomAccessIterator};
 use std::num::{from_u8, from_f32, from_uint, from_u16, Int, Float, FromPrimitive, ToPrimitive};
 
 const WHEEL: &'static [u16] = &[2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101];
 
 const MAX_SEGMENT_SIZE: usize = 10_000;
 
-pub trait Primeable : Int + Ord + FromPrimitive {}
+pub trait Primeable : Int + Ord + FromPrimitive + iter::Step {}
 
 impl<T> Primeable for T
-  where T: Int + Ord + FromPrimitive {}
+  where T: Int + Ord + FromPrimitive + iter::Step {}
 
 
 #[derive(Clone)]
@@ -157,9 +157,9 @@ impl<T: Primeable> Sieve<T> {
         let uint_len = len.to_uint().unwrap();
 
         let mut values = Vec::with_capacity(uint_len);
-        for value in range(min, min + len) {
-            values.push(Some(value));
-        }
+        let max = min + len;
+
+        values.extend((min..max).map(Some));
 
         Segment {
             min: min,

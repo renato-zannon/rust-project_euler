@@ -53,7 +53,7 @@ const MAX_N: u32 = 10_000;
 
 #[cfg(not(test))]
 fn main() {
-    let result = range(2, MAX_N + 1).filter(|&n| {
+    let result = (2..MAX_N + 1).filter(|&n| {
         match divide_square(n) {
             FractionType::Exact => false,
             FractionType::Periodic(_, v) => (v.len() % 2 == 1),

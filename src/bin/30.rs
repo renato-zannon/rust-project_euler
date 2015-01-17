@@ -26,7 +26,7 @@ fn main() {
         one_digit_max * digits < min_with_digits
     }).unwrap();
 
-    let result = range(2, 10u.pow(max_digits)).filter_map(|num| {
+    let result = (2..10u.pow(max_digits)).filter_map(|num| {
         let sum = sum_of_digits_to_power(num, POWER);
 
         if sum == num {

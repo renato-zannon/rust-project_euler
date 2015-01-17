@@ -10,7 +10,7 @@ use std::iter::AdditiveIterator;
 use std::fmt;
 
 fn main() {
-    let result = range(1u, 1_000_000).filter(|number| {
+    let result = (1u..1_000_000).filter(|number| {
         is_palindrome(*number, 10) && is_palindrome(*number, 2)
     }).sum();
 

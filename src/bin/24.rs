@@ -51,7 +51,7 @@ impl<A: Ord+Clone> SEPA<A> {
         let current_perm = &self.current[];
         let current_len  = current_perm.len();
 
-        let maybe_key_index: Option<usize> = range(1, current_len).rev().find(|&index| {
+        let maybe_key_index: Option<usize> = (1..current_len).rev().find(|&index| {
             let ref element = current_perm[index];
             let ref element_before = current_perm[index - 1];
 
@@ -63,7 +63,7 @@ impl<A: Ord+Clone> SEPA<A> {
         maybe_key_index.map(|key_index| {
             let ref key_element = current_perm[key_index];
 
-            let newkey = range(key_index + 1, current_len).filter(|&index| {
+            let newkey = (key_index + 1..current_len).filter(|&index| {
                 let ref element = current_perm[index];
                 element > key_element
             }).min_by(|&index| {

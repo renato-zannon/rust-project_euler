@@ -23,7 +23,7 @@ fn main() {
         max_single_digit_factorial * max_digits
     };
 
-    let result = range(3u, max_number).filter(|&number| {
+    let result = (3u..max_number).filter(|&number| {
         number_eqls_fact_sum(number)
     }).sum();
 

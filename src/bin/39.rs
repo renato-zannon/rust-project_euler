@@ -9,7 +9,7 @@
 
 #[cfg(not(test))]
 fn main() {
-    let result = range(1u, 1_000)
+    let result = (1u..1_000)
         .max_by(|&perimeter| solution_count(perimeter))
         .unwrap();
 
@@ -21,10 +21,10 @@ fn solution_count(perimeter: usize) -> usize {
     let perimeter_by_3 = perimeter / 3;
     let half_perimeter = perimeter / 2;
 
-    for a in range(1, perimeter_by_3) {
+    for a in (1..perimeter_by_3) {
         let a_squared = a * a;
 
-        for b in range(half_perimeter - a, perimeter_by_3 + a) {
+        for b in (half_perimeter - a..perimeter_by_3 + a) {
             let c = perimeter - (a + b);
 
             let b_squared = b * b;

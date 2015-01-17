@@ -40,8 +40,8 @@ fn main() {
 fn coordinates() -> Vec<(usize, usize)>  {
     let mut result = vec!();
 
-    for row in range(0u, 20) {
-        for column in range(0u, 20) {
+    for row in (0..20) {
+        for column in (0..20) {
             result.push((row, column));
         }
     }
@@ -139,7 +139,7 @@ impl<'a> SlicesFromPoint<'a> {
         let mut result    = vec!(self.grid[self.row][self.column]);
         let mut prev_pair = (self.row, self.column);
 
-        for _ in range(0, self.length - 1) {
+        for _ in (0..self.length - 1) {
             let next_pair = increment(prev_pair);
 
             let (row, col) = next_pair;

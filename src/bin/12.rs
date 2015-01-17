@@ -26,7 +26,7 @@ const NUMBER_OF_DIVISORS: u64 = 500;
 
 fn main() {
     let result = triangular_numbers::new().find(|&num| {
-        let divisor_count = range(1, (num as f64).sqrt() as u64).fold(0, |sum, candidate| {
+        let divisor_count = (1..(num as f64).sqrt() as u64).fold(0, |sum, candidate| {
             if num % candidate == 0 {
                 sum + 2
             } else {

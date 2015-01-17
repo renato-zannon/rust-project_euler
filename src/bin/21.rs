@@ -22,7 +22,7 @@ fn main() {
     let mut divisor_sums: HashMap<u32, u32> = HashMap::new();
     let mut amicables = BTreeSet::new();
 
-    for num in range(1, 10_000) {
+    for num in (1..10_000) {
         if amicables.contains(&num) { continue; }
 
         let sum = match divisor_sums.entry(num) {

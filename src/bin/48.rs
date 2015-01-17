@@ -18,7 +18,7 @@ fn main() {
     for number in range_inclusive(1u64, 1000) {
         let mut number_result: u64 = 1;
 
-        for _ in range(0u64, number) {
+        for _ in (0u64..number) {
             number_result = take_10_digits(number_result) * number;
         }
 

@@ -19,13 +19,13 @@ const MAX_EXP:  u8 = 100;
 fn main() {
     let mut max_sum = 0;
 
-    for base in range(2, MAX_BASE) {
+    for base in (2..MAX_BASE) {
         let mut buffer      = Vec::with_capacity(MAX_DIGITS);
         let mut prev_buffer = Vec::with_capacity(MAX_DIGITS);
 
         prev_buffer.extend(digits::new(base).rev());
 
-        for _ in range(2, MAX_EXP) {
+        for _ in (2..MAX_EXP) {
             buffer.clear();
 
             let mut carry: u16 = 0;

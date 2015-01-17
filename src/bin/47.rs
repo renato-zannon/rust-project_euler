@@ -27,7 +27,7 @@ fn main() {
     let mut memo  = HashMap::new();
 
     let result = count(1u, 1).find(|&first_number| {
-        range(first_number, first_number + CONSECUTIVE_COUNT).all(|number| {
+        (first_number..first_number + CONSECUTIVE_COUNT).all(|number| {
             sieve.compute_until(number);
 
             let count = factors_for_number(FactorCount {
