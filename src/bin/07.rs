@@ -16,7 +16,7 @@ use std::num::{ToPrimitive, Float};
 fn main() {
 //let mut all_primes = count(1u, 1).filter(naive_is_prime);
 //let mut all_primes = count(1u, 1).filter(smart_is_prime);
-    let mut all_primes: Sieve<uint> = sieve::new();
+    let mut all_primes: Sieve<u32> = sieve::new();
 
     let result = all_primes.nth(10_000).unwrap();
     println!("{}", result);
@@ -24,24 +24,20 @@ fn main() {
 
 /* Naive implementation. Fast enough for 10 001 primes */
 #[allow(dead_code)]
-fn naive_is_prime(&num: &uint) -> bool {
-    !range(2, num).any(|divisor| num % divisor == 0)
+fn naive_is_prime(&num: &u32) -> bool {
+    !(2..num).any(|divisor| num % divisor == 0)
 }
 
 /* From the overview pdf */
 #[allow(dead_code)]
-fn smart_is_prime(&num: &uint) -> bool {
+fn smart_is_prime(&num: &u32) -> bool {
     if num == 1           { false }
     else if num < 4       { true  }
     else if num % 2 == 0  { false }
     else if num < 9       { true  }
     else if num % 3 == 0  { false }
     else {
-        let r = num.to_f64()
-            .map(|as_float| as_float.sqrt())
-            .and_then(|result| result.ceil().to_uint())
-            .unwrap();
-
+        let r = (num as f64).sqrt().ceil() as u32;
         range_step_inclusive(5, r, 6).all(|f| {
             num % f != 0 && num % (f + 2) != 0
         })

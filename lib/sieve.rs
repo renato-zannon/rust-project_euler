@@ -2,11 +2,11 @@
 // https://github.com/ruby/ruby/blob/1aa54bebaf274bc08e72f9ad3854c7ad592c344a/lib/prime.rb#L423
 
 use std::iter::RandomAccessIterator;
-use std::num::{from_u8, from_f32, from_uint, Int, Float, FromPrimitive, ToPrimitive};
+use std::num::{from_u8, from_f32, from_uint, from_u16, Int, Float, FromPrimitive, ToPrimitive};
 
-const WHEEL: &'static [uint] = &[2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101];
+const WHEEL: &'static [u16] = &[2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101];
 
-const MAX_SEGMENT_SIZE: uint = 10_000u;
+const MAX_SEGMENT_SIZE: usize = 10_000;
 
 pub trait Primeable : Int + Ord + FromPrimitive {}
 
@@ -16,14 +16,14 @@ impl<T> Primeable for T
 
 #[derive(Clone)]
 pub struct Sieve<T> {
-    last_prime_index: Option<uint>,
+    last_prime_index: Option<usize>,
     max_checked: T,
     primes: Vec<T>,
 }
 
 pub fn new<T: Primeable>() -> Sieve<T> {
     let primes: Vec<T> = WHEEL.iter()
-        .map(|&num| from_uint(num).unwrap())
+        .map(|&num| from_u16(num).unwrap())
         .collect();
 
     Sieve {
@@ -56,15 +56,14 @@ impl<T: Primeable> Iterator for Sieve<T> {
 }
 
 impl<T: Primeable> RandomAccessIterator for Sieve<T> {
-    fn indexable(&self) -> uint {
-        use std::uint;
-
-        uint::MAX
+    fn indexable(&self) -> usize {
+        use std::usize;
+        usize::MAX
     }
 
-    fn idx(&mut self, index: uint) -> Option<T> {
+    fn idx(&mut self, index: usize) -> Option<T> {
         loop {
-            match self.primes[].get(index) {
+            match self.primes.get(index) {
                 Some(&prime) => {
                     return Some(prime);
                 },
@@ -78,7 +77,7 @@ impl<T: Primeable> RandomAccessIterator for Sieve<T> {
 struct Segment<T> {
     min: T,
     max: T,
-    len: uint,
+    len: usize,
     values: Vec<Option<T>>,
 }
 
@@ -95,7 +94,7 @@ impl<T: Primeable> Sieve<T> {
     }
 
     pub fn found_primes(&self) -> &[T] {
-        self.primes[]
+        &*self.primes
     }
 
     fn compute_primes(&mut self) {
@@ -174,7 +173,7 @@ impl<T: Primeable> Sieve<T> {
 #[test]
 fn test_first_few_primes() {
     let first_primes = [2, 3, 5, 7, 11, 13, 17, 19, 23];
-    let mut iter: Sieve<uint> = new();
+    let mut iter: Sieve<u16> = new();
 
     for &prime in first_primes.iter() {
         assert_eq!(iter.next(), Some(prime));

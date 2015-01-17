@@ -11,7 +11,7 @@ extern crate shared;
 use shared::digits;
 use std::mem;
 
-const MAX_DIGITS: uint = 200;
+const MAX_DIGITS: usize = 200;
 
 const MAX_BASE: u8 = 100;
 const MAX_EXP:  u8 = 100;

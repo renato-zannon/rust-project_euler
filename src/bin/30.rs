@@ -16,7 +16,7 @@
 use std::iter::{count, AdditiveIterator};
 use std::num::Int;
 
-const POWER: uint = 5;
+const POWER: usize = 5;
 
 fn main() {
     let one_digit_max = 9u.pow(POWER);
@@ -39,7 +39,7 @@ fn main() {
     println!("{}", result);
 }
 
-fn sum_of_digits_to_power(num: uint, power: uint) -> uint {
+fn sum_of_digits_to_power(num: usize, power: usize) -> usize {
     let mut result = 0;
     let mut rest = num;
 

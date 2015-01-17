@@ -10,3 +10,6 @@ collect = "*"
 
 [dependencies.shared]
 path = "lib"
+
+[profile.release]
+lto = true

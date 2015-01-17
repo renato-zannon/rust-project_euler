@@ -1,6 +1,6 @@
 #![crate_name = "shared"]
 #![crate_type = "lib"]
-#![feature(macro_rules, slicing_syntax, associated_types)]
+#![allow(unstable)]
 
 extern crate num;
 

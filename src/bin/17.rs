@@ -20,7 +20,7 @@ fn main() {
     println!("{}", result);
 }
 
-fn letter_count(num: uint) -> uint {
+fn letter_count(num: usize) -> usize {
     match num {
         1  => 3, // "One"
         2  => 3, // "Two"

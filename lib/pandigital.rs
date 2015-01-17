@@ -2,6 +2,9 @@ use super::digits;
 use super::std::{slice, iter};
 use self::PandigitalResult::{IsPandigital, TooSmall, TooLarge, HasRepetitions};
 
+use num::Integer;
+use std::num::{FromPrimitive, ToPrimitive};
+
 #[derive(Copy)]
 pub enum PandigitalResult {
     IsPandigital,
@@ -19,34 +22,45 @@ impl PandigitalResult {
     }
 }
 
-pub trait DigitCollection<T: Iterator<Item = uint>> {
+pub trait DigitCollection<T: Iterator<Item = u8>> {
     fn digit_iter(self)     -> T;
-    fn digit_len(&mut self) -> uint;
+    fn digit_len(&mut self) -> u32;
 }
 
-impl DigitCollection<digits::Digits<uint, uint>> for digits::Digits<uint, uint> {
-    fn digit_iter(self) -> digits::Digits<uint, uint> {
+impl<A> DigitCollection<digits::Digits<A, u8>> for digits::Digits<A, u8>
+    where A: Integer + FromPrimitive + ToPrimitive {
+
+    fn digit_iter(self) -> digits::Digits<A, u8> {
         return self
     }
 
-    fn digit_len(&mut self) -> uint {
+    fn digit_len(&mut self) -> u32 {
         9
     }
 }
 
-pub type SliceDigits<'a> = iter::Cloned<slice::Iter<'a, uint>>;
+pub type SliceDigits<'a, N> = iter::Map<&'a N, u8, slice::Iter<'a, N>, fn(&'a N) -> u8>;
 
-impl<'a> DigitCollection<SliceDigits<'a>> for &'a [uint] {
-    fn digit_iter(self) -> SliceDigits<'a> {
-        return self.iter().cloned()
+impl<'a, N> DigitCollection<SliceDigits<'a, N>> for &'a [N]
+    where N: ToPrimitive + Clone {
+
+    fn digit_iter(self) -> SliceDigits<'a, N> {
+        return self.iter().map(transform as fn(&'a N) -> u8);
+
+        fn transform<'a, N: ToPrimitive>(n: &'a N) -> u8 {
+            ToPrimitive::to_u8(n).unwrap()
+        }
     }
 
-    fn digit_len(&mut self) -> uint {
-        self.len()
+    fn digit_len(&mut self) -> u32 {
+        self.len() as u32
     }
 }
 
-pub fn is_9_pandigital<U: Iterator<Item = uint>, T: DigitCollection<U>>(mut digits: T) -> PandigitalResult {
+pub fn is_9_pandigital<U, T>(mut digits: T) -> PandigitalResult
+    where U: Iterator<Item = u8>,
+          T: DigitCollection<U> {
+
     use std::cmp::Ordering::{Less, Greater, Equal};
 
     match digits.digit_len().cmp(&9) {
@@ -60,7 +74,7 @@ pub fn is_9_pandigital<U: Iterator<Item = uint>, T: DigitCollection<U>>(mut digi
     let only_uniques = digits.digit_iter().all(|digit| {
         let found = match digit {
             0     => return false,
-            1...9 => &mut found_numbers[digit - 1],
+            1...9 => &mut found_numbers[(digit as usize) - 1],
             _     => unreachable!(),
         };
 

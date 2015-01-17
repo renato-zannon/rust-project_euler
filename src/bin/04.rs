@@ -13,10 +13,10 @@ use std::iter::Unfold;
 use shared::combinations;
 
 fn main() {
-    let pairs = combinations::new(range_inclusive(100 as uint, 999).collect());
+    let pairs = combinations::new(range_inclusive(100 as usize, 999).collect());
 
     let (result, (n1, n2)) = pairs
-        .filter(|&(n1, n2): &(uint, uint)| n1 <= n2)
+        .filter(|&(n1, n2): &(usize, usize)| n1 <= n2)
         .filter_map(select_palindromes)
         .max_by(|&(n, _)| n)
         .unwrap();
@@ -24,7 +24,7 @@ fn main() {
     println!("{} ({}, {})", result, n1, n2);
 }
 
-fn select_palindromes(pair: (uint, uint)) -> Option<(uint, (uint, uint))> {
+fn select_palindromes(pair: (usize, usize)) -> Option<(usize, (usize, usize))> {
     let &(n1, n2) = &pair;
     let mult = n1 * n2;
 
@@ -35,15 +35,15 @@ fn select_palindromes(pair: (uint, uint)) -> Option<(uint, (uint, uint))> {
     }
 }
 
-fn is_palindrome(n: uint) -> bool {
+fn is_palindrome(n: usize) -> bool {
     n == reverse(n)
 }
 
-fn reverse(n: uint) -> uint {
+fn reverse(n: usize) -> usize {
     return Unfold::new((n, 0), unfold_reverse).last().unwrap();
 
-    fn unfold_reverse(state_ptr: &mut (uint, uint)) -> Option<uint> {
-        let &(remaining, reversed) = state_ptr;
+    fn unfold_reverse(state_ptr: &mut (usize, usize)) -> Option<usize> {
+        let &mut (remaining, reversed) = state_ptr;
 
         if remaining <= 0 {
             return None;

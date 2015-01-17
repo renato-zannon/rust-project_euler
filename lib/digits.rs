@@ -5,7 +5,7 @@ use std::io::IoResult;
 
 pub struct Digits<A, B> {
     remaining: A,
-    remaining_digits: uint,
+    remaining_digits: u32,
 }
 
 impl<A, B> Iterator for Digits<A, B>
@@ -18,7 +18,7 @@ impl<A, B> Iterator for Digits<A, B>
             return None;
         }
 
-        let divisor: A = FromPrimitive::from_uint(self.current_divisor()).unwrap();
+        let divisor: A = FromPrimitive::from_u32(self.current_divisor()).unwrap();
         let (digit, remainder) = self.remaining.div_rem(&divisor);
 
         self.remaining = remainder;
@@ -27,11 +27,11 @@ impl<A, B> Iterator for Digits<A, B>
         digit.to_u8().and_then(FromPrimitive::from_u8)
     }
 
-    fn size_hint(&self) -> (uint, Option<uint>) {
+    fn size_hint(&self) -> (usize, Option<usize>) {
         match self.remaining.to_f64() {
             Some(as_float) => {
                 let log = as_float.log10();
-                (log.floor() as uint, Some(log.ceil() as uint))
+                (log.floor() as usize, Some(log.ceil() as usize))
             },
 
             None => (0, None)
@@ -68,29 +68,29 @@ pub fn new<A, B>(number: A) -> Digits<A, B>
 impl<A, B> Digits<A, B>
     where A: Integer + FromPrimitive + ToPrimitive {
 
-    fn current_divisor(&self) -> uint {
-        10u.pow(self.remaining_digits - 1)
+    fn current_divisor(&self) -> u32 {
+        10.pow((self.remaining_digits - 1) as usize)
     }
 
-    pub fn count(self) -> uint {
+    pub fn count(self) -> u32 {
         self.remaining_digits
     }
 }
 
-fn number_of_digits<A: ToPrimitive + Show>(number: &A) -> uint {
+fn number_of_digits<A: ToPrimitive + Show>(number: &A) -> u32 {
     let mut counter = DigitCounter { count: 0 };
-    (write!(&mut counter, "{}", number)).unwrap();
+    (write!(&mut counter, "{:?}", number)).unwrap();
 
     counter.count
 }
 
 struct DigitCounter {
-    count: uint,
+    count: u32,
 }
 
 impl Writer for DigitCounter {
     fn write(&mut self, buf: &[u8]) -> IoResult<()> {
-        self.count += buf.len();
+        self.count += buf.len() as u32;
 
         Ok(())
     }
@@ -102,25 +102,25 @@ mod tests {
 
     #[test]
     fn test_digits_in_order() {
-        let digits = new(12345u).collect::<Vec<uint>>();
+        let digits = new(12345u).collect::<Vec<u32>>();
         assert_eq!(digits[], [1, 2, 3, 4, 5][]);
     }
 
     #[test]
     fn test_digits_in_reverse() {
-        let digits = new(12345u).rev().collect::<Vec<uint>>();
+        let digits = new(12345u).rev().collect::<Vec<u32>>();
         assert_eq!(digits[], [5, 4, 3, 2, 1][]);
     }
 
     #[test]
     fn test_digits_in_order_with_zero() {
-        let digits = new(123450u).collect::<Vec<uint>>();
+        let digits = new(123450u).collect::<Vec<u32>>();
         assert_eq!(digits[], [1, 2, 3, 4, 5, 0][]);
     }
 
     #[test]
     fn test_digits_in_reverse_with_zero() {
-        let digits = new(123450u).rev().collect::<Vec<uint>>();
+        let digits = new(123450u).rev().collect::<Vec<u32>>();
         assert_eq!(digits[], [0, 5, 4, 3, 2, 1][]);
     }
 }

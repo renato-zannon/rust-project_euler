@@ -15,7 +15,7 @@
  * denominator.  In the first one-thousand expansions, how many fractions contain a numerator with more
  * digits than denominator? */
 
-const ITERATION_COUNT: uint = 1000;
+const ITERATION_COUNT: usize = 1000;
 
 // Starting with x0 = a0/b0 = 3/2, xn+1 = an + 2bn / bn + an
 fn main() {

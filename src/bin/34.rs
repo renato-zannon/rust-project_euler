@@ -30,7 +30,7 @@ fn main() {
     println!("{}", result);
 }
 
-fn number_eqls_fact_sum(number: uint) -> bool {
+fn number_eqls_fact_sum(number: usize) -> bool {
     let mut fact_sum = 0;
 
     for digit in digits::new(number) {
@@ -44,12 +44,12 @@ fn number_eqls_fact_sum(number: uint) -> bool {
     fact_sum == number
 }
 
-fn factorial(n: uint) -> uint {
+fn factorial(n: usize) -> usize {
     range_inclusive(1, n).fold(1, |num, result| {
         num * result
     })
 }
 
-fn max_number_with_digits(digit_count: uint) -> uint {
+fn max_number_with_digits(digit_count: usize) -> usize {
     10u.pow(digit_count) - 1
 }

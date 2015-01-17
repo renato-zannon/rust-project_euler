@@ -2,7 +2,7 @@ use std::collections::HashSet;
 use std::num::{ToPrimitive, Float};
 
 fn main() {
-    let mut powers: HashSet<(uint, uint)> = HashSet::new();
+    let mut powers: HashSet<(usize, usize)> = HashSet::new();
 
     for a in range(2u, 101) {
         let (base_a, factor) = factor_for(a);
@@ -15,11 +15,11 @@ fn main() {
     println!("{}", powers.len());
 }
 
-fn factor_for(num: uint) -> (uint, uint) {
+fn factor_for(num: usize) -> (usize, usize) {
     let fnum:       f64 = num as f64;
 
     let mut factor: f64  = 1.0;
-    let mut base:   uint = num;
+    let mut base:   usize = num;
 
     for potential_root in range(2, num) {
         let exp = potential_root.to_f64().map(|root_f| {
@@ -33,5 +33,5 @@ fn factor_for(num: uint) -> (uint, uint) {
         }
     }
 
-    (base, factor as uint)
+    (base, factor as usize)
 }

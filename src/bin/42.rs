@@ -22,7 +22,7 @@ fn main() {
     let reader = data_reader::for_path("./data/42-words.txt");
 
     let result = reader.filter(|word| {
-        is_triangular_word(word[])
+        is_triangular_word(&word[])
     }).count();
 
     println!("{}", result);
@@ -30,14 +30,14 @@ fn main() {
 
 fn is_triangular_word(word: &str) -> bool {
     let as_number = word.chars().map(|chr| {
-        (chr as uint) - ('A' as uint) + 1
+        (chr as u32) - ('A' as u32) + 1
     }).sum();
 
     triangular_index(as_number).is_some()
 }
 
 // Deduced by solving x = n(n + 1)/2
-fn triangular_index(number: uint) -> Option<uint> {
+fn triangular_index(number: u32) -> Option<u32> {
     if number == 1 {
         return Some(1);
     }
@@ -48,23 +48,23 @@ fn triangular_index(number: uint) -> Option<uint> {
         .and_then(ensure_integer)
         .and_then(ensure_divisible);
 
-    fn take_sqrt(delta: uint) -> Option<f64> {
+    fn take_sqrt(delta: u32) -> Option<f64> {
         delta.to_f64().map(|as_float| {
             as_float.sqrt()
         })
     }
 
-    fn ensure_integer(delta_sqrt: f64) -> Option<uint> {
+    fn ensure_integer(delta_sqrt: f64) -> Option<u32> {
         let is_integer = delta_sqrt == delta_sqrt.floor();
 
         if is_integer {
-            delta_sqrt.to_uint()
+            delta_sqrt.to_u32()
         } else {
             None
         }
     }
 
-    fn ensure_divisible(integer_sqrt: uint) -> Option<uint> {
+    fn ensure_divisible(integer_sqrt: u32) -> Option<u32> {
         let remainder = (integer_sqrt - 1) % 2;
 
         if remainder == 0 {
@@ -78,10 +78,10 @@ fn triangular_index(number: uint) -> Option<uint> {
 
 #[test]
 fn test_triangular_index() {
-    let examples = [1u, 3, 6, 10, 15, 21, 28, 36, 45, 55];
+    let examples = [1, 3, 6, 10, 15, 21, 28, 36, 45, 55];
 
     for (index, &example) in examples.iter().enumerate() {
-        assert_eq!(triangular_index(example), Some(index + 1));
+        assert_eq!(triangular_index(example), Some(index as u32 + 1));
     }
 }
 

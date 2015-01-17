@@ -19,18 +19,18 @@ use std::iter::AdditiveIterator;
 use std::num::Float;
 
 fn main() {
-    let mut divisor_sums: HashMap<uint, uint> = HashMap::new();
+    let mut divisor_sums: HashMap<u32, u32> = HashMap::new();
     let mut amicables = BTreeSet::new();
 
-    for num in range(1u, 10_000) {
+    for num in range(1, 10_000) {
         if amicables.contains(&num) { continue; }
 
-        let sum = match divisor_sums.entry(&num) {
+        let sum = match divisor_sums.entry(num) {
             Entry::Vacant(entry)   => * entry.insert(divisor_sum(num)),
             Entry::Occupied(entry) => entry.remove(),
         };
 
-        let reverse_sum = match divisor_sums.entry(&sum) {
+        let reverse_sum = match divisor_sums.entry(sum) {
             Entry::Vacant(entry)   => * entry.insert(divisor_sum(sum)),
             Entry::Occupied(entry) => entry.remove(),
         };
@@ -44,10 +44,10 @@ fn main() {
     println!("{}", amicables.iter().map(|&x| x).sum());
 }
 
-fn divisor_sum(num: uint) -> uint {
-    let num_sqrt = (num as f64).sqrt() as uint;
+fn divisor_sum(num: u32) -> u32 {
+    let num_sqrt = (num as f64).sqrt() as u32;
 
-    irange(2u, num_sqrt).fold(1, |sum, candidate| {
+    irange(2, num_sqrt).fold(1, |sum, candidate| {
         let (divided, remainder) = num.div_rem(&candidate);
         if remainder > 0 { return sum; }
 

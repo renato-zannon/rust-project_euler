@@ -27,13 +27,13 @@ use std::io::{File, BufferedReader};
 use shared::triangle;
 
 fn main() {
-    let mut triangle = triangle::new(deep_slice(&read_triangle())[]);
+    let mut triangle = triangle::new(&deep_slice(&read_triangle())[]);
     let result = triangle.maximum_total();
 
     println!("{}", result);
 }
 
-fn read_triangle() -> Vec<Vec<uint>> {
+fn read_triangle() -> Vec<Vec<u32>> {
     let path = &Path::new("./data/67-triangle.txt");
     let mut file = BufferedReader::new(File::open(path));
 
@@ -44,7 +44,7 @@ fn read_triangle() -> Vec<Vec<uint>> {
         let mut parsed_line = Vec::new();
 
         for atom in line_text.trim().split(' ') {
-            match atom.parse::<uint>() {
+            match atom.parse::<u32>() {
                 Some(num) => { parsed_line.push(num); },
                 None      => { () }
             }
@@ -56,11 +56,11 @@ fn read_triangle() -> Vec<Vec<uint>> {
     result
 }
 
-fn deep_slice(v: &Vec<Vec<uint>>) -> Vec<&[uint]> {
-    let mut result: Vec<&[uint]> = Vec::new();
+fn deep_slice(v: &Vec<Vec<u32>>) -> Vec<&[u32]> {
+    let mut result: Vec<&[u32]> = Vec::new();
 
     for row in v.iter() {
-        result.push(row[]);
+        result.push(&row[]);
     }
 
     result

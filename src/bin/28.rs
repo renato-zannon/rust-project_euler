@@ -22,7 +22,7 @@ fn main() {
     println!("{}", diagonals(1001).into_iter().sum());
 }
 
-fn diagonals(square_size: uint) -> Vec<uint> {
+fn diagonals(square_size: usize) -> Vec<usize> {
     assert!(square_size % 2 == 1);
 
     let mut result  = vec!(1);

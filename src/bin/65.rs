@@ -27,7 +27,6 @@
  *
  * Find the sum of digits in the numerator of the 100th convergent of the continued fraction for e */
 
-#![feature(associated_types)]
 
 extern crate num;
 extern crate shared;
@@ -38,7 +37,7 @@ use std::cmp;
 use std::iter::repeat;
 
 const INITIAL_TERM: u32 = 2;
-const CONVERGENT_INDEX: uint = 99;
+const CONVERGENT_INDEX: usize = 99;
 
 fn main() {
     let (terms, last_term) = {

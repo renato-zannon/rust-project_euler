@@ -21,8 +21,8 @@ use std::iter::{count, AdditiveIterator};
 type Prime = u32;
 type PrimeSets = BTreeMap<Prime, RefCell<BTreeSet<Prime>>>;
 
-const SET_SIZE: uint     = 5;
-const SEGMENT_SIZE: uint = 200;
+const SET_SIZE: usize     = 5;
+const SEGMENT_SIZE: usize = 200;
 
 fn main() {
     let mut sieve: Sieve<Prime> = sieve::new();
@@ -33,7 +33,7 @@ fn main() {
             sets.insert(prime, RefCell::new(BTreeSet::new()));
         }
 
-        for &prime in sieve.found_primes().slice(first_index, last_index).iter() {
+        for &prime in sieve.found_primes()[first_index..last_index].iter() {
             let mut prime_set: RefMut<BTreeSet<Prime>> = sets[prime].borrow_mut();
 
             for (&other_prime, other_set_ref) in sets.iter() {
@@ -74,7 +74,7 @@ fn search_set(prev: &[Prime], prime: Prime, sets: &PrimeSets) -> Option<Vec<Prim
     }
 
     for &other_prime in sets[prime].borrow().iter() {
-        match search_set(stack.as_slice(), other_prime, sets) {
+        match search_set(&stack[], other_prime, sets) {
             Some(v) => return Some(v),
             None    => continue,
         }
@@ -90,6 +90,6 @@ fn concats_generate_primes(p1: Prime, p2: Prime) -> bool {
 
     fn concat(start: Prime, end: Prime) -> Prime {
         let end_len = digits::new::<Prime, u8>(end).count();
-        return start * 10.pow(end_len) + end;
+        return start * 10.pow(end_len as usize) + end;
     }
 }

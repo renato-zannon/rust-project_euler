@@ -7,10 +7,10 @@
 extern crate shared;
 use shared::sieve;
 
-const PRIME_MAX: uint = 2_000_000;
+const PRIME_MAX: usize = 2_000_000;
 
 fn main() {
-    let result = sieve::new::<uint>()
+    let result = sieve::new::<usize>()
         .take_while(|&prime| prime < PRIME_MAX)
         .fold(0u64, |acc, num| acc + (num as u64));
 

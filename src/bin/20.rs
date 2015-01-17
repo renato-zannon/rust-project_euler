@@ -17,13 +17,13 @@ use num::bigint::{BigUint, ToBigUint};
 fn main() {
     let strnum = factorial(100).to_string();
 
-    let result = strnum[].chars().fold(0, |digit, sum| digit + to_i(sum));
+    let result = strnum.chars().fold(0, |digit, sum| digit + to_i(sum));
     println!("{}", result);
 }
 
-fn factorial(n: uint) -> BigUint {
+fn factorial(n: u32) -> BigUint {
     let mut result: BigUint = One::one();
-    let mut remaining: uint = n;
+    let mut remaining: u32 = n;
 
     while remaining > 0 {
         result = result * remaining.to_biguint().unwrap();
@@ -33,6 +33,6 @@ fn factorial(n: uint) -> BigUint {
     result
 }
 
-fn to_i(chr: char) -> uint {
+fn to_i(chr: char) -> usize {
     chr.to_digit(10).unwrap()
 }

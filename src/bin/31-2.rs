@@ -13,15 +13,15 @@
 
 use std::iter::{repeat, range_inclusive};
 
-const DENOMINATIONS: &'static [uint] = &[200, 100, 50, 20, 10, 5, 2, 1];
+const DENOMINATIONS: &'static [usize] = &[200, 100, 50, 20, 10, 5, 2, 1];
 
 fn main() {
     println!("{}", ways_to_make(200, DENOMINATIONS));
 }
 
 // Dynamic programming solution, adapted from the overview PDF
-fn ways_to_make(value: uint, denominations: &[uint]) -> uint {
-    let mut ways: Vec<uint> = repeat(0).take(value + 1).collect();
+fn ways_to_make(value: usize, denominations: &[usize]) -> usize {
+    let mut ways: Vec<usize> = repeat(0).take(value + 1).collect();
     let ways = ways.as_mut_slice();
 
     ways[0] = 1;

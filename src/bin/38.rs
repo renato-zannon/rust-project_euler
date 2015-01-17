@@ -23,13 +23,13 @@ use shared::digits;
 use std::iter::{count, range_inclusive};
 
 fn main() {
-    let mut largest = 0u;
+    let mut largest = 0;
 
-    for n in range(2u, 9) {
-        for start in count(1u, 1) {
+    for n in range(2, 9) {
+        for start in count(1, 1) {
             let prod = concat_product(start, n);
 
-            match is_9_pandigital(prod[]) {
+            match is_9_pandigital(&prod[]) {
                 PandigitalResult::IsPandigital => {
                     let num_prod = to_num(prod);
 
@@ -47,8 +47,8 @@ fn main() {
     println!("{}", largest);
 }
 
-fn concat_product(number: uint, max_factor: uint) -> Vec<uint> {
-    range_inclusive(1u, max_factor).map(|factor| {
+fn concat_product(number: u32, max_factor: u32) -> Vec<u32> {
+    range_inclusive(1, max_factor).map(|factor| {
         number * factor
     }).fold(Vec::with_capacity(9), |mut result, n| {
         result.extend(digits::new(n));
@@ -56,7 +56,7 @@ fn concat_product(number: uint, max_factor: uint) -> Vec<uint> {
     })
 }
 
-fn to_num(digits: Vec<uint>) -> uint {
+fn to_num(digits: Vec<u32>) -> u32 {
     let mut multiplier = 1;
     let mut result = 0;
 

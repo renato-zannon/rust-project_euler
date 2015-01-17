@@ -23,8 +23,8 @@ use self::CancelResult::{Cancelable, NonCancelable};
 fn main() {
     let mut result = (1, 1);
 
-    for numerator in range(10u, 100u) {
-        for denominator in range(numerator + 1, 100u) {
+    for numerator in range(10, 100) {
+        for denominator in range(numerator + 1, 100) {
             match cancel_fraction(numerator, denominator) {
                 NonCancelable => continue,
                 Cancelable(num, den) => {
@@ -34,19 +34,19 @@ fn main() {
         }
     }
 
-    println!("{}", simplify(result));
+    println!("{:?}", simplify(result));
 }
 
 enum CancelResult {
     NonCancelable,
-    Cancelable(uint, uint),
+    Cancelable(u32, u32),
 }
 
-fn cancel_fraction(numerator: uint, denominator: uint) -> CancelResult {
-    let num_digits: Vec<uint> = digits::new(numerator).collect();
-    let den_digits: Vec<uint> = digits::new(denominator).collect();
+fn cancel_fraction(numerator: u32, denominator: u32) -> CancelResult {
+    let num_digits: Vec<u32> = digits::new(numerator).collect();
+    let den_digits: Vec<u32> = digits::new(denominator).collect();
 
-    let shared_digits: HashSet<uint> = num_digits.iter()
+    let shared_digits: HashSet<u32> = num_digits.iter()
         .map(|&digit| digit)
         .filter(|digit| digit != &0 && den_digits.contains(digit))
         .collect();
@@ -68,7 +68,7 @@ fn cancel_fraction(numerator: uint, denominator: uint) -> CancelResult {
     }
 }
 
-fn build_from_digits(digits: Vec<uint>, except: &HashSet<uint>) -> uint {
+fn build_from_digits(digits: Vec<u32>, except: &HashSet<u32>) -> u32 {
     use std::num::Int;
 
     let mut used_shared = HashSet::with_capacity(except.len());
@@ -83,11 +83,11 @@ fn build_from_digits(digits: Vec<uint>, except: &HashSet<uint>) -> uint {
     });
 
     used_digits.enumerate().fold(0, |sum, (power, digit)| {
-        sum + digit * 10u.pow(power)
+        sum + digit * 10.pow(power)
     })
 }
 
-fn simplify((numerator, denominator): (uint, uint)) -> (uint, uint) {
+fn simplify((numerator, denominator): (u32, u32)) -> (u32, u32) {
     let divisor = gcd(numerator, denominator);
 
     (numerator / divisor, denominator / divisor)

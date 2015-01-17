@@ -23,14 +23,14 @@
  * text must contain common English words, decrypt the message and find the sum of the ASCII values
  * in the original text. */
 
-#![feature(slicing_syntax, globs, associated_types)]
+#![feature(slicing_syntax)]
 
 extern crate ascii;
 
 use ascii::*;
 
 const CIPHER: &'static str = include_str!("../../data/59-cipher.txt");
-const KEY_LEN: uint = 3;
+const KEY_LEN: usize = 3;
 const COMMON_WORDS: &'static [&'static str] = &["the", "be", "to", "of", "and"];
 
 fn main() {
@@ -45,10 +45,10 @@ fn main() {
         let key = key_gen.next().expect("No more keys to try!");
         buffer.clear();
 
-        let decryptor = Decryptor::new(cipher[], key);
+        let decryptor = Decryptor::new(&cipher[], key);
         buffer.extend(decryptor);
 
-        let buffer_slice = buffer[];
+        let buffer_slice = &buffer[];
         let string = buffer_slice.as_str();
 
         if COMMON_WORDS.iter().all(|&word| string.contains(word)) {
@@ -67,7 +67,7 @@ struct Decryptor<'a> {
     source: &'a [u8],
     key: &'a [LowerCaseCharacter],
 
-    position: uint,
+    position: usize,
 }
 
 impl<'a> Decryptor<'a> {
@@ -136,15 +136,15 @@ impl KeysGenerator {
 
             None => {
                 self.last = Some([LowerCaseCharacter::first(); KEY_LEN]);
-                return self.last.as_ref().map(|result| result.as_slice())
+                return self.last.as_ref().map(|result| &result[])
             }
         };
 
-        for index in range(0u, KEY_LEN) {
+        for index in (0..KEY_LEN) {
             match last[index].next() {
                 Some(new_value) => {
                     last[index] = new_value;
-                    return Some(last.as_slice());
+                    return Some(&last[]);
                 },
 
                 None => {

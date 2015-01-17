@@ -22,8 +22,8 @@ use std::iter::AdditiveIterator;
 fn main() {
     let mut products = Vec::new();
 
-    for x in range(1u, 10_000) {
-        for y in range(1u, x) {
+    for x in range(1, 10_000) {
+        for y in range(1, x) {
             let result = x * y;
 
             match pandigital_product(&[x, y, result]) {
@@ -42,10 +42,10 @@ fn main() {
     println!("{}", products.into_iter().sum());
 }
 
-fn pandigital_product(numbers: &[uint]) -> PandigitalResult {
-    let all_digits: Vec<uint> = numbers.iter().flat_map(|&number| {
+fn pandigital_product(numbers: &[u32]) -> PandigitalResult {
+    let all_digits: Vec<u32> = numbers.iter().flat_map(|&number| {
         digits::new(number)
     }).collect();
 
-    is_9_pandigital(all_digits[])
+    is_9_pandigital(&all_digits[])
 }

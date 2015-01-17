@@ -14,16 +14,16 @@
  * Find the first four consecutive integers to have four distinct prime factors. What is the first
  * of these numbers? */
 
-#![feature(slicing_syntax, associated_types)]
+#![feature(slicing_syntax)]
 
 extern crate shared;
 use shared::sieve;
 use std::iter::{range_step_inclusive, count};
 use std::cmp::Ordering;
 
-const SEGMENT_SIZE: uint = 1_000;
-const FACTOR_COUNT: uint = 4;
-const CONSECUTIVE_COUNT: uint = 4;
+const SEGMENT_SIZE: usize = 1_000;
+const FACTOR_COUNT: usize = 4;
+const CONSECUTIVE_COUNT: usize = 4;
 
 // Alternatvie, Dynamic programming-based implementation
 fn main() {
@@ -69,23 +69,23 @@ fn main() {
 }
 
 struct Segment {
-    start: uint,
+    start: usize,
     values: [FactorCount; SEGMENT_SIZE],
 }
 
 #[derive(Copy)]
 struct FactorCount {
-    factors: [Option<uint>; FACTOR_COUNT],
-    count: uint,
+    factors: [Option<usize>; FACTOR_COUNT],
+    count: usize,
 }
 
 struct NumberFactors<'a> {
-    start: uint,
+    start: usize,
     values: &'a [FactorCount],
 }
 
 impl Segment {
-    fn new(start: uint) -> Segment {
+    fn new(start: usize) -> Segment {
         let factor_count = FactorCount {
             factors: [None; FACTOR_COUNT],
             count: 0,
@@ -97,7 +97,7 @@ impl Segment {
         }
     }
 
-    fn add_factor(&mut self, number: uint, factor: uint) {
+    fn add_factor(&mut self, number: usize, factor: usize) {
         let first = self.first_number();
         let last  = self.last_number();
 
@@ -111,21 +111,21 @@ impl Segment {
     fn number_factors(&self) -> NumberFactors {
         NumberFactors {
             start: self.start,
-            values: self.values[],
+            values: &self.values[],
         }
     }
 
-    fn first_number(&self) -> uint {
+    fn first_number(&self) -> usize {
         self.start
     }
 
-    fn last_number(&self) -> uint {
+    fn last_number(&self) -> usize {
         self.start + SEGMENT_SIZE - 1
     }
 }
 
 impl FactorCount {
-    fn add_factor(&mut self, factor: uint) {
+    fn add_factor(&mut self, factor: usize) {
         if self.count == FACTOR_COUNT {
             return;
         }
@@ -146,9 +146,9 @@ impl FactorCount {
 }
 
 impl<'a> Iterator for NumberFactors<'a> {
-    type Item = (uint, uint);
+    type Item = (usize, usize);
 
-    fn next(&mut self) -> Option<(uint, uint)> {
+    fn next(&mut self) -> Option<(usize, usize)> {
         match self.values.first() {
             Some(factor_count) => {
                 let number = self.start;

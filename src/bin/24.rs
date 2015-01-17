@@ -8,17 +8,17 @@
  *
  * What is the millionth lexicographic permutation of the digits 0, 1, 2, 3, 4, 5, 6, 7, 8 and 9? */
 
-#![feature(slicing_syntax, associated_types)]
+#![feature(slicing_syntax)]
 
 fn main() {
     let result = permutations()
         .skip(1_000_000 - 1)
         .next();
 
-    println!("{}", result);
+    println!("{:?}", result.unwrap());
 }
 
-fn permutations() -> SEPA<uint> {
+fn permutations() -> SEPA<usize> {
     SEPA {
         current: vec!(0, 1, 2, 3, 4, 5, 6, 7, 8, 9),
         first: true,
@@ -47,11 +47,11 @@ impl<A: Ord+Clone> Iterator for SEPA<A> {
 }
 
 impl<A: Ord+Clone> SEPA<A> {
-    fn keys(&self) -> Option<(uint, uint)> {
-        let current_perm = self.current[];
+    fn keys(&self) -> Option<(usize, usize)> {
+        let current_perm = &self.current[];
         let current_len  = current_perm.len();
 
-        let maybe_key_index: Option<uint> = range(1, current_len).rev().find(|&index| {
+        let maybe_key_index: Option<usize> = range(1, current_len).rev().find(|&index| {
             let ref element = current_perm[index];
             let ref element_before = current_perm[index - 1];
 
@@ -74,7 +74,7 @@ impl<A: Ord+Clone> SEPA<A> {
         })
     }
 
-    fn permute(&mut self, key: uint, newkey: uint) -> Vec<A> {
+    fn permute(&mut self, key: usize, newkey: usize) -> Vec<A> {
         let current_perm = self.current.as_mut_slice();
 
         current_perm.swap(key, newkey);

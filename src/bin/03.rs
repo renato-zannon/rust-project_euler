@@ -6,22 +6,21 @@
 use std::iter::Unfold;
 
 fn main() {
-    let factors = Unfold::new((600851475143, 2), unfold_factors);
-    println!("{}", factors.max());
-}
+    let factors = Unfold::new((600851475143u64, 2), |state_ptr| {
+        let (remaining, divisor) = *state_ptr;
 
-fn unfold_factors(state_ptr : &mut (uint, uint)) -> Option<uint> {
-    let (remaining, divisor) = *state_ptr;
+        if remaining <= 1 {
+            return None;
+        }
 
-    if remaining <= 1 {
-        return None;
-    }
+        let mut new_divisor = divisor;
+        while remaining % new_divisor > 0 {
+            new_divisor += 1;
+        }
 
-    let mut new_divisor = divisor;
-    while remaining % new_divisor > 0 {
-        new_divisor += 1;
-    }
+        *state_ptr = (remaining / new_divisor, new_divisor);
+        Some(new_divisor)
+    });
 
-    *state_ptr = (remaining / new_divisor, new_divisor);
-    Some(new_divisor)
+    println!("{}", factors.max().unwrap());
 }

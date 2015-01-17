@@ -23,7 +23,7 @@ use num::Integer;
 use std::thread::Thread;
 use std::sync::mpsc::{Receiver, Sender, channel};
 
-const MAX: uint = 1_000_000;
+const MAX: u64 = 1_000_000;
 
 fn main() {
     let master_rx = spawn_workers(MAX);
@@ -41,13 +41,13 @@ fn main() {
     println!("{}", result);
 }
 
-fn spawn_workers(max: uint) -> Receiver<WorkResult> {
+fn spawn_workers(max: u64) -> Receiver<WorkResult> {
     use std::os;
     use std::iter::range_step_inclusive;
 
     let (master_tx, master_rx) = channel();
 
-    let task_count: uint = match os::getenv("NPROC") {
+    let task_count: u64 = match os::getenv("NPROC") {
         Some(num) => num.parse().unwrap(),
         None      => 4,
     };
@@ -60,7 +60,7 @@ fn spawn_workers(max: uint) -> Receiver<WorkResult> {
         Thread::spawn(move || {
             let end = start + per_task;
             collatz_worker((start, end), master_tx_clone);
-        }).detach();
+        });
     }
 
     return master_rx;
@@ -68,16 +68,16 @@ fn spawn_workers(max: uint) -> Receiver<WorkResult> {
 
 struct WorkResult {
     number: u64,
-    result: uint,
+    result: u32,
 }
 
-fn collatz_worker(numbers: (uint, uint), tx: Sender<WorkResult>) {
+fn collatz_worker(numbers: (u64, u64), tx: Sender<WorkResult>) {
     let (start, end) = numbers;
 
     let mut current = 0;
     let mut max = 0;
 
-    for num in range(start as u64, end as u64) {
+    for num in (start as u64..end as u64) {
         let len = collatz_length(num);
 
         if len > max {
@@ -86,10 +86,10 @@ fn collatz_worker(numbers: (uint, uint), tx: Sender<WorkResult>) {
         }
     }
 
-    tx.send(WorkResult { number: current, result: max }).unwrap();
+    tx.send(WorkResult { number: current, result: max as u32 }).unwrap();
 }
 
-fn collatz_length(number: u64) -> uint {
+fn collatz_length(number: u64) -> usize {
     let mut length = 1;
     let mut current_number = number;
 

@@ -19,11 +19,10 @@
  *
  * What is the value of the first triangle number to have over five hundred divisors? */
 
-#![feature(associated_types)]
 
 use std::num::Float;
 
-const NUMBER_OF_DIVISORS: uint = 500;
+const NUMBER_OF_DIVISORS: u64 = 500;
 
 fn main() {
     let result = triangular_numbers::new().find(|&num| {
@@ -38,7 +37,7 @@ fn main() {
         divisor_count > NUMBER_OF_DIVISORS
     });
 
-    println!("{}", result);
+    println!("{}", result.unwrap());
 }
 
 mod triangular_numbers {

@@ -17,7 +17,7 @@ fn main() {
     println!("{}", result);
 }
 
-fn is_palindrome(number: uint, base: u8) -> bool {
+fn is_palindrome(number: usize, base: u8) -> bool {
     use std::io::BufWriter;
     use std::str;
 
@@ -30,7 +30,7 @@ fn is_palindrome(number: uint, base: u8) -> bool {
             return writer.tell()
         })
     }.ok().and_then(|size| {
-        str::from_utf8(buffer.slice_to(size as uint)).ok()
+        str::from_utf8(buffer.slice_to(size as usize)).ok()
     }).unwrap();
 
     slice.chars().zip(slice.chars().rev()).all(|(from_start, from_end)| {

@@ -49,7 +49,7 @@ fn main() {
 
 #[derive(Show)]
 struct Day {
-    number: uint,
+    number: usize,
     weekday: Weekday,
     month: Month,
     year: Year,
@@ -84,7 +84,7 @@ impl Day {
 
 #[derive(Show, Copy)]
 struct Year {
-    number: uint,
+    number: usize,
 }
 
 impl Year {
@@ -114,7 +114,7 @@ enum Month {
 }
 
 impl Month {
-    fn day_count(self, year: Year) -> uint {
+    fn day_count(self, year: Year) -> usize {
         match self {
             Month::September | Month::April | Month::June | Month::November => 30,
             Month::February => if year.is_leap() { 29 } else { 28 },

@@ -16,7 +16,7 @@ fn main() {
     println!("{}", result);
 }
 
-fn solution_count(perimeter: uint) -> uint {
+fn solution_count(perimeter: usize) -> usize {
     let mut count = 0;
     let perimeter_by_3 = perimeter / 3;
     let half_perimeter = perimeter / 2;

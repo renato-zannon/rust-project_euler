@@ -19,25 +19,26 @@ use std::iter::AdditiveIterator;
 fn main() {
     let names: Vec<String> = get_name_list();
 
-    let mut values: Vec<Vec<uint>> = names.into_iter().map(|name| {
-        alphabetical_value(name[])
+    let mut values: Vec<Vec<u32>> = names.into_iter().map(|name| {
+        alphabetical_value(&name[])
     }).collect();
 
     values.sort();
 
     let result = values.into_iter().enumerate().fold(0, |sum, (index, score)| {
+        let index = index as u32;
         sum + ((index + 1) * score.into_iter().sum())
     });
 
     println!("{}", result);
 }
 
-fn alphabetical_value(name: &str) -> Vec<uint> {
+fn alphabetical_value(name: &str) -> Vec<u32> {
     name.chars().map(|chr| {
         let result = (chr as u8) - ('A' as u8) + 1;
 
-        result as uint
-    }).collect::<Vec<uint>>()
+        result as u32
+    }).collect::<Vec<u32>>()
 }
 
 fn get_name_list() -> Vec<String> {

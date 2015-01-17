@@ -13,24 +13,24 @@ use shared::digits;
 use std::iter::{range_inclusive, count};
 
 fn main() {
-    let result = count(1u, 1u).find(|&number| {
+    let result = count(1, 1).find(|&number| {
         let num_digits = digit_set(number);
 
-        range_inclusive(2u, 6u).rev().all(|multiplier| {
-            yields_same_digits(number * multiplier, num_digits[])
+        range_inclusive(2, 6).rev().all(|multiplier| {
+            yields_same_digits(number * multiplier, &num_digits[])
         })
     }).unwrap();
 
     println!("{}", result);
 }
 
-fn yields_same_digits(number: uint, digits: &[bool]) -> bool {
-    digits::new(number).rev().all(|digit| digits[digit])
+fn yields_same_digits(number: usize, digits: &[bool]) -> bool {
+    digits::new::<_, usize>(number).rev().all(|digit| digits[digit])
 }
 
-fn digit_set(number: uint) -> [bool; 10] {
+fn digit_set(number: usize) -> [bool; 10] {
     let mut found_numbers = [false; 10];
-    for digit in digits::new(number).rev() {
+    for digit in digits::new::<_, usize>(number).rev() {
         found_numbers[digit] = true;
     }
 

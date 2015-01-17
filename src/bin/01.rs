@@ -6,7 +6,7 @@
  * Find the sum of all the multiples of 3 or 5 below 1000. */
 
 fn main() {
-    let result = range(1u, 1000)
+    let result = range(1us, 1000)
         .filter(|&num| (num % 3 == 0) || (num % 5 == 0))
         .fold(0, |acc, num| acc + num);
 

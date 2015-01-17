@@ -19,11 +19,11 @@ fn main() {
     println!("{}", result);
 }
 
-fn power_of_2(power: uint) -> BigUint {
+fn power_of_2(power: usize) -> BigUint {
     let num: BigUint = FromPrimitive::from_uint(2).unwrap();
     pow(num, power)
 }
 
-fn to_i(chr: char) -> uint {
+fn to_i(chr: char) -> usize {
     chr.to_digit(10).unwrap()
 }

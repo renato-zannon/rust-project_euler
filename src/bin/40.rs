@@ -17,10 +17,10 @@ use std::iter::{count, MultiplicativeIterator};
 
 fn main() {
     let mut sequence = count(1u, 1)
-        .flat_map(|number| digits::new::<uint, uint>(number))
+        .flat_map(|number| digits::new::<usize, usize>(number))
         .enumerate();
 
-    let get_digit = |number: uint| {
+    let mut get_digit = move |&mut: number: usize| {
         let (_, digit) = sequence
             .find(|&(idx, _)| idx == number - 1)
             .unwrap();

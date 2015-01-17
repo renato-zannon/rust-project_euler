@@ -22,7 +22,7 @@ use shared::sieve::Sieve as PrimeSieve;
 use std::iter::{count, range_inclusive};
 use std::num::Float;
 
-const SEGMENT_SIZE: uint = 101;
+const SEGMENT_SIZE: usize = 101;
 
 fn main() {
     let mut sieve = sieve::new();
@@ -40,7 +40,7 @@ fn main() {
     }
 }
 
-fn mark_odd_composites(segment: &mut OddNumberSegment, sieve: &mut PrimeSieve<uint>) {
+fn mark_odd_composites(segment: &mut OddNumberSegment, sieve: &mut PrimeSieve<usize>) {
     let segment_start = segment.first();
     let segment_end   = segment.last();
 
@@ -67,7 +67,7 @@ enum Rounding {
     Down,
 }
 
-fn min_half_square(prime: uint, end: uint, rounding: Rounding) -> uint {
+fn min_half_square(prime: usize, end: usize, rounding: Rounding) -> usize {
     if prime >= end {
         0
     } else {
@@ -79,17 +79,17 @@ fn min_half_square(prime: uint, end: uint, rounding: Rounding) -> uint {
             Rounding::Down => result.floor(),
         };
 
-        rounded as uint
+        rounded as usize
     }
 }
 
 struct OddNumberSegment {
     values: [bool; SEGMENT_SIZE],
-    start: uint,
-    unmarked_count: uint,
+    start: usize,
+    unmarked_count: usize,
 }
 
-fn new_segment(start: uint) -> OddNumberSegment {
+fn new_segment(start: usize) -> OddNumberSegment {
     let end = start + SEGMENT_SIZE - 1;
 
     assert!(start % 2 == 1, "segment start is not odd: {}", start);
@@ -103,7 +103,7 @@ fn new_segment(start: uint) -> OddNumberSegment {
 }
 
 impl OddNumberSegment {
-    fn mark_number(&mut self, number: uint) {
+    fn mark_number(&mut self, number: usize) {
         let index = {
             let is_odd = number % 2 == 1;
             assert!(is_odd, "{} is not an odd number!", number);
@@ -119,7 +119,7 @@ impl OddNumberSegment {
         self.values[index] = true;
     }
 
-    fn unmarked_numbers(&self) -> Vec<uint> {
+    fn unmarked_numbers(&self) -> Vec<usize> {
         self.values.iter().enumerate().filter_map(|(index, value)| {
             if *value {
                 None
@@ -129,15 +129,15 @@ impl OddNumberSegment {
         }).take(self.unmarked_count).collect()
     }
 
-    fn length() -> uint {
+    fn length() -> usize {
         SEGMENT_SIZE * 2 - 1
     }
 
-    fn first(&self) -> uint {
+    fn first(&self) -> usize {
         self.start
     }
 
-    fn last(&self) -> uint {
+    fn last(&self) -> usize {
         self.start + OddNumberSegment::length() - 1
     }
 }

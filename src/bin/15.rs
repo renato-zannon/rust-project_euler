@@ -12,7 +12,7 @@ fn main() {
     println!("{}", result);
 }
 
-fn ways_to_reach(row: uint, column: uint, cache: &mut BTreeMap<(uint, uint), uint>) -> uint {
+fn ways_to_reach(row: usize, column: usize, cache: &mut BTreeMap<(usize, usize), usize>) -> usize {
     return match cache.get(&(row, column)) {
         Some(&value) => value,
 
@@ -24,7 +24,7 @@ fn ways_to_reach(row: uint, column: uint, cache: &mut BTreeMap<(uint, uint), uin
     };
 }
 
-fn compute(row: uint, column: uint, cache: &mut BTreeMap<(uint, uint), uint>) -> uint {
+fn compute(row: usize, column: usize, cache: &mut BTreeMap<(usize, usize), usize>) -> usize {
     match (row, column) {
         (_, 0)        => 1,
         (0, _)        => 1,

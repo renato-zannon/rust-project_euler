@@ -62,7 +62,7 @@ impl Square {
         self.size += 2;
     }
 
-    fn update_diagonal(&mut self, dest: uint, source: uint, increment: u32) {
+    fn update_diagonal(&mut self, dest: usize, source: usize, increment: u32) {
         let value = self.diagonal[source] + increment;
 
         self.diagonal[dest] = value;

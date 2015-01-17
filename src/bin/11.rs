@@ -3,9 +3,8 @@
  * What is the greatest product of four adjacent numbers in the same direction (up, down, left,
  * right, or diagonally) in the 20×20 grid? */
 
-#![feature(associated_types)]
 
-static GRID: [[uint; 20]; 20] = [
+static GRID: [[usize; 20]; 20] = [
     [08, 02, 22, 97, 38, 15, 00, 40, 00, 75, 04, 05, 07, 78, 52, 12, 50, 77, 91, 08],
     [49, 49, 99, 40, 17, 81, 18, 57, 60, 87, 17, 40, 98, 43, 69, 48, 04, 56, 62, 00],
     [81, 49, 31, 73, 55, 79, 14, 29, 93, 71, 40, 67, 53, 88, 30, 03, 49, 13, 36, 65],
@@ -28,7 +27,7 @@ static GRID: [[uint; 20]; 20] = [
     [01, 70, 54, 71, 83, 51, 54, 69, 16, 92, 33, 48, 61, 43, 52, 01, 89, 19, 67, 48],
 ];
 
-const SLICE_LENGTH: uint = 4;
+const SLICE_LENGTH: usize = 4;
 
 fn main() {
     let result = coordinates().iter().flat_map(|&(row, column)| {
@@ -38,7 +37,7 @@ fn main() {
     println!("{}", result);
 }
 
-fn coordinates() -> Vec<(uint, uint)>  {
+fn coordinates() -> Vec<(usize, usize)>  {
     let mut result = vec!();
 
     for row in range(0u, 20) {
@@ -50,15 +49,15 @@ fn coordinates() -> Vec<(uint, uint)>  {
     return result;
 }
 
-fn slices_for(row: uint, column: uint) -> SlicesFromPoint<'static> {
+fn slices_for(row: usize, column: usize) -> SlicesFromPoint<'static> {
     SlicesFromPoint::new(row, column, SLICE_LENGTH, &GRID)
 }
 
 struct SlicesFromPoint<'a> {
-    grid: &'a [[uint; 20]; 20],
-    row: uint,
-    column: uint,
-    length: uint,
+    grid: &'a [[usize; 20]; 20],
+    row: usize,
+    column: usize,
+    length: usize,
     last_slice_type: Option<SliceType>
 }
 
@@ -70,7 +69,7 @@ enum SliceType {
 }
 
 impl<'a> SlicesFromPoint<'a> {
-    fn new(row: uint, column: uint, length: uint, grid: &[[uint; 20]; 20]) -> SlicesFromPoint {
+    fn new(row: usize, column: usize, length: usize, grid: &[[usize; 20]; 20]) -> SlicesFromPoint {
         SlicesFromPoint {
             grid: grid,
             row: row,
@@ -80,7 +79,7 @@ impl<'a> SlicesFromPoint<'a> {
         }
     }
 
-    fn horizontal_slice(&mut self) -> Option<Vec<uint>> {
+    fn horizontal_slice(&mut self) -> Option<Vec<usize>> {
         let limit = 20 - self.length;
         self.last_slice_type = Some(SliceType::Horizontal);
 
@@ -94,7 +93,7 @@ impl<'a> SlicesFromPoint<'a> {
         }
     }
 
-    fn vertical_slice(&mut self) -> Option<Vec<uint>> {
+    fn vertical_slice(&mut self) -> Option<Vec<usize>> {
         let limit = 20 - self.length;
         self.last_slice_type = Some(SliceType::Vertical);
 
@@ -108,7 +107,7 @@ impl<'a> SlicesFromPoint<'a> {
         }
     }
 
-    fn diagonal_from_left_slice(&mut self) -> Option<Vec<uint>> {
+    fn diagonal_from_left_slice(&mut self) -> Option<Vec<usize>> {
         let limit = 20 - self.length;
         self.last_slice_type = Some(SliceType::DiagonalFromLeft);
 
@@ -122,7 +121,7 @@ impl<'a> SlicesFromPoint<'a> {
         }
     }
 
-    fn diagonal_from_right_slice(&mut self) -> Option<Vec<uint>> {
+    fn diagonal_from_right_slice(&mut self) -> Option<Vec<usize>> {
         let limit = 20 - self.length;
         self.last_slice_type = Some(SliceType::DiagonalFromRight);
 
@@ -136,7 +135,7 @@ impl<'a> SlicesFromPoint<'a> {
         }
     }
 
-    fn make_slice(&self, increment: |(uint, uint)| -> (uint, uint)) -> Vec<uint> {
+    fn make_slice<F>(&self, increment: F) -> Vec<usize> where F: Fn((usize, usize)) -> (usize, usize) {
         let mut result    = vec!(self.grid[self.row][self.column]);
         let mut prev_pair = (self.row, self.column);
 
@@ -154,9 +153,9 @@ impl<'a> SlicesFromPoint<'a> {
 }
 
 impl<'a> Iterator for SlicesFromPoint<'a> {
-    type Item = Vec<uint>;
+    type Item = Vec<usize>;
 
-    fn next(&mut self) -> Option<Vec<uint>> {
+    fn next(&mut self) -> Option<Vec<usize>> {
         match self.last_slice_type {
             None                               => self.horizontal_slice(),
             Some(SliceType::Horizontal)        => self.vertical_slice(),

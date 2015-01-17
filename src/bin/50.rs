@@ -17,12 +17,12 @@ use shared::sieve;
 use shared::sieve::Sieve;
 use std::iter::AdditiveIterator;
 
-const MAX_PRIME: uint = 1_000_000;
+const MAX_PRIME: usize = 1_000_000;
 
 fn main() {
-    let mut sieve = sieve::new::<uint>();
+    let mut sieve = sieve::new::<usize>();
 
-    let primes: Vec<uint> = sieve.by_ref()
+    let primes: Vec<usize> = sieve.by_ref()
         .take_while(|&prime| prime < MAX_PRIME)
         .collect();
 
@@ -30,7 +30,7 @@ fn main() {
         value: primes.iter().map(|prime| *prime).sum(),
         start_index: 0,
         end_index:   primes.len() - 1,
-        all_primes: primes[]
+        all_primes: &primes[]
     };
 
     // Reduce the sequence until we find the longest possible that begins on the first prime
@@ -43,11 +43,11 @@ fn main() {
     println!("{}", sequence.value);
 }
 
-fn suitable_prime(value: uint, sieve: &mut Sieve<uint>) -> bool {
+fn suitable_prime(value: usize, sieve: &mut Sieve<usize>) -> bool {
     value < MAX_PRIME && sieve.is_prime(value)
 }
 
-fn longest_after_advancing<'a>(seq: PrimeSequenceSum<'a>, sieve: &mut Sieve<uint>) -> PrimeSequenceSum<'a> {
+fn longest_after_advancing<'a>(seq: PrimeSequenceSum<'a>, sieve: &mut Sieve<usize>) -> PrimeSequenceSum<'a> {
     let mut longest_sequence = seq.clone();
     let mut prev_try = seq.clone();
 
@@ -69,7 +69,7 @@ fn longest_after_advancing<'a>(seq: PrimeSequenceSum<'a>, sieve: &mut Sieve<uint
     longest_sequence
 }
 
-fn longest_after_expanding<'a>(seq: PrimeSequenceSum<'a>, sieve: &mut Sieve<uint>) -> PrimeSequenceSum<'a> {
+fn longest_after_expanding<'a>(seq: PrimeSequenceSum<'a>, sieve: &mut Sieve<usize>) -> PrimeSequenceSum<'a> {
     let mut longest = seq.clone();
     let mut longest_prime = seq;
 
@@ -92,15 +92,15 @@ fn longest_after_expanding<'a>(seq: PrimeSequenceSum<'a>, sieve: &mut Sieve<uint
 
 #[derive(Show, Clone)]
 struct PrimeSequenceSum<'a> {
-    value:  uint,
+    value:  usize,
 
-    start_index: uint,
-    end_index:   uint,
-    all_primes:  &'a [uint],
+    start_index: usize,
+    end_index:   usize,
+    all_primes:  &'a [usize],
 }
 
 impl<'a> PrimeSequenceSum<'a> {
-    fn len(&self) -> uint {
+    fn len(&self) -> usize {
         self.end_index - self.start_index + 1
     }
 
@@ -138,14 +138,14 @@ impl<'a> PrimeSequenceSum<'a> {
         })
     }
 
-    fn peek_left(&self) -> Option<(uint, uint)> {
+    fn peek_left(&self) -> Option<(usize, usize)> {
         match self.start_index {
             0     => None,
             index => Some((index - 1, self.all_primes[index - 1]))
         }
     }
 
-    fn peek_right(&self) -> Option<(uint, uint)> {
+    fn peek_right(&self) -> Option<(usize, usize)> {
         if self.end_index >= self.all_primes.len() - 1 {
             None
         } else {

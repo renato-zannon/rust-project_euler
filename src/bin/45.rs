@@ -10,9 +10,8 @@
  *
  * Find the next triangle number that is also pentagonal and hexagonal. */
 
-#![feature(associated_types)]
 
-const TARGET: uint = 40755;
+const TARGET: usize = 40755;
 
 fn main() {
     let mut triangles   = numbers_from_formula(|n| n * (n + 1) / 2);
@@ -35,22 +34,22 @@ fn main() {
     }
 }
 
-fn numbers_from_formula<'a>(formula: |uint|: 'a -> uint) -> NumbersFromFormula<'a> {
+fn numbers_from_formula<'a, F>(formula: F) -> NumbersFromFormula<'a, F> where F: Fn(usize) -> usize + 'a {
     NumbersFromFormula {
         last_n: 0,
         formula: formula
     }
 }
 
-struct NumbersFromFormula<'a> {
-    last_n: uint,
-    formula: |uint|: 'a -> uint,
+struct NumbersFromFormula<'a, F> where F: Fn(usize) -> usize + 'a {
+    last_n: usize,
+    formula: F,
 }
 
-impl<'a> Iterator for NumbersFromFormula<'a> {
-    type Item = uint;
+impl<'a, F> Iterator for NumbersFromFormula<'a, F> where F: Fn(usize) -> usize + 'a {
+    type Item = usize;
 
-    fn next(&mut self) -> Option<uint> {
+    fn next(&mut self) -> Option<usize> {
         let n = self.last_n + 1;
         self.last_n = n;
 

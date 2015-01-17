@@ -19,7 +19,7 @@
 extern crate shared;
 use shared::triangle;
 
-const TRIANGLE: &'static [&'static [uint]] = &[
+const TRIANGLE: &'static [&'static [u32]] = &[
                                                         &[75],
                                                     &[95, 64],
                                                 &[17, 47, 82],

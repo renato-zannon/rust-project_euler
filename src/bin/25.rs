@@ -57,7 +57,7 @@ fn main() {
 fn fib_iteration(state: &mut (BigInt, BigInt)) -> Option<BigInt> {
     use std::mem::swap;
 
-    let &(ref mut pprev, ref mut prev) = state;
+    let &mut (ref mut pprev, ref mut prev) = state;
     let result = (&*pprev) + (&*prev);
 
     swap(pprev, prev);
@@ -66,7 +66,7 @@ fn fib_iteration(state: &mut (BigInt, BigInt)) -> Option<BigInt> {
     Some(result)
 }
 
-fn number_of_digits(num: &BigInt, minimum_digits: uint) -> uint {
+fn number_of_digits(num: &BigInt, minimum_digits: usize) -> usize {
     use num::zero;
 
     let bigzero: BigInt = zero();

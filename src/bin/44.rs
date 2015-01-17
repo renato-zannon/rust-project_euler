@@ -17,9 +17,9 @@ use std::iter::count;
 use std::num::{ToPrimitive, Float};
 
 fn main() {
-    let mut found: Vec<uint> = Vec::new();
+    let mut found: Vec<u32> = Vec::new();
 
-    for n in count(1u, 1) {
+    for n in count(1, 1) {
         let pent1 = calculate_pentagonal_for(n);
 
         for &pent2 in found.iter() {
@@ -33,7 +33,7 @@ fn main() {
     }
 }
 
-fn is_pentagonal(number: uint) -> bool {
+fn is_pentagonal(number: u32) -> bool {
     let delta = 1 + 24 * number;
 
     return take_sqrt(delta)
@@ -41,21 +41,21 @@ fn is_pentagonal(number: uint) -> bool {
         .map(|integer_sqrt| (1 + integer_sqrt) % 6 == 0)
         .unwrap_or(false);
 
-    fn take_sqrt(delta: uint) -> Option<f32> {
+    fn take_sqrt(delta: u32) -> Option<f32> {
         delta.to_f32().map(|as_float| as_float.sqrt())
     }
 
-    fn to_integer(delta_sqrt: f32) -> Option<uint> {
+    fn to_integer(delta_sqrt: f32) -> Option<u32> {
         let is_integer = delta_sqrt == delta_sqrt.floor();
 
         if is_integer {
-            delta_sqrt.to_uint()
+            delta_sqrt.to_u32()
         } else {
             None
         }
     }
 }
 
-fn calculate_pentagonal_for(n: uint) -> uint {
+fn calculate_pentagonal_for(n: u32) -> u32 {
     n * (3 * n - 1) / 2
 }

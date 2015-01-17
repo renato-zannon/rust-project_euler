@@ -38,14 +38,14 @@ pub fn is_prime<T>(num: T) -> bool
 
 #[allow(missing_copy_implementations)]
 pub struct PrimeFactors {
-    remaining: uint,
-    divisor: uint,
+    remaining: u32,
+    divisor: u32,
 }
 
 impl Iterator for PrimeFactors {
-    type Item = uint;
+    type Item = u32;
 
-    fn next(&mut self) -> Option<uint> {
+    fn next(&mut self) -> Option<u32> {
         if self.remaining <= 1 {
             return None;
         }
@@ -62,13 +62,13 @@ impl Iterator for PrimeFactors {
     }
 }
 
-pub fn prime_factors(n: uint) -> PrimeFactors {
+pub fn prime_factors(n: u32) -> PrimeFactors {
     return PrimeFactors { remaining: n, divisor: 2 }
 }
 
 pub type DistinctPrimeFactors = UniqueFilter<PrimeFactors>;
 
-pub fn distinct_prime_factors(n: uint) -> DistinctPrimeFactors {
+pub fn distinct_prime_factors(n: u32) -> DistinctPrimeFactors {
     UniqueFilter {
         last: None,
         iter: prime_factors(n)
@@ -76,14 +76,14 @@ pub fn distinct_prime_factors(n: uint) -> DistinctPrimeFactors {
 }
 
 struct UniqueFilter<T> {
-    last: Option<uint>,
+    last: Option<u32>,
     iter: T
 }
 
-impl<T: Iterator<Item = uint>> Iterator for UniqueFilter<T> {
+impl<T: Iterator<Item = u32>> Iterator for UniqueFilter<T> {
     type Item = <T as Iterator>::Item;
 
-    fn next(&mut self) -> Option<uint> {
+    fn next(&mut self) -> Option<u32> {
         loop {
             let new_value = match self.iter.next() {
                 None        => return None,
@@ -108,10 +108,10 @@ mod tests {
 
     macro_rules! prime_assert(
         ($func:ident, $num:expr, [ $($factor:expr),+ ]) => ({
-            let mut expected_factors: Vec<uint> = vec!( $($factor),* );
+            let mut expected_factors: Vec<u32> = vec!( $($factor),* );
             expected_factors.sort();
 
-            let mut returned = $func($num).collect::<Vec<uint>>();
+            let mut returned = $func($num).collect::<Vec<u32>>();
             returned.sort();
 
             assert_eq!(expected_factors, returned);

@@ -13,7 +13,7 @@ use shared::digits;
 use std::collections::{BTreeMap, BTreeSet};
 use std::iter::count;
 
-const PERMUTATION_COUNT: uint = 5;
+const PERMUTATION_COUNT: usize = 5;
 
 fn main() {
     let mut map: BTreeMap<Vec<u8>, BTreeSet<u64>> = BTreeMap::new();

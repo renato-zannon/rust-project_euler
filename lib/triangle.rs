@@ -4,35 +4,37 @@ use std::cmp::Eq;
 
 #[derive(Eq, PartialEq, Show)]
 struct Value {
-    coord: (uint, uint),
-    value: uint,
-    maximum: Option<uint>,
+    coord: (u32, u32),
+    value: u32,
+    maximum: Option<u32>,
 }
 
 pub struct Triangle {
-    values: BTreeMap<(uint, uint), RefCell<Value>>,
-    height: uint,
+    values: BTreeMap<(u32, u32), RefCell<Value>>,
+    height: u32,
 }
 
-pub fn new(raw: &[&[uint]]) -> Triangle {
+pub fn new(raw: &[&[u32]]) -> Triangle {
     let mut values = BTreeMap::new();
 
     for (row_index, row) in raw.iter().enumerate() {
         assert_eq!(row.len(), row_index + 1);
 
+        let row_index = row_index as u32;
+
         for (index, &raw_value) in row.iter().enumerate() {
-            let coord = (row_index, index);
+            let coord = (row_index, index as u32);
             let value = Value { coord: coord, value: raw_value, maximum: None };
 
             values.insert(coord, RefCell::new(value));
         }
     }
 
-    Triangle { values: values, height: raw.len() }
+    Triangle { values: values, height: raw.len() as u32 }
 }
 
 impl Triangle {
-    pub fn maximum_total(&mut self) -> uint {
+    pub fn maximum_total(&mut self) -> u32 {
         let origin_ref = self.get_coord((0, 0));
 
         {
@@ -86,11 +88,11 @@ impl Triangle {
         }
     }
 
-    fn get_coord(&self, coord: (uint, uint)) -> &RefCell<Value> {
+    fn get_coord(&self, coord: (u32, u32)) -> &RefCell<Value> {
         self.values.get(&coord).unwrap()
     }
 
-    fn values_below(&self, (row, col): (uint, uint)) -> Option<(&RefCell<Value>, &RefCell<Value>)> {
+    fn values_below(&self, (row, col): (u32, u32)) -> Option<(&RefCell<Value>, &RefCell<Value>)> {
         if row + 1 < self.height {
             let left  = self.get_coord((row + 1, col));
             let right = self.get_coord((row + 1, col + 1));

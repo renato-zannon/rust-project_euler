@@ -11,8 +11,8 @@ extern crate shared;
 use shared::{digits, sieve};
 
 fn main() {
-    let mut sieve = sieve::new::<uint>();
-    let search_space: Vec<uint> = sieve.by_ref().take_while(|&prime| prime < 1_000_000).collect();
+    let mut sieve = sieve::new::<u32>();
+    let search_space: Vec<u32> = sieve.by_ref().take_while(|&prime| prime < 1_000_000).collect();
 
     let result = search_space.into_iter().filter(|&prime| {
         is_circular(prime, &mut sieve)
@@ -21,20 +21,19 @@ fn main() {
     println!("{}", result);
 }
 
-fn is_circular(prime: uint, sieve: &mut sieve::Sieve<uint>) -> bool {
+fn is_circular(prime: u32, sieve: &mut sieve::Sieve<u32>) -> bool {
     rotations_of(prime).into_iter().all(|rotation| {
         sieve.is_prime(rotation)
     })
 }
 
-fn rotations_of(number: uint) -> Vec<uint> {
+fn rotations_of(number: u32) -> Vec<u32> {
     use std::num::Int;
 
-    let number_count = digits::new::<uint, uint>(number).count();
+    let number_count = digits::new::<u32, u8>(number).count() as usize;
+    let biggest_unit = 10.pow(number_count - 1);
 
-    let biggest_unit = 10u.pow(number_count - 1);
-
-    range(0, number_count).scan(number, |state, _| {
+    (0..number_count).scan(number, |state, _| {
         let prev_rotation = *state;
 
         let head = prev_rotation % 10;

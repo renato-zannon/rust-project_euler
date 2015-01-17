@@ -14,27 +14,27 @@
 extern crate shared;
 use shared::{digits, sieve};
 
-const MEMBER_GAP: uint = 3330;
+const MEMBER_GAP: usize = 3330;
 
 fn main() {
-    let mut sieve = sieve::new::<uint>();
+    let mut sieve = sieve::new::<usize>();
 
     let primes = sieve.clone()
         .skip_while(|&prime| prime < 999)
         .take_while(|&prime| prime <= 9999);
 
     let sequences = primes.filter_map(|prime| {
-        let digits: Vec<uint> = digits::new(prime).rev().collect();
+        let digits: Vec<usize> = digits::new(prime).rev().collect();
 
         let matching_permutations = digits[].permutations()
-            .map(|digits| to_number(digits[]))
+            .map(|digits| to_number(&digits[]))
             .filter(|&perm| {
                 perm > prime &&
                     (perm - prime) % MEMBER_GAP == 0 &&
                     sieve.is_prime(perm)
             });
 
-        let mut sequence: Vec<uint> = matching_permutations.collect();
+        let mut sequence: Vec<usize> = matching_permutations.collect();
         sequence.push(prime);
 
         sequence.sort();
@@ -57,7 +57,7 @@ fn main() {
     println!("{}", result);
 }
 
-fn to_number(digits: &[uint]) -> uint {
+fn to_number(digits: &[usize]) -> usize {
     digits.iter().fold(0, |result, &digit| {
         result * 10 + digit
     })

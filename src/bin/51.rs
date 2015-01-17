@@ -11,8 +11,6 @@
  * Find the smallest prime which, by replacing part of the number (not necessarily adjacent digits)
  * with the same digit, is part of an eight prime value family. */
 
-#![feature(slicing_syntax, associated_types)]
-
 extern crate shared;
 use shared::{digits, sieve};
 
@@ -21,14 +19,14 @@ fn main() {
 
     loop {
         let prime = sieve.next().unwrap();
-        let prime_digits = digits::new(prime).collect::<Vec<uint>>();
+        let prime_digits = digits::new(prime).collect::<Vec<usize>>();
 
         let mut families = range(1, prime_digits.len()).flat_map(|variable_count| {
             families_from_variables(variable_count, &prime_digits).into_iter()
         });
 
         for family_iter in families {
-            let family = family_iter.filter(|&num| sieve.is_prime(num)).collect::<Vec<uint>>();
+            let family = family_iter.filter(|&num| sieve.is_prime(num)).collect::<Vec<usize>>();
 
             if family.len() == 8 {
                 println!("{}", prime);
@@ -38,9 +36,9 @@ fn main() {
     }
 }
 
-fn families_from_variables(count: uint, digits: &Vec<uint>) -> Vec<FamilyIterator> {
+fn families_from_variables(count: usize, digits: &Vec<usize>) -> Vec<FamilyIterator> {
     let mut result:    Vec<FamilyIterator> = Vec::new();
-    let mut variables: Vec<uint>           = range(0, count).map(|index| index).collect();
+    let mut variables: Vec<usize>           = range(0, count).map(|index| index).collect();
 
     let digit_count = digits.len();
 
@@ -82,15 +80,15 @@ fn families_from_variables(count: uint, digits: &Vec<uint>) -> Vec<FamilyIterato
 }
 
 struct FamilyIterator {
-    variables: Vec<uint>,
-    template:  Vec<uint>,
-    last_used: Option<uint>,
+    variables: Vec<usize>,
+    template:  Vec<usize>,
+    last_used: Option<usize>,
 }
 
 impl Iterator for FamilyIterator {
-    type Item = uint;
+    type Item = usize;
 
-    fn next(&mut self) -> Option<uint> {
+    fn next(&mut self) -> Option<usize> {
         let last_used = match self.last_used {
             val @ Some(_) => val,
             None          => return self.init_pattern(),
@@ -116,15 +114,15 @@ impl Iterator for FamilyIterator {
 }
 
 impl FamilyIterator {
-    fn to_number(digits: &[uint]) -> uint {
+    fn to_number(digits: &[usize]) -> usize {
         digits.iter().fold(0, |acc, &digit| {
             acc * 10 + digit
         })
     }
 
-    fn init_pattern(&mut self) -> Option<uint> {
+    fn init_pattern(&mut self) -> Option<usize> {
         let mut found_variable = None;
-        let templ = self.template[];
+        let templ = &self.template[];
 
         for &var_index in self.variables.iter() {
             let on_template = match templ.get(var_index) {
@@ -144,7 +142,7 @@ impl FamilyIterator {
 
         self.last_used = found_variable;
         found_variable.map(|_| {
-            FamilyIterator::to_number(self.template[])
+            FamilyIterator::to_number(&self.template[])
         })
     }
 }

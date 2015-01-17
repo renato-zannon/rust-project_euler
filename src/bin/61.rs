@@ -21,8 +21,6 @@
  * triangle, square, pentagonal, hexagonal, heptagonal, and octagonal, is represented by a different
  * number in the set. */
 
-#![feature(macro_rules, associated_types)]
-
 extern crate collect;
 extern crate shared;
 

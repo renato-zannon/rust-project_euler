@@ -14,7 +14,7 @@ use shared::{digits, sieve};
 use std::iter::AdditiveIterator;
 
 fn main() {
-    let search_space = sieve::new::<uint>().skip_while(|&prime| prime < 10u);
+    let search_space = sieve::new::<usize>().skip_while(|&prime| prime < 10u);
 
     let mut prime_checker = sieve::new();
 
@@ -25,13 +25,13 @@ fn main() {
     println!("{}", truncatable_primes.sum());
 }
 
-fn is_truncatable(prime: uint, sieve: &mut sieve::Sieve<uint>) -> bool {
+fn is_truncatable(prime: usize, sieve: &mut sieve::Sieve<usize>) -> bool {
     truncatable_from_left(prime, sieve) &&
         truncatable_from_right(prime, sieve)
 }
 
-fn truncatable_from_left(prime: uint, sieve: &mut sieve::Sieve<uint>) -> bool {
-    let prime_digits = digits::new::<_, uint>(prime);
+fn truncatable_from_left(prime: usize, sieve: &mut sieve::Sieve<usize>) -> bool {
+    let prime_digits = digits::new::<_, usize>(prime);
 
     prime_digits.rev().scan((0, 1), |state, digit| {
         let (previous, multiplier) = *state;
@@ -44,7 +44,7 @@ fn truncatable_from_left(prime: uint, sieve: &mut sieve::Sieve<uint>) -> bool {
     })
 }
 
-fn truncatable_from_right(prime: uint, sieve: &mut sieve::Sieve<uint>) -> bool {
+fn truncatable_from_right(prime: usize, sieve: &mut sieve::Sieve<usize>) -> bool {
     let mut remaining = prime / 10;
 
     while remaining > 0 {

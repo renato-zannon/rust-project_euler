@@ -20,7 +20,7 @@ use shared::sieve;
 use std::iter::count;
 use std::collections::{HashMap, HashSet};
 
-const CONSECUTIVE_COUNT: uint = 4;
+const CONSECUTIVE_COUNT: usize = 4;
 
 fn main() {
     let mut sieve = sieve::new();
@@ -43,20 +43,20 @@ fn main() {
     println!("{}", result);
 }
 
-type Memo<'a> = &'a mut HashMap<uint, HashSet<uint>>;
+type Memo<'a> = &'a mut HashMap<usize, HashSet<usize>>;
 
-fn factors_for_number(count: FactorCount) -> uint {
+fn factors_for_number(count: FactorCount) -> usize {
     let (_, result) = factors(count);
     result.len()
 }
 
 struct FactorCount<'a> {
-    remaining: uint,
+    remaining: usize,
     memo:      Memo<'a>,
-    primes:    &'a [uint]
+    primes:    &'a [usize]
 }
 
-fn factors(mut count: FactorCount) -> (Memo, HashSet<uint>) {
+fn factors(mut count: FactorCount) -> (Memo, HashSet<usize>) {
     match count.memo.get(&count.remaining).cloned() {
         Some(cached) => {
             return (count.memo, cached);

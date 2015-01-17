@@ -39,7 +39,7 @@
  *
  * How many hands does Player 1 win? */
 
-#![feature(globs, slicing_syntax)]
+#![feature(slicing_syntax)]
 
 use std::cmp::Ordering;
 use std::num::FromPrimitive;
@@ -124,8 +124,8 @@ struct Card {
 
 impl Card {
     fn parse(s: &str) -> Option<Card> {
-        let value = s.slice_to(1);
-        let suit  = s.slice_from(1);
+        let value = &s[..1];
+        let suit  = &s[1..];
 
         match (CardValue::parse(value), CardSuit::parse(suit)) {
             (Some(card_value), Some(card_suit)) => {
@@ -160,8 +160,8 @@ impl Hand {
             Ordering::Greater => true,
 
             Ordering::Equal => {
-                let my_cards    = self.cards[];
-                let other_cards = other.cards[];
+                let my_cards    = &self.cards[];
+                let other_cards = &other.cards[];
 
                 for (my, hers) in my_cards.iter().rev().zip(other_cards.iter().rev()) {
                     match my.cmp(hers) {
@@ -203,9 +203,9 @@ impl Hand {
             CardValue::Ace
         ];
 
-        let cards_in_order = self.cards[];
+        let cards_in_order = &self.cards[];
 
-        let consecutives = self.consecutive_card_count(cards_in_order[]);
+        let consecutives = self.consecutive_card_count(&cards_in_order[]);
 
         let (suits, values) = self.card_counts();
 
@@ -245,15 +245,15 @@ impl Hand {
         };
     }
 
-    fn consecutive_card_count(&self, in_order: &[Card]) -> uint {
-        let mut max_consecutive = 0u;
-        let mut current_consecutives: Option<uint> = None;
+    fn consecutive_card_count(&self, in_order: &[Card]) -> usize {
+        let mut max_consecutive = 0;
+        let mut current_consecutives: Option<usize> = None;
 
         for window in in_order.windows(2) {
             let value1 = window[0].value;
             let value2 = window[1].value;
 
-            let consecutive_value = FromPrimitive::from_int((value1 as int) + 1);
+            let consecutive_value = FromPrimitive::from_int((value1 as isize) + 1);
 
             if consecutive_value != Some(value2) {
                 current_consecutives = None;
@@ -275,19 +275,19 @@ impl Hand {
         max_consecutive
     }
 
-    fn card_counts(&self) -> (Vec<(CardSuit, uint)>, Vec<(CardValue, uint)>) {
+    fn card_counts(&self) -> (Vec<(CardSuit, usize)>, Vec<(CardValue, usize)>) {
         let mut suites = [0; 4];
         let mut values = [0; 13];
 
         for &Card { suit, value } in self.cards.iter() {
-            suites[suit as uint]  += 1;
-            values[value as uint] += 1;
+            suites[suit as usize]  += 1;
+            values[value as usize] += 1;
         }
 
         return (into_sorted_vec(&suites), into_sorted_vec(&values));
 
-        fn into_sorted_vec<T: FromPrimitive + Ord>(values: &[uint]) -> Vec<(T, uint)> {
-            let mut vec: Vec<(T, uint)> = values.iter().enumerate().map(|(idx, &count)| {
+        fn into_sorted_vec<T: FromPrimitive + Ord>(values: &[usize]) -> Vec<(T, usize)> {
+            let mut vec: Vec<(T, usize)> = values.iter().enumerate().map(|(idx, &count)| {
                 (FromPrimitive::from_uint(idx).unwrap(), count)
             }).collect();
 
@@ -308,8 +308,8 @@ fn main() {
     const HANDS: &'static str = include_str!("../../data/54-poker.txt");
 
     let player_1_victories = HANDS.lines().filter(|line| {
-        let maybe_hand1 = Hand::parse(line.slice_to(14));
-        let maybe_hand2 = Hand::parse(line.slice_from(15));
+        let maybe_hand1 = Hand::parse(&line[..14]);
+        let maybe_hand2 = Hand::parse(&line[15..]);
 
         match (maybe_hand1, maybe_hand2) {
             (Some(ref hand1), Some(ref hand2)) => hand1.beats(hand2),

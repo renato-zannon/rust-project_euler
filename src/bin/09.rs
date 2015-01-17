@@ -9,7 +9,6 @@
  *
  * Find the product abc. */
 
-#![feature(associated_types)]
 
 fn main() {
     let (result, (a, b, c)) = triplets::new().find(|&(a, b, c)| {
@@ -28,14 +27,14 @@ pub mod triplets {
     }
 
     impl Iterator for Triplets {
-        type Item = (uint, uint, uint);
+        type Item = (usize, usize, usize);
 
-        fn next(&mut self) -> Option<(uint, uint, uint)> {
+        fn next(&mut self) -> Option<(usize, usize, usize)> {
             self.counter.find(is_triplet)
         }
     }
 
-    fn is_triplet(&(a, b, c): &(uint, uint, uint)) -> bool {
+    fn is_triplet(&(a, b, c): &(usize, usize, usize)) -> bool {
         (c * c) == (a * a) + (b * b)
     }
 
@@ -45,15 +44,15 @@ pub mod triplets {
     }
 
     struct Counter {
-        last_c: uint,
-        last_b: uint,
-        last_a: uint
+        last_c: usize,
+        last_b: usize,
+        last_a: usize
     }
 
     impl Iterator for Counter {
-        type Item = (uint, uint, uint);
+        type Item = (usize, usize, usize);
 
-        fn next(&mut self) -> Option<(uint, uint, uint)> {
+        fn next(&mut self) -> Option<(usize, usize, usize)> {
             if self.last_a > 0 {
                 self.last_a -= 1;
             } else if self.last_b > 1 {

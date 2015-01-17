@@ -24,13 +24,13 @@ use num::Integer;
 use std::collections::HashSet;
 use std::num::Float;
 
-const MAX_NON_ABUNDANT: uint = 28123;
+const MAX_NON_ABUNDANT: usize = 28123;
 
 fn main() {
     println!("{}", non_abundant_number_sums());
 }
 
-fn non_abundant_number_sums() -> uint {
+fn non_abundant_number_sums() -> usize {
     let sums = abundant_numbers_sum(abundant_numbers_below(MAX_NON_ABUNDANT));
 
     range_inclusive(1, MAX_NON_ABUNDANT).filter(|num| {
@@ -38,7 +38,7 @@ fn non_abundant_number_sums() -> uint {
     }).sum()
 }
 
-fn abundant_numbers_sum(abundant_numbers: Vec<uint>) -> HashSet<uint> {
+fn abundant_numbers_sum(abundant_numbers: Vec<usize>) -> HashSet<usize> {
     let mut result = HashSet::new();
 
     for (index, &n1) in abundant_numbers.init().iter().enumerate() {
@@ -56,7 +56,7 @@ fn abundant_numbers_sum(abundant_numbers: Vec<uint>) -> HashSet<uint> {
     result
 }
 
-fn abundant_numbers_below(ceil: uint) -> Vec<uint> {
+fn abundant_numbers_below(ceil: usize) -> Vec<usize> {
     let mut result = vec!();
 
     /* 12 is given as the first abundant by the problem  statement */
@@ -71,11 +71,11 @@ fn abundant_numbers_below(ceil: uint) -> Vec<uint> {
     result
 }
 
-fn proper_divisor_sum(number: uint) -> uint {
+fn proper_divisor_sum(number: usize) -> usize {
     let mut result = 1;
 
     let last_candidate = {
-        let sqrt = (number as f64).sqrt().floor() as uint;
+        let sqrt = (number as f64).sqrt().floor() as usize;
 
         if sqrt * sqrt == number {
             result += sqrt;

@@ -13,7 +13,7 @@ const MAX_PERIMETER: f64 = 1_000.0;
 
 // Alternative implementation for problem 39. Much faster
 fn main() {
-    let mut counts = [0u; MAX_PERIMETER as uint];
+    let mut counts = [0u; MAX_PERIMETER as usize];
 
     let max_perimeter_by_3 = MAX_PERIMETER / 3.0;
     let two_thirds_of_max  = 2.0 * max_perimeter_by_3;
@@ -35,7 +35,7 @@ fn main() {
             let perimeter = a + b + c;
 
             if perimeter < MAX_PERIMETER {
-                counts[(perimeter as uint) - 1] += 1;
+                counts[(perimeter as usize) - 1] += 1;
             }
 
             b += 1.0;

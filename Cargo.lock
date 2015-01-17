@@ -2,47 +2,47 @@
 name = "project_euler"
 version = "0.0.1"
 dependencies = [
- "ascii 0.2.2 (registry+https://github.com/rust-lang/crates.io-index)",
- "collect 0.0.12 (registry+https://github.com/rust-lang/crates.io-index)",
- "num 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "ascii 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
+ "collect 0.0.15 (registry+https://github.com/rust-lang/crates.io-index)",
+ "num 0.1.8 (registry+https://github.com/rust-lang/crates.io-index)",
  "shared 0.0.1",
 ]
 
 [[package]]
 name = "ascii"
-version = "0.2.2"
+version = "0.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "collect"
-version = "0.0.12"
+version = "0.0.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "traverse 0.0.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "traverse 0.0.6 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "num"
-version = "0.1.5"
+version = "0.1.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "rustc-serialize 0.2.4 (registry+https://github.com/rust-lang/crates.io-index)",
+ "rustc-serialize 0.2.8 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "rustc-serialize"
-version = "0.2.4"
+version = "0.2.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "shared"
 version = "0.0.1"
 dependencies = [
- "num 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "num 0.1.8 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "traverse"
-version = "0.0.5"
+version = "0.0.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 

@@ -1,6 +1,6 @@
 pub struct Combinations<A> {
     values: Vec<A>,
-    last_pair: Option<(uint, uint)>
+    last_pair: Option<(usize, usize)>
 }
 
 pub fn new<A>(values: Vec<A>) -> Combinations<A> {
@@ -27,7 +27,7 @@ impl<A: Clone> Iterator for Combinations<A> {
 }
 
 impl<A> Combinations<A> {
-    fn next_pair(&self) -> Option<(uint, uint)> {
+    fn next_pair(&self) -> Option<(usize, usize)> {
         return match self.last_pair {
             None => Some((0, 0)),
 
