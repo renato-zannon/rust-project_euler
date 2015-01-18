@@ -24,13 +24,13 @@ fn is_palindrome(number: usize, base: u8) -> bool {
     let mut buffer = [0u8; 50];
 
     let slice = {
-        let mut writer = BufWriter::new(buffer.as_mut_slice());
+        let mut writer = BufWriter::new(&mut buffer[]);
 
         (write!(&mut writer, "{}", fmt::radix(number, base))).and_then(|_| {
             return writer.tell()
         })
     }.ok().and_then(|size| {
-        str::from_utf8(buffer.slice_to(size as usize)).ok()
+        str::from_utf8(&buffer[..size as usize]).ok()
     }).unwrap();
 
     slice.chars().zip(slice.chars().rev()).all(|(from_start, from_end)| {

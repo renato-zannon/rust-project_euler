@@ -22,8 +22,6 @@ fn main() {
 // Dynamic programming solution, adapted from the overview PDF
 fn ways_to_make(value: usize, denominations: &[usize]) -> usize {
     let mut ways: Vec<usize> = repeat(0).take(value + 1).collect();
-    let ways = ways.as_mut_slice();
-
     ways[0] = 1;
 
     for &denom in denominations.iter() {

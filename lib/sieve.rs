@@ -103,7 +103,7 @@ impl<T: Primeable> Sieve<T> {
         let mut segment = self.next_segment();
 
         {
-            let seg_values = segment.values.as_mut_slice();
+            let seg_values = &mut segment.values[];
 
             for &prime in self.sieving_primes(segment.max).iter() {
                 let first_composite = (prime - (segment.min % prime)) % prime;
@@ -139,7 +139,7 @@ impl<T: Primeable> Sieve<T> {
             prime > root
         }).unwrap();
 
-        self.primes.slice_to(last)
+        &self.primes[..last]
     }
 
     fn next_segment(&self) -> Segment<T> {

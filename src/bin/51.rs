@@ -52,7 +52,7 @@ fn families_from_variables(count: usize, digits: &Vec<usize>) -> Vec<FamilyItera
         let mut max_index  = digit_count - 1;
         let mut current_index = variables.len();
 
-        let var_slice = variables.as_mut_slice();
+        let var_slice = &mut variables[];
 
         loop {
             current_index = current_index - 1;
@@ -99,7 +99,7 @@ impl Iterator for FamilyIterator {
 
             Some(prev) => {
                 let new   = prev + 1;
-                let templ = self.template.as_mut_slice();
+                let templ = &mut self.template[];
 
                 for &var_index in self.variables.iter() {
                     templ[var_index] = new;

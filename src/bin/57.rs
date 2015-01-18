@@ -38,11 +38,11 @@ fn advance(a: &mut Vec<u8>, b: &mut Vec<u8>) {
     use std::{mem, cmp};
 
     // Store "old_a + old_b" = new_b into a.
-    sum(b.as_slice(), a);
+    sum(&b[], a);
 
     // Sum a (which is "old_a + old_b") with b (which is "old_b") and store on b. Now b contains
     // "old_a + 2old_b" = new_a
-    sum(a.as_slice(), b);
+    sum(&a[], b);
 
     // a contains new_b and b contains new_a. Swap them.
     mem::swap(a, b);
@@ -55,7 +55,7 @@ fn advance(a: &mut Vec<u8>, b: &mut Vec<u8>) {
         for index in (0..digit_count) {
             let result = {
                 let source_digit = *source.get(index).unwrap_or(&0);
-                let dest_digit   = *destination.as_slice().get(index).unwrap_or(&0);
+                let dest_digit   = *destination.get(index).unwrap_or(&0);
 
                 source_digit + dest_digit + carry
             };

@@ -115,7 +115,7 @@ fn find_set(candidates: Vec<NumberInfo>) -> Vec<u32> {
     return recurse(&mut Context {
         stack: Vec::new(),
         used_types: EnumSet::new(),
-        candidates: candidates.as_slice()
+        candidates: &candidates[]
     }).unwrap();
 
     fn recurse(context: &mut Context) -> Option<Vec<u32>> {

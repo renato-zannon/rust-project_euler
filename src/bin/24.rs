@@ -75,7 +75,7 @@ impl<A: Ord+Clone> SEPA<A> {
     }
 
     fn permute(&mut self, key: usize, newkey: usize) -> Vec<A> {
-        let current_perm = self.current.as_mut_slice();
+        let current_perm = &mut self.current[];
 
         current_perm.swap(key, newkey);
 

@@ -107,7 +107,7 @@ const NUMBERS: [&'static str; 100] = [
 
 fn main() {
     let result = NUMBERS.iter().fold(0, |acc, num| {
-        let significant: u64 = num.slice(0, 11).parse().unwrap();
+        let significant: u64 = num[0..11].parse().unwrap();
         acc + significant
     });
 
