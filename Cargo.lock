@@ -4,7 +4,7 @@ version = "0.0.1"
 dependencies = [
  "ascii 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
  "collect 0.0.15 (registry+https://github.com/rust-lang/crates.io-index)",
- "num 0.1.8 (registry+https://github.com/rust-lang/crates.io-index)",
+ "num 0.1.8 (git+https://github.com/rust-lang/num)",
  "shared 0.0.1",
 ]
 
@@ -24,7 +24,7 @@ dependencies = [
 [[package]]
 name = "num"
 version = "0.1.8"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+source = "git+https://github.com/rust-lang/num#f186a5b71fb532df78b448ea707e9922c4521c86"
 dependencies = [
  "rustc-serialize 0.2.8 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
@@ -38,7 +38,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 name = "shared"
 version = "0.0.1"
 dependencies = [
- "num 0.1.8 (registry+https://github.com/rust-lang/crates.io-index)",
+ "num 0.1.8 (git+https://github.com/rust-lang/num)",
 ]
 
 [[package]]

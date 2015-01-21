@@ -4,7 +4,6 @@ version = "0.0.1"
 authors = ["Renato Zannon <renato@rrsz.com.br>"]
 
 [dependencies]
-num = "^0.1.0"
 ascii = "*"
 collect = "*"
 
@@ -13,3 +12,6 @@ path = "lib"
 
 [profile.release]
 lto = true
+
+[dependencies.num]
+git = "https://github.com/rust-lang/num"
