@@ -8,10 +8,10 @@ const WHEEL: &'static [u16] = &[2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 
 
 const MAX_SEGMENT_SIZE: usize = 10_000;
 
-pub trait Primeable : Int + Ord + FromPrimitive + iter::Step {}
+pub trait Primeable : Int + Ord + FromPrimitive + ToPrimitive {}
 
 impl<T> Primeable for T
-  where T: Int + Ord + FromPrimitive + iter::Step {}
+  where T: Int + Ord + FromPrimitive + ToPrimitive {}
 
 
 #[derive(Clone)]
@@ -159,7 +159,7 @@ impl<T: Primeable> Sieve<T> {
         let mut values = Vec::with_capacity(uint_len);
         let max = min + len;
 
-        values.extend((min..max).map(Some));
+        values.extend(range(min, max).map(Some));
 
         Segment {
             min: min,

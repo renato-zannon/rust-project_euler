@@ -25,7 +25,7 @@ use std::iter::{count, range_inclusive};
 fn main() {
     let mut largest = 0;
 
-    for n in (2..9) {
+    for n in 2u32..9 {
         for start in count(1, 1) {
             let prod = concat_product(start, n);
 

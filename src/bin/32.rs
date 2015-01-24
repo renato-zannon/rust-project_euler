@@ -22,7 +22,7 @@ use std::iter::AdditiveIterator;
 fn main() {
     let mut products = Vec::new();
 
-    for x in (1..10_000) {
+    for x in 1u32..10_000 {
         for y in (1..x) {
             let result = x * y;
 

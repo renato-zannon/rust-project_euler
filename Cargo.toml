@@ -4,7 +4,6 @@ version = "0.0.1"
 authors = ["Renato Zannon <renato@rrsz.com.br>"]
 
 [dependencies]
-ascii = "*"
 collect = "*"
 
 [dependencies.shared]
@@ -15,3 +14,6 @@ lto = true
 
 [dependencies.num]
 git = "https://github.com/rust-lang/num"
+
+[dependencies.ascii]
+git = "https://github.com/simonsapin/rust-ascii"

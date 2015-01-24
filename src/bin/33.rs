@@ -23,8 +23,8 @@ use self::CancelResult::{Cancelable, NonCancelable};
 fn main() {
     let mut result = (1, 1);
 
-    for numerator in (10..100) {
-        for denominator in (numerator + 1..100) {
+    for numerator in 10u32..100 {
+        for denominator in (numerator + 1)..100 {
             match cancel_fraction(numerator, denominator) {
                 NonCancelable => continue,
                 Cancelable(num, den) => {

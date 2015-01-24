@@ -1,6 +1,6 @@
 use num::Integer;
 use std::num::{Int, Float, FromPrimitive, ToPrimitive};
-use std::fmt::Show;
+use std::fmt::Debug;
 use std::io::IoResult;
 
 pub struct Digits<A, B> {
@@ -58,7 +58,7 @@ impl<A, B> DoubleEndedIterator for Digits<A, B>
 }
 
 pub fn new<A, B>(number: A) -> Digits<A, B>
-    where A: ToPrimitive + Show {
+    where A: ToPrimitive + Debug {
     Digits {
         remaining_digits: number_of_digits(&number),
         remaining: number,
@@ -77,7 +77,7 @@ impl<A, B> Digits<A, B>
     }
 }
 
-fn number_of_digits<A: ToPrimitive + Show>(number: &A) -> u32 {
+fn number_of_digits<A: ToPrimitive + Debug>(number: &A) -> u32 {
     let mut counter = DigitCounter { count: 0 };
     (write!(&mut counter, "{:?}", number)).unwrap();
 
