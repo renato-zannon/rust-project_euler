@@ -16,6 +16,7 @@
  * Find the sum of all the positive integers which cannot be written as the sum of two abundant
  * numbers.*/
 
+#![allow(unstable)]
 extern crate num;
 
 use std::iter::{range_inclusive, range_step_inclusive};

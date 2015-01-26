@@ -39,6 +39,7 @@
  *
  * How many hands does Player 1 win? */
 
+#![allow(unstable)]
 #![feature(slicing_syntax)]
 
 use std::cmp::Ordering;

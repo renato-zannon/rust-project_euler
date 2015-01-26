@@ -7,6 +7,7 @@
  *
  * Find the sum of the digits in the number 100! */
 
+#![allow(unstable)]
 #![feature(slicing_syntax)]
 
 extern crate num;

@@ -21,6 +21,7 @@
  * triangle, square, pentagonal, hexagonal, heptagonal, and octagonal, is represented by a different
  * number in the set. */
 
+#![allow(unstable)]
 extern crate collect;
 extern crate shared;
 

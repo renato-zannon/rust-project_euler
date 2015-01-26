@@ -16,6 +16,7 @@
  * How many, not necessarily distinct, values of  nCr, for 1 ≤ n ≤ 100, are greater than
  * one-million? */
 
+#![allow(unstable)]
 use std::iter::AdditiveIterator;
 use std::iter::range_inclusive;
 

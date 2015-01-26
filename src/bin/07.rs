@@ -5,6 +5,7 @@
  *
  * What is the 10 001st prime number? */
 
+#![allow(unstable)]
 #![allow(unused_imports)]
 
 extern crate shared;

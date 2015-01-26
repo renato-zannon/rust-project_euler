@@ -6,6 +6,7 @@
  *
  * Find the smallest cube for which exactly five permutations of its digits are cube. */
 
+#![allow(unstable)]
 extern crate shared;
 
 use shared::digits;

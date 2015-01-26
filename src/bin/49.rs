@@ -9,6 +9,7 @@
  *
  * What 12-digit number do you form by concatenating the three terms in this sequence? */
 
+#![allow(unstable)]
 #![feature(slicing_syntax)]
 
 extern crate shared;

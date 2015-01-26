@@ -27,6 +27,7 @@
  *
  * Find the sum of digits in the numerator of the 100th convergent of the continued fraction for e */
 
+#![allow(unstable)]
 
 extern crate num;
 extern crate shared;

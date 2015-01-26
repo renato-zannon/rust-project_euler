@@ -9,6 +9,7 @@
  *
  * Find the product abc. */
 
+#![allow(unstable)]
 
 fn main() {
     let (result, (a, b, c)) = triplets::new().find(|&(a, b, c)| {

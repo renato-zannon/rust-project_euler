@@ -5,6 +5,7 @@
  *
  * How many such routes are there through a 20×20 grid? */
 
+#![allow(unstable)]
 use std::collections::BTreeMap;
 
 fn main() {

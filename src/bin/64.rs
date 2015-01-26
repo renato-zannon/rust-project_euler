@@ -39,6 +39,7 @@
  *
  * How many continued fractions for N ≤ 10000 have an odd period? */
 
+#![allow(unstable)]
 extern crate shared;
 
 use shared::continuous_division::{FractionType, divide_square};

@@ -5,6 +5,7 @@
  *
  * Find the largest palindrome made from the product of two 3-digit numbers. */
 
+#![allow(unstable)]
 extern crate shared;
 
 use std::iter::range_inclusive;

@@ -6,6 +6,7 @@
  *
  * Note: as 1! = 1 and 2! = 2 are not sums they are not included. */
 
+#![allow(unstable)]
 extern crate shared;
 
 use std::iter::{range_inclusive, AdditiveIterator, count};

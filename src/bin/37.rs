@@ -9,6 +9,7 @@
  *
  * NOTE: 2, 3, 5, and 7 are not considered to be truncatable primes. */
 
+#![allow(unstable)]
 extern crate shared;
 use shared::{digits, sieve};
 use std::iter::AdditiveIterator;

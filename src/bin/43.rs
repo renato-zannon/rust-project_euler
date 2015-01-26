@@ -15,6 +15,7 @@
  *
  * Find the sum of all 0 to 9 pandigital numbers with this property. */
 
+#![allow(unstable)]
 #![feature(slicing_syntax)]
 
 extern crate shared;

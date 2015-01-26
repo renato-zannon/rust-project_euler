@@ -4,6 +4,7 @@
  *
  * Find the last ten digits of the series, 1¹ + 2² + 3³ + ... + 1000¹⁰⁰⁰ */
 
+#![allow(unstable)]
 use std::num::Int;
 use std::iter::range_inclusive;
 

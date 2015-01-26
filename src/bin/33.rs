@@ -12,6 +12,7 @@
  * If the product of these four fractions is given in its lowest common terms, find the value of the
  * denominator. */
 
+#![allow(unstable)]
 extern crate shared;
 extern crate num;
 
