@@ -50,7 +50,7 @@ fn main() {
 
         for digits in numbers.into_iter() {
             let next = plus_one_digit(digits).filter(|more_digits| {
-                to_number(more_digits.slice_to(3)) % divisor == 0
+                to_number(&more_digits[..3]) % divisor == 0
             });
 
             next_digits.extend(next);

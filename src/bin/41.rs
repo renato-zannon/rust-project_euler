@@ -15,7 +15,7 @@ fn main() {
     let all_digits = [1u32, 2, 3, 4, 5, 6, 7, 8, 9];
 
     let permutations = (1us..9).flat_map(|end| {
-        let digit_slice = all_digits.slice_to(end);
+        let digit_slice = &all_digits[..end];
         digit_slice.permutations()
     });
 

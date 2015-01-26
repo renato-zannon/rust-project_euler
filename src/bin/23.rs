@@ -43,7 +43,7 @@ fn abundant_numbers_sum(abundant_numbers: Vec<usize>) -> HashSet<usize> {
     let mut result = HashSet::new();
 
     for (index, &n1) in abundant_numbers.init().iter().enumerate() {
-        for &n2 in abundant_numbers.slice_from(index).iter() {
+        for &n2 in abundant_numbers[index..].iter() {
             let sum = n1 + n2;
 
             if sum <= MAX_NON_ABUNDANT {

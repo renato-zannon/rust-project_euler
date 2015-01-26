@@ -54,7 +54,7 @@ fn division_type(numerator: usize, denominator: usize) -> DivisionType {
 
         match maybe_cycle {
             Some(start) => {
-                return DivisionType::Recurring(seen_to_str(seen.slice_from(start)));
+                return DivisionType::Recurring(seen_to_str(&seen[start..]));
             },
 
             None => {
