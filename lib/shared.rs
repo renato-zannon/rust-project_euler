@@ -14,3 +14,4 @@ pub mod pandigital;
 pub mod primes;
 pub mod data_reader;
 pub mod integer_extensions;
+pub mod continuous_division;
