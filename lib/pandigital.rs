@@ -99,26 +99,26 @@ mod tests {
 
     #[test]
     fn test_1_through_9() {
-        assert!(is_9_pandigital([1us, 2, 3, 4, 5, 6, 7, 8, 9][]).to_bool());
+        assert!(is_9_pandigital(&[1, 2, 3, 4, 5, 6, 7, 8, 9][]).to_bool());
     }
 
     #[test]
     fn test_out_of_order() {
-        assert!(is_9_pandigital([1us, 3, 5, 9, 7, 2, 8, 4, 6][]).to_bool());
+        assert!(is_9_pandigital(&[1, 3, 5, 9, 7, 2, 8, 4, 6][]).to_bool());
     }
 
     #[test]
     fn test_not_all_numbers() {
-        assert!(is_9_pandigital([1us, 2, 3, 4, 5, 6, 7][]).to_bool() == false);
+        assert!(is_9_pandigital(&[1, 2, 3, 4, 5, 6, 7][]).to_bool() == false);
     }
 
     #[test]
     fn test_with_repetitions() {
-        assert!(is_9_pandigital([1us, 2, 3, 4, 5, 6, 7, 8, 9, 1][]).to_bool() == false);
+        assert!(is_9_pandigital(&[1, 2, 3, 4, 5, 6, 7, 8, 9, 1][]).to_bool() == false);
     }
 
     #[test]
     fn test_rejects_zeroes() {
-        assert!(is_9_pandigital([1us, 3, 5, 9, 7, 0, 0, 2, 8, 0, 0, 0, 4, 6, 0][]).to_bool() == false);
+        assert!(is_9_pandigital(&[1, 3, 5, 9, 7, 0, 0, 2, 8, 0, 0, 0, 4, 6, 0][]).to_bool() == false);
     }
 }
