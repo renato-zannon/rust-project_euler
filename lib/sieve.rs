@@ -1,7 +1,7 @@
 // Based on the ruby implementation:
 // https://github.com/ruby/ruby/blob/1aa54bebaf274bc08e72f9ad3854c7ad592c344a/lib/prime.rb#L423
 
-use std::iter::{self, RandomAccessIterator};
+use std::iter::RandomAccessIterator;
 use std::num::{from_u8, from_f32, from_uint, from_u16, Int, Float, FromPrimitive, ToPrimitive};
 
 const WHEEL: &'static [u16] = &[2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101];
