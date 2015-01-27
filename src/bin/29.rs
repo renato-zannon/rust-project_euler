@@ -1,5 +1,5 @@
 use std::collections::HashSet;
-use std::num::{ToPrimitive, Float};
+use std::num::Float;
 
 fn main() {
     let mut powers: HashSet<(usize, usize)> = HashSet::new();
@@ -22,9 +22,7 @@ fn factor_for(num: usize) -> (usize, usize) {
     let mut base:   usize = num;
 
     for potential_root in (2..num) {
-        let exp = potential_root.to_f64().map(|root_f| {
-            fnum.log(root_f)
-        }).unwrap();
+        let exp = fnum.log(potential_root as f64);
 
         if exp.fract() == 0f64 {
             factor = exp;
