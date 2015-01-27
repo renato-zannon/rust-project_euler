@@ -42,7 +42,7 @@
 #![allow(unstable)]
 extern crate shared;
 
-use shared::continuous_division::{FractionType, divide_square};
+use shared::continued_fraction::{FractionType, divide_square};
 
 const MAX_N: u32 = 10_000;
 
