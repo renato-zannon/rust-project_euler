@@ -1,4 +1,4 @@
-use std::io::{File, BufferedReader};
+use std::old_io::{File, BufferedReader};
 use std::borrow::ToOwned;
 use std::str;
 

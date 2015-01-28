@@ -6,5 +6,5 @@ authors = ["Renato Zannon <renato@rrsz.com.br>"]
 [lib]
 name = "shared"
 
-[dependencies.num]
-git = "https://github.com/rust-lang/num"
+[dependencies]
+num = "*"

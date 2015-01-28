@@ -19,7 +19,7 @@ fn main() {
 }
 
 fn is_palindrome(number: usize, base: u8) -> bool {
-    use std::io::BufWriter;
+    use std::old_io::BufWriter;
     use std::str;
 
     let mut buffer = [0u8; 50];

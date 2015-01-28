@@ -5,15 +5,11 @@ authors = ["Renato Zannon <renato@rrsz.com.br>"]
 
 [dependencies]
 collect = "*"
+num = "*"
+ascii = "*"
 
 [dependencies.shared]
 path = "lib"
 
 [profile.release]
 lto = true
-
-[dependencies.num]
-git = "https://github.com/rust-lang/num"
-
-[dependencies.ascii]
-git = "https://github.com/simonsapin/rust-ascii"

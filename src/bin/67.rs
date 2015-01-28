@@ -23,7 +23,7 @@
 
 extern crate shared;
 
-use std::io::{File, BufferedReader};
+use std::old_io::{File, BufferedReader};
 
 use shared::triangle;
 

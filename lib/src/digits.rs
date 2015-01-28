@@ -1,7 +1,7 @@
 use num::Integer;
 use std::num::{Int, Float, FromPrimitive, ToPrimitive};
 use std::fmt::Debug;
-use std::io::IoResult;
+use std::old_io::IoResult;
 
 pub struct Digits<A, B> {
     remaining: A,
@@ -89,7 +89,7 @@ struct DigitCounter {
 }
 
 impl Writer for DigitCounter {
-    fn write(&mut self, buf: &[u8]) -> IoResult<()> {
+    fn write_all(&mut self, buf: &[u8]) -> IoResult<()> {
         self.count += buf.len() as u32;
 
         Ok(())
