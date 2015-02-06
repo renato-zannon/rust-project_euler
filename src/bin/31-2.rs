@@ -11,7 +11,7 @@
  *
  * How many different ways can £2 be made using any number of coins? */
 
-#![allow(unstable)]
+#![feature(core)]
 use std::iter::{repeat, range_inclusive};
 
 const DENOMINATIONS: &'static [usize] = &[200, 100, 50, 20, 10, 5, 2, 1];

@@ -5,7 +5,7 @@
  *
  * How many n-digit positive integers exist which are also an nth power? */
 
-#![allow(unstable)]
+#![feature(core, std_misc)]
 use std::num::{ToPrimitive, Float};
 
 fn main() {

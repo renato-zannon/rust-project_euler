@@ -17,7 +17,7 @@
  * How many Sundays fell on the first of the month during the twentieth century
  * (1 Jan 1901 to 31 Dec 2000)? */
 
-#![allow(unstable)]
+#![feature(core)]
 extern crate num;
 use num::Integer;
 use std::num::from_int;
@@ -48,7 +48,7 @@ fn main() {
     println!("{}", count);
 }
 
-#[derive(Show)]
+#[derive(Debug)]
 struct Day {
     number: usize,
     weekday: Weekday,
@@ -83,7 +83,7 @@ impl Day {
     }
 }
 
-#[derive(Show, Copy)]
+#[derive(Debug, Copy)]
 struct Year {
     number: usize,
 }
@@ -98,7 +98,7 @@ impl Year {
     }
 }
 
-#[derive(PartialEq, FromPrimitive, PartialOrd, Show, Copy)]
+#[derive(PartialEq, FromPrimitive, PartialOrd, Debug, Copy)]
 enum Month {
     January,
     February,
@@ -134,7 +134,7 @@ impl Month {
     }
 }
 
-#[derive(PartialEq, FromPrimitive, Show, Copy)]
+#[derive(PartialEq, FromPrimitive, Debug, Copy)]
 enum Weekday {
     Sunday,
     Monday,

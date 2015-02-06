@@ -6,7 +6,7 @@
  *
  * (Please note that the palindromic number, in either base, may not include leading zeros.) */
 
-#![allow(unstable)]
+#![feature(core, io)]
 use std::iter::AdditiveIterator;
 use std::fmt;
 

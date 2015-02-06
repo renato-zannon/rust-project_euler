@@ -15,7 +15,7 @@
  * What is the smallest odd composite that cannot be written as the sum of a prime and twice a
  * square? */
 
-#![allow(unstable)]
+#![feature(collections, core)]
 extern crate shared;
 
 use shared::sieve;
@@ -47,7 +47,7 @@ fn mark_odd_composites(segment: &mut OddNumberSegment, sieve: &mut PrimeSieve<us
 
     sieve.compute_until(segment_end);
 
-    let mut primes = sieve.found_primes()
+    let primes = sieve.found_primes()
         .tail() // Skip 2, as 2 + 2*x² is always even
         .iter()
         .take_while(|prime| **prime < segment_end);

@@ -39,13 +39,12 @@
  *
  * How many hands does Player 1 win? */
 
-#![allow(unstable)]
-#![feature(slicing_syntax)]
+#![feature(core)]
 
 use std::cmp::Ordering;
 use std::num::FromPrimitive;
 
-#[derive(PartialEq, Eq, PartialOrd, Ord, Show)]
+#[derive(PartialEq, Eq, PartialOrd, Ord, Debug)]
 enum Rank {
     HighCard(CardValue),              // High Card: Highest value card.
     OnePair(CardValue),               // One Pair: Two cards of the same value.
@@ -59,7 +58,7 @@ enum Rank {
     RoyalFlush,                       // Royal Flush: Ten, Jack, Queen, King, Ace, in same suit.
 }
 
-#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, FromPrimitive, Show, Copy)]
+#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, FromPrimitive, Debug, Copy)]
 enum CardValue {
     Two   = 0,
     Three = 1,

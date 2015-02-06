@@ -10,8 +10,7 @@
  *
  * Which prime, below one-million, can be written as the sum of the most consecutive primes? */
 
-#![allow(unstable)]
-#![feature(slicing_syntax)]
+#![feature(core)]
 
 extern crate shared;
 use shared::sieve;
@@ -91,7 +90,7 @@ fn longest_after_expanding<'a>(seq: PrimeSequenceSum<'a>, sieve: &mut Sieve<usiz
     longest_prime
 }
 
-#[derive(Show, Clone)]
+#[derive(Debug, Clone)]
 struct PrimeSequenceSum<'a> {
     value:  usize,
 

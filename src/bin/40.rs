@@ -11,7 +11,7 @@
  *
  * d1 × d10 × d100 × d1000 × d10000 × d100000 × d1000000 */
 
-#![allow(unstable)]
+#![feature(core)]
 extern crate shared;
 use shared::digits;
 use std::iter::{count, MultiplicativeIterator};
@@ -21,7 +21,7 @@ fn main() {
         .flat_map(|number| digits::new::<usize, usize>(number))
         .enumerate();
 
-    let mut get_digit = move |&mut: number: usize| {
+    let mut get_digit = move |number: usize| {
         let (_, digit) = sequence
             .find(|&(idx, _)| idx == number - 1)
             .unwrap();

@@ -11,7 +11,7 @@
  * Find the smallest prime which, by replacing part of the number (not necessarily adjacent digits)
  * with the same digit, is part of an eight prime value family. */
 
-#![allow(unstable)]
+#![feature(core)]
 extern crate shared;
 use shared::{digits, sieve};
 
@@ -22,7 +22,7 @@ fn main() {
         let prime = sieve.next().unwrap();
         let prime_digits = digits::new(prime).collect::<Vec<usize>>();
 
-        let mut families = (1..prime_digits.len()).flat_map(|variable_count| {
+        let families = (1..prime_digits.len()).flat_map(|variable_count| {
             families_from_variables(variable_count, &prime_digits).into_iter()
         });
 

@@ -1,3 +1,5 @@
+#![feature(core)]
+
 use std::collections::HashSet;
 use std::num::Float;
 

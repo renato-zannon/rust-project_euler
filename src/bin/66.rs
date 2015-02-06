@@ -21,8 +21,8 @@
  * Find the value of D ≤ 1000 in minimal solutions of x for which the largest value of x is
  * obtained. */
 
-#![allow(unstable)]
-use std::iter::{self, range_inclusive};
+#![feature(collections, core)]
+
 use std::num::Float;
 use std::u64;
 use std::collections::BTreeSet;
@@ -86,6 +86,6 @@ fn main() {
     println!("{}", solution.d);
 }
 
-fn integer_root(x: u64) -> Option<u64> {
+fn integer_root(_x: u64) -> Option<u64> {
     None
 }

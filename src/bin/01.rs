@@ -5,7 +5,6 @@
  *
  * Find the sum of all the multiples of 3 or 5 below 1000. */
 
-#![allow(unstable)]
 fn main() {
     let result = (1us..1000)
         .filter(|&num| (num % 3 == 0) || (num % 5 == 0))

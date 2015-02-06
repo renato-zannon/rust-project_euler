@@ -1,6 +1,6 @@
 #![crate_name = "shared"]
 #![crate_type = "lib"]
-#![allow(unstable)]
+#![feature(core, io, path)]
 
 extern crate num;
 

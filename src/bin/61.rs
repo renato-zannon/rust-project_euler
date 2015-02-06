@@ -21,7 +21,7 @@
  * triangle, square, pentagonal, hexagonal, heptagonal, and octagonal, is represented by a different
  * number in the set. */
 
-#![allow(unstable)]
+#![feature(core)]
 extern crate collect;
 extern crate shared;
 
@@ -71,7 +71,7 @@ fn build_candidates() -> Vec<NumberInfo> {
 
     for iter in iterators.into_iter() {
         let iter_classification = iter.classification;
-        let mut iter_candidates = iter
+        let iter_candidates = iter
             .skip_while(|&n| n < 1_000)
             .take_while(|&n| n < 10_000);
 
@@ -203,7 +203,7 @@ macro_rules! polygonal_formulas {
             )+
         }
 
-        #[derive(Show, Clone, Copy)]
+        #[derive(Debug, Clone, Copy)]
         #[repr(u32)]
         enum PolygonalClassification {
             $($name),+

@@ -4,7 +4,6 @@
  *
  * Find the sum of all the primes below two million. */
 
-#![allow(unstable)]
 extern crate shared;
 use shared::sieve;
 

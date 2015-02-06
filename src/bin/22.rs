@@ -9,8 +9,7 @@
  *
  * What is the total of all the name scores in the file? */
 
-#![allow(unstable)]
-#![feature(slicing_syntax)]
+#![feature(core)]
 
 extern crate shared;
 

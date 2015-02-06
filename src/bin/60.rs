@@ -8,7 +8,7 @@
  * Find the lowest sum for a set of five primes for which any two primes concatenate to produce
  * another prime. */
 
-#![allow(unstable)]
+#![feature(core)]
 extern crate shared;
 
 use shared::sieve::{self, Sieve};

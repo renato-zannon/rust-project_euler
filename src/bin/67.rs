@@ -18,8 +18,7 @@
  * every second it would take over twenty billion years to check them all. There is an efficient
  * algorithm to solve it. ;o) */
 
-#![allow(unstable)]
-#![feature(slicing_syntax)]
+#![feature(core, io, path)]
 
 extern crate shared;
 
@@ -46,8 +45,8 @@ fn read_triangle() -> Vec<Vec<u32>> {
 
         for atom in line_text.trim().split(' ') {
             match atom.parse::<u32>() {
-                Some(num) => { parsed_line.push(num); },
-                None      => { () }
+                Ok(num) => parsed_line.push(num),
+                Err(_)  => continue,
             }
         }
 

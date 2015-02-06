@@ -23,8 +23,7 @@
  * text must contain common English words, decrypt the message and find the sum of the ASCII values
  * in the original text. */
 
-#![allow(unstable)]
-#![feature(slicing_syntax)]
+#![feature(core)]
 
 extern crate ascii;
 

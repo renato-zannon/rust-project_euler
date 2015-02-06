@@ -7,7 +7,8 @@
  *
  * For which value of p ≤ 1000, is the number of solutions maximised? */
 
-#![allow(unstable)]
+#![feature(core)]
+
 #[cfg(not(test))]
 fn main() {
     let result = (1us..1_000)

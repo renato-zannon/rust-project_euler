@@ -2,7 +2,7 @@
  *
  * Find the greatest product of five consecutive digits in the 1000-digit number. */
 
-#![allow(unstable)]
+#![feature(core, unicode)]
 
 use std::iter::MultiplicativeIterator;
 

@@ -111,7 +111,7 @@ impl<T: Primeable> Sieve<T> {
                 let first_composite = first_composite.to_uint().unwrap();
                 let prime = prime.to_uint().unwrap();
 
-                let mut composites = range_step(first_composite, segment.len, prime);
+                let composites = range_step(first_composite, segment.len, prime);
 
                 for composite_index in composites  {
                     seg_values[composite_index] = None;

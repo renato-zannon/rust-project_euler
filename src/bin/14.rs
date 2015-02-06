@@ -16,8 +16,7 @@
  *
  * NOTE: Once the chain starts the terms are allowed to go above one million. */
 
-#![allow(unstable)]
-#![feature(slicing_syntax)]
+#![feature(core, env, std_misc)]
 
 extern crate num;
 use num::Integer;
@@ -43,14 +42,15 @@ fn main() {
 }
 
 fn spawn_workers(max: u64) -> Receiver<WorkResult> {
-    use std::os;
     use std::iter::range_step_inclusive;
+    use std::env::{self, VarError};
 
     let (master_tx, master_rx) = channel();
 
-    let task_count: u64 = match os::getenv("NPROC") {
-        Some(num) => num.parse().unwrap(),
-        None      => 4,
+    let task_count: u64 = match env::var_string("NPROC") {
+        Ok(num) => num.parse().unwrap(),
+        Err(VarError::NotPresent) => 4,
+        Err(err) => panic!("{}", err),
     };
 
     let per_task = max / task_count;

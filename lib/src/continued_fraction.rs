@@ -2,7 +2,7 @@ use std::collections::BTreeSet;
 use std::num::Float;
 use std::iter::count;
 
-#[derive(Show, PartialEq)]
+#[derive(Debug, PartialEq)]
 pub enum FractionType {
     Exact,
     Periodic(u32, Vec<u32>)
@@ -45,7 +45,7 @@ pub fn divide_square(number: u32) -> FractionType {
     FractionType::Periodic(closest_square, period)
 }
 
-#[derive(Show, PartialEq, Eq, PartialOrd, Ord, Clone)]
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone)]
 struct Step { closest_square: u32, numerator: u32, number: u32, rest: u32 }
 
 fn step(prev: Step) -> (u32, Step) {
@@ -65,6 +65,28 @@ fn step(prev: Step) -> (u32, Step) {
         rest: new_rest,
     })
 }
+
+// struct ConvergentIterator {
+//     number: u32,
+//     last_pair: Option<(u32, u32)>,
+// }
+//
+// impl Iterator for ConvergentIterator {
+//     type Item = (u32, u32);
+//
+//     fn next(&mut self) -> Option<(u32, u32)> {
+//         let last_pair = match self.last_pair {
+//             Some(pair) => pair,
+//
+//             None => {
+//                 // k0 = 1 + (x - 1) / 2 = (x + 1)/2
+//                 let pair = Some((self.number + 1, 2));
+//                 self.last_pair = pair.clone();
+//                 return pair;
+//             }
+//         };
+//     }
+// }
 
 #[cfg(test)]
 mod tests {

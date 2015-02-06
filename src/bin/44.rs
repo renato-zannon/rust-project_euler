@@ -11,7 +11,7 @@
  * Find the pair of pentagonal numbers, Pj and Pk, for which their sum and difference are pentagonal
  * and D = |Pk − Pj| is minimised; what is the value of D? */
 
-#![allow(unstable)]
+#![feature(core)]
 extern crate num;
 
 use std::iter::count;

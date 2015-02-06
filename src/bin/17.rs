@@ -10,7 +10,7 @@
  * letters and 115 (one hundred and fifteen) contains 20 letters. The use of "and" when writing out
  * numbers is in compliance with British usage. */
 
-#![allow(unstable)]
+#![feature(core)]
 use std::iter::range_inclusive;
 
 fn main() {

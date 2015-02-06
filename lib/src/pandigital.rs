@@ -39,7 +39,7 @@ impl<A> DigitCollection<digits::Digits<A, u8>> for digits::Digits<A, u8>
     }
 }
 
-pub type SliceDigits<'a, N> = iter::Map<&'a N, u8, slice::Iter<'a, N>, fn(&'a N) -> u8>;
+pub type SliceDigits<'a, N> = iter::Map<slice::Iter<'a, N>, fn(&'a N) -> u8>;
 
 impl<'a, N> DigitCollection<SliceDigits<'a, N>> for &'a [N]
     where N: ToPrimitive + Clone {

@@ -10,7 +10,7 @@
  *
  * Find the next triangle number that is also pentagonal and hexagonal. */
 
-#![allow(unstable)]
+#![feature(core)]
 
 const TARGET: usize = 40755;
 

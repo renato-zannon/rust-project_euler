@@ -13,7 +13,7 @@
  *
  * What is the sum of the numbers on the diagonals in a 1001 by 1001 spiral formed in the same way? */
 
-#![allow(unstable)]
+#![feature(core)]
 use std::iter::range_step_inclusive;
 
 #[cfg(not(test))]
