@@ -9,7 +9,7 @@
  *
  * Evaluate the sum of all the amicable numbers under 10000. */
 
-#![feature(core, std_misc)]
+#![feature(core)]
 extern crate num;
 
 use std::collections::{HashMap, BTreeSet};
