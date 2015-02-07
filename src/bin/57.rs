@@ -39,11 +39,11 @@ fn advance(a: &mut Vec<u8>, b: &mut Vec<u8>) {
     use std::{mem, cmp};
 
     // Store "old_a + old_b" = new_b into a.
-    sum(&b[], a);
+    sum(&b, a);
 
     // Sum a (which is "old_a + old_b") with b (which is "old_b") and store on b. Now b contains
     // "old_a + 2old_b" = new_a
-    sum(&a[], b);
+    sum(&a, b);
 
     // a contains new_b and b contains new_a. Swap them.
     mem::swap(a, b);

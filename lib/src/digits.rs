@@ -103,24 +103,24 @@ mod tests {
     #[test]
     fn test_digits_in_order() {
         let digits = new(12345us).collect::<Vec<u32>>();
-        assert_eq!(&digits[], &[1, 2, 3, 4, 5][]);
+        assert_eq!(&digits, &[1, 2, 3, 4, 5]);
     }
 
     #[test]
     fn test_digits_in_reverse() {
         let digits = new(12345us).rev().collect::<Vec<u32>>();
-        assert_eq!(&digits[], &[5, 4, 3, 2, 1][]);
+        assert_eq!(&digits, &[5, 4, 3, 2, 1]);
     }
 
     #[test]
     fn test_digits_in_order_with_zero() {
         let digits = new(123450us).collect::<Vec<u32>>();
-        assert_eq!(&digits[], &[1, 2, 3, 4, 5, 0][]);
+        assert_eq!(&digits, &[1, 2, 3, 4, 5, 0]);
     }
 
     #[test]
     fn test_digits_in_reverse_with_zero() {
         let digits = new(123450us).rev().collect::<Vec<u32>>();
-        assert_eq!(&digits[], &[0, 5, 4, 3, 2, 1][]);
+        assert_eq!(&digits, &[0, 5, 4, 3, 2, 1]);
     }
 }

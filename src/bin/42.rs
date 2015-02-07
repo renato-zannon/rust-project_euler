@@ -22,7 +22,7 @@ fn main() {
     let reader = data_reader::for_path("./data/42-words.txt");
 
     let result = reader.filter(|word| {
-        is_triangular_word(&word[])
+        is_triangular_word(&word)
     }).count();
 
     println!("{}", result);

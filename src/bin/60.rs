@@ -75,7 +75,7 @@ fn search_set(prev: &[Prime], prime: Prime, sets: &PrimeSets) -> Option<Vec<Prim
     }
 
     for &other_prime in sets[prime].borrow().iter() {
-        match search_set(&stack[], other_prime, sets) {
+        match search_set(&stack[..], other_prime, sets) {
             Some(v) => return Some(v),
             None    => continue,
         }

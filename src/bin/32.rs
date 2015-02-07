@@ -13,7 +13,6 @@
  * your sum. */
 
 #![feature(core)]
-#![feature(slicing_syntax)]
 
 extern crate shared;
 use shared::digits;
@@ -48,5 +47,5 @@ fn pandigital_product(numbers: &[u32]) -> PandigitalResult {
         digits::new(number)
     }).collect();
 
-    is_9_pandigital(&all_digits[])
+    is_9_pandigital(&all_digits[..])
 }

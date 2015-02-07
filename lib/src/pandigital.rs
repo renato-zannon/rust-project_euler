@@ -22,13 +22,17 @@ impl PandigitalResult {
     }
 }
 
-pub trait DigitCollection<T: Iterator<Item = u8>> {
-    fn digit_iter(self)     -> T;
+pub trait DigitCollection {
+    type Iter: Iterator<Item = u8>;
+
+    fn digit_iter(self)     -> <Self as DigitCollection>::Iter;
     fn digit_len(&mut self) -> u32;
 }
 
-impl<A> DigitCollection<digits::Digits<A, u8>> for digits::Digits<A, u8>
+impl<A> DigitCollection for digits::Digits<A, u8>
     where A: Integer + FromPrimitive + ToPrimitive {
+
+    type Iter = digits::Digits<A, u8>;
 
     fn digit_iter(self) -> digits::Digits<A, u8> {
         return self
@@ -41,8 +45,10 @@ impl<A> DigitCollection<digits::Digits<A, u8>> for digits::Digits<A, u8>
 
 pub type SliceDigits<'a, N> = iter::Map<slice::Iter<'a, N>, fn(&'a N) -> u8>;
 
-impl<'a, N> DigitCollection<SliceDigits<'a, N>> for &'a [N]
+impl<'a, N> DigitCollection for &'a [N]
     where N: ToPrimitive + Clone {
+
+    type Iter = SliceDigits<'a, N>;
 
     fn digit_iter(self) -> SliceDigits<'a, N> {
         return self.iter().map(transform as fn(&'a N) -> u8);
@@ -57,10 +63,7 @@ impl<'a, N> DigitCollection<SliceDigits<'a, N>> for &'a [N]
     }
 }
 
-pub fn is_9_pandigital<U, T>(mut digits: T) -> PandigitalResult
-    where U: Iterator<Item = u8>,
-          T: DigitCollection<U> {
-
+pub fn is_9_pandigital<T: DigitCollection>(mut digits: T) -> PandigitalResult {
     use std::cmp::Ordering::{Less, Greater, Equal};
 
     match digits.digit_len().cmp(&9) {
@@ -99,26 +102,26 @@ mod tests {
 
     #[test]
     fn test_1_through_9() {
-        assert!(is_9_pandigital(&[1, 2, 3, 4, 5, 6, 7, 8, 9][]).to_bool());
+        assert!(is_9_pandigital(&[1, 2, 3, 4, 5, 6, 7, 8, 9][..]).to_bool());
     }
 
     #[test]
     fn test_out_of_order() {
-        assert!(is_9_pandigital(&[1, 3, 5, 9, 7, 2, 8, 4, 6][]).to_bool());
+        assert!(is_9_pandigital(&[1, 3, 5, 9, 7, 2, 8, 4, 6][..]).to_bool());
     }
 
     #[test]
     fn test_not_all_numbers() {
-        assert!(is_9_pandigital(&[1, 2, 3, 4, 5, 6, 7][]).to_bool() == false);
+        assert!(is_9_pandigital(&[1, 2, 3, 4, 5, 6, 7][..]).to_bool() == false);
     }
 
     #[test]
     fn test_with_repetitions() {
-        assert!(is_9_pandigital(&[1, 2, 3, 4, 5, 6, 7, 8, 9, 1][]).to_bool() == false);
+        assert!(is_9_pandigital(&[1, 2, 3, 4, 5, 6, 7, 8, 9, 1][..]).to_bool() == false);
     }
 
     #[test]
     fn test_rejects_zeroes() {
-        assert!(is_9_pandigital(&[1, 3, 5, 9, 7, 0, 0, 2, 8, 0, 0, 0, 4, 6, 0][]).to_bool() == false);
+        assert!(is_9_pandigital(&[1, 3, 5, 9, 7, 0, 0, 2, 8, 0, 0, 0, 4, 6, 0][..]).to_bool() == false);
     }
 }

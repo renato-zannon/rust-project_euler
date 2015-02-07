@@ -59,7 +59,7 @@ fn main() {
     });
 
     let result = divisible_by_all.into_iter()
-        .map(|digits| to_number(&digits[]))
+        .map(|digits| to_number(&digits))
         .sum();
 
     println!("{}", result);
@@ -98,7 +98,7 @@ impl Iterator for PlusOneDigit {
             let mut combination = Vec::with_capacity(self.base.capacity() + 1);
 
             combination.push(next_digit);
-            combination.push_all(&self.base[]);
+            combination.push_all(&self.base);
 
             let index = next_digit as usize;
             self.used_digits[index] = true;

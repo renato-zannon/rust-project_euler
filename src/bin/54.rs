@@ -160,8 +160,8 @@ impl Hand {
             Ordering::Greater => true,
 
             Ordering::Equal => {
-                let my_cards    = &self.cards[];
-                let other_cards = &other.cards[];
+                let my_cards    = &self.cards[..];
+                let other_cards = &other.cards[..];
 
                 for (my, hers) in my_cards.iter().rev().zip(other_cards.iter().rev()) {
                     match my.cmp(hers) {
@@ -203,9 +203,9 @@ impl Hand {
             CardValue::Ace
         ];
 
-        let cards_in_order = &self.cards[];
+        let cards_in_order = &self.cards[..];
 
-        let consecutives = self.consecutive_card_count(&cards_in_order[]);
+        let consecutives = self.consecutive_card_count(&cards_in_order[..]);
 
         let (suits, values) = self.card_counts();
 

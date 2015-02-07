@@ -21,7 +21,6 @@
  * What is the first term in the Fibonacci sequence to contain 1000 digits? */
 
 #![feature(core)]
-#![feature(slicing_syntax)]
 
 extern crate num;
 

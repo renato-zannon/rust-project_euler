@@ -20,7 +20,7 @@ fn main() {
     let names: Vec<String> = get_name_list();
 
     let mut values: Vec<Vec<u32>> = names.into_iter().map(|name| {
-        alphabetical_value(&name[])
+        alphabetical_value(&name)
     }).collect();
 
     values.sort();

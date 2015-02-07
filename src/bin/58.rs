@@ -81,17 +81,17 @@ mod tests {
     fn test_square_growth() {
         let mut square = Square::new();
 
-        assert_eq!(square.diagonal[], [3, 5, 7, 9][]);
+        assert_eq!(&square.diagonal[..], &[3, 5, 7, 9][..]);
         assert_eq!(square.size, 3);
         assert_eq!(square.prime_count, 3);
 
         square.grow();
-        assert_eq!(square.diagonal[], [13, 17, 21, 25][]);
+        assert_eq!(&square.diagonal[..], &[13, 17, 21, 25][..]);
         assert_eq!(square.size, 5);
         assert_eq!(square.prime_count, 5);
 
         square.grow();
-        assert_eq!(square.diagonal[], [31, 37, 43, 49][]);
+        assert_eq!(&square.diagonal[..], &[31, 37, 43, 49][..]);
         assert_eq!(square.size, 7);
         assert_eq!(square.prime_count, 8);
     }

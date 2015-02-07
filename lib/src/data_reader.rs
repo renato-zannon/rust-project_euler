@@ -18,8 +18,9 @@ impl Iterator for DataReader {
 }
 
 fn trim_markup(bytes: Vec<u8>) -> Option<String> {
+    let chars: &[char] = &['"', ','];
     str::from_utf8(&*bytes).ok().map(|slice| {
-        slice.trim_matches(['"', ','].as_slice()).to_owned()
+        slice.trim_matches(chars).to_owned()
     })
 }
 

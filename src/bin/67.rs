@@ -27,7 +27,7 @@ use std::old_io::{File, BufferedReader};
 use shared::triangle;
 
 fn main() {
-    let mut triangle = triangle::new(&deep_slice(&read_triangle())[]);
+    let mut triangle = triangle::new(&deep_slice(&read_triangle()));
     let result = triangle.maximum_total();
 
     println!("{}", result);
@@ -60,7 +60,7 @@ fn deep_slice(v: &Vec<Vec<u32>>) -> Vec<&[u32]> {
     let mut result: Vec<&[u32]> = Vec::new();
 
     for row in v.iter() {
-        result.push(&row[]);
+        result.push(&row);
     }
 
     result

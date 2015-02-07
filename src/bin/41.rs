@@ -19,7 +19,7 @@ fn main() {
     });
 
     let primes = permutations.filter_map(|permutation| {
-        let number = to_number(&permutation[]);
+        let number = to_number(&permutation);
 
         if primes::is_prime(number) {
             Some(number)

@@ -9,7 +9,6 @@
  * What is the millionth lexicographic permutation of the digits 0, 1, 2, 3, 4, 5, 6, 7, 8 and 9? */
 
 #![feature(core)]
-#![feature(slicing_syntax)]
 
 fn main() {
     let result = permutations()
@@ -49,7 +48,7 @@ impl<A: Ord+Clone> Iterator for SEPA<A> {
 
 impl<A: Ord+Clone> SEPA<A> {
     fn keys(&self) -> Option<(usize, usize)> {
-        let current_perm = &self.current[];
+        let current_perm = &self.current[..];
         let current_len  = current_perm.len();
 
         let maybe_key_index: Option<usize> = (1..current_len).rev().find(|&index| {
@@ -76,7 +75,7 @@ impl<A: Ord+Clone> SEPA<A> {
     }
 
     fn permute(&mut self, key: usize, newkey: usize) -> Vec<A> {
-        let current_perm = &mut self.current[];
+        let current_perm = &mut self.current[..];
 
         current_perm.swap(key, newkey);
 

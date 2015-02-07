@@ -29,7 +29,7 @@ fn main() {
         for start in count(1, 1) {
             let prod = concat_product(start, n);
 
-            match is_9_pandigital(&prod[]) {
+            match is_9_pandigital(&prod[..]) {
                 PandigitalResult::IsPandigital => {
                     let num_prod = to_num(prod);
 

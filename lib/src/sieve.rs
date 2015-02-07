@@ -43,7 +43,7 @@ impl<T: Primeable> Iterator for Sieve<T> {
         };
 
         loop {
-            match self.primes[].get(index) {
+            match self.primes.get(index) {
                 Some(&prime) => {
                     self.last_prime_index = Some(index);
                     return Some(prime);
@@ -103,7 +103,7 @@ impl<T: Primeable> Sieve<T> {
         let mut segment = self.next_segment();
 
         {
-            let seg_values = &mut segment.values[];
+            let seg_values = &mut segment.values;
 
             for &prime in self.sieving_primes(segment.max).iter() {
                 let first_composite = (prime - (segment.min % prime)) % prime;

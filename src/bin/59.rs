@@ -45,10 +45,10 @@ fn main() {
         let key = key_gen.next().expect("No more keys to try!");
         buffer.clear();
 
-        let decryptor = Decryptor::new(&cipher[], key);
+        let decryptor = Decryptor::new(&cipher, key);
         buffer.extend(decryptor);
 
-        let buffer_slice = &buffer[];
+        let buffer_slice = &buffer[..];
         let string = buffer_slice.as_str();
 
         if COMMON_WORDS.iter().all(|&word| string.contains(word)) {
@@ -56,7 +56,7 @@ fn main() {
         }
     }
 
-    let result: u32 = buffer[].iter().fold(0, |total, chr| {
+    let result: u32 = buffer.iter().fold(0, |total, chr| {
        total + (chr.as_byte() as u32)
     });
 
@@ -136,7 +136,7 @@ impl KeysGenerator {
 
             None => {
                 self.last = Some([LowerCaseCharacter::first(); KEY_LEN]);
-                return self.last.as_ref().map(|result| &result[])
+                return self.last.as_ref().map(|result| &result[..])
             }
         };
 
@@ -144,7 +144,7 @@ impl KeysGenerator {
             match last[index].next() {
                 Some(new_value) => {
                     last[index] = new_value;
-                    return Some(&last[]);
+                    return Some(&last[..]);
                 },
 
                 None => {

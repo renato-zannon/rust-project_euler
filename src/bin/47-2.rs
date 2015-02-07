@@ -111,7 +111,7 @@ impl Segment {
     fn number_factors(&self) -> NumberFactors {
         NumberFactors {
             start: self.start,
-            values: &self.values[],
+            values: &self.values,
         }
     }
 
