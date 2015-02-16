@@ -47,7 +47,7 @@ fn spawn_workers(max: u64) -> Receiver<WorkResult> {
 
     let (master_tx, master_rx) = channel();
 
-    let task_count: u64 = match env::var_string("NPROC") {
+    let task_count: u64 = match env::var("NPROC") {
         Ok(num) => num.parse().unwrap(),
         Err(VarError::NotPresent) => 4,
         Err(err) => panic!("{}", err),
