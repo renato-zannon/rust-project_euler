@@ -22,7 +22,7 @@
  * number in the set. */
 
 #![feature(core)]
-extern crate collect;
+extern crate enum_set;
 extern crate shared;
 
 use shared::digits;
@@ -30,7 +30,7 @@ use shared::digits;
 use std::mem;
 use std::iter::AdditiveIterator;
 use std::collections::BTreeMap;
-use collect::enum_set::{EnumSet, CLike};
+use enum_set::{EnumSet, CLike};
 
 struct NumberInfo {
     value: u32,

@@ -6,9 +6,7 @@ authors = ["Renato Zannon <renato@rrsz.com.br>"]
 [dependencies]
 num = "*"
 ascii = "*"
-
-[dependencies.collect]
-git = "https://github.com/Gankro/collect-rs"
+enum-set = "*"
 
 [dependencies.shared]
 path = "lib"
