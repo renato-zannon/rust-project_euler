@@ -36,9 +36,9 @@ const MAX: usize = 10_000;
 const MAX_ITERATIONS: usize = 50;
 
 fn main() {
-    let mut lychrel_count = 0us;
+    let mut lychrel_count = 0usize;
 
-    for num in range_inclusive(1us, MAX) {
+    for num in range_inclusive(1usize, MAX) {
         let first_palindrome = Unfold::new(num, |current| {
             *current += current.reverse();
             Some(*current)

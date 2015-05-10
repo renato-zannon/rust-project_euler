@@ -19,7 +19,7 @@
 
 #![feature(core, io)]
 fn main() {
-    let result = (2us..1_000).max_by(|&divisor| {
+    let result = (2usize..1_000).max_by(|&divisor| {
         match division_type(1, divisor) {
             DivisionType::Terminating      => 0,
             DivisionType::Recurring(cycle) => cycle.len()

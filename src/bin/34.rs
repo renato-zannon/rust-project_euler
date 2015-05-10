@@ -17,14 +17,14 @@ fn main() {
     let max_number = {
         let max_single_digit_factorial = factorial(9);
 
-        let max_digits = count(1us, 1us).find(|&digits| {
+        let max_digits = count(1usize, 1usize).find(|&digits| {
             max_single_digit_factorial * digits < max_number_with_digits(digits)
         }).unwrap();
 
         max_single_digit_factorial * max_digits
     };
 
-    let result = (3us..max_number).filter(|&number| {
+    let result = (3usize..max_number).filter(|&number| {
         number_eqls_fact_sum(number)
     }).sum();
 
@@ -52,5 +52,5 @@ fn factorial(n: usize) -> usize {
 }
 
 fn max_number_with_digits(digit_count: usize) -> usize {
-    10us.pow(digit_count) - 1
+    10usize.pow(digit_count) - 1
 }

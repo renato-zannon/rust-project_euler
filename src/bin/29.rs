@@ -6,10 +6,10 @@ use std::num::Float;
 fn main() {
     let mut powers: HashSet<(usize, usize)> = HashSet::new();
 
-    for a in (2us..101) {
+    for a in (2usize..101) {
         let (base_a, factor) = factor_for(a);
 
-        for b in (2us..101) {
+        for b in (2usize..101) {
             powers.insert((base_a, factor * b));
         }
     }

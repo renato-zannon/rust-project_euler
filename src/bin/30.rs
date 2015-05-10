@@ -20,14 +20,14 @@ use std::num::Int;
 const POWER: usize = 5;
 
 fn main() {
-    let one_digit_max = 9us.pow(POWER);
+    let one_digit_max = 9usize.pow(POWER);
 
-    let max_digits = count(2us, 1).find(|&digits| {
-        let min_with_digits = 10us.pow(digits);
+    let max_digits = count(2usize, 1).find(|&digits| {
+        let min_with_digits = 10usize.pow(digits);
         one_digit_max * digits < min_with_digits
     }).unwrap();
 
-    let result = (2..10us.pow(max_digits)).filter_map(|num| {
+    let result = (2..10usize.pow(max_digits)).filter_map(|num| {
         let sum = sum_of_digits_to_power(num, POWER);
 
         if sum == num {

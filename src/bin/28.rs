@@ -30,7 +30,7 @@ fn diagonals(square_size: usize) -> Vec<usize> {
     let mut current = 1;
 
     for size in range_step_inclusive(3, square_size, 2) {
-        for _ in (0us..4) {
+        for _ in (0usize..4) {
             current += size - 1;
             result.push(current);
         }

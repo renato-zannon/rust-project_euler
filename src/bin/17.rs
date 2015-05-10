@@ -14,7 +14,7 @@
 use std::iter::range_inclusive;
 
 fn main() {
-    let result = range_inclusive(1us, 1000).fold(0us, |sum, number| {
+    let result = range_inclusive(1usize, 1000).fold(0usize, |sum, number| {
         sum + letter_count(number)
     });
 

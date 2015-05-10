@@ -41,8 +41,8 @@ fn main() {
 fn coordinates() -> Vec<(usize, usize)>  {
     let mut result = vec!();
 
-    for row in 0us..20 {
-        for column in 0us..20 {
+    for row in 0usize..20 {
+        for column in 0usize..20 {
             result.push((row, column));
         }
     }

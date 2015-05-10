@@ -14,7 +14,7 @@ const MAX_PERIMETER: f64 = 1_000.0;
 
 // Alternative implementation for problem 39. Much faster
 fn main() {
-    let mut counts = [0us; MAX_PERIMETER as usize];
+    let mut counts = [0usize; MAX_PERIMETER as usize];
 
     let max_perimeter_by_3 = MAX_PERIMETER / 3.0;
     let two_thirds_of_max  = 2.0 * max_perimeter_by_3;
