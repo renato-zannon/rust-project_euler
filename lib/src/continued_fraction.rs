@@ -1,6 +1,5 @@
 use std::collections::BTreeSet;
-use std::num::Float;
-use std::iter::count;
+use num::Float;
 
 #[derive(Debug, PartialEq)]
 pub enum FractionType {
@@ -51,7 +50,7 @@ struct Step { closest_square: u32, numerator: u32, number: u32, rest: u32 }
 fn step(prev: Step) -> (u32, Step) {
     let numerator = (prev.number - (prev.rest * prev.rest)) / prev.numerator;
 
-    let multiplier = count(0, 1).take_while(|&n| {
+    let multiplier = (0..).step_by(1).take_while(|&n| {
         n * numerator <= prev.closest_square + prev.rest
     }).last().unwrap();
 

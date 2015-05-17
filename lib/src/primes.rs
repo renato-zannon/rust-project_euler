@@ -1,9 +1,10 @@
-use std::iter::range_step_inclusive;
-use std::num::{Float, Int, FromPrimitive, ToPrimitive};
+use num::{Num, Float, FromPrimitive, ToPrimitive};
+use std::iter::Step;
+use std::num::Zero;
 
 // Adapted from the problem 07 overview PDF
 pub fn is_prime<T>(num: T) -> bool
-    where T : Int + Eq + Ord + FromPrimitive + Clone + ToPrimitive {
+    where T : Num + Eq + Ord + FromPrimitive + Clone + ToPrimitive + Step + Zero + Copy {
 
     let zero:  T = literal(0);
     let one:   T = literal(1);
@@ -20,13 +21,13 @@ pub fn is_prime<T>(num: T) -> bool
     else if num < nine          { return true  }
     else if num % three == zero { return false }
 
-    let r = num.to_f32()
+    let r: T = num.to_f32()
         .map(|as_float| as_float.sqrt())
         .map(|result| result.ceil())
         .and_then(|result| FromPrimitive::from_f32(result))
         .unwrap();
 
-    return range_step_inclusive(five, r, six).all(|f| {
+    return (five..(r + one)).step_by(six).all(|f| {
         num % f != zero && num % (f + two) != zero
     });
 

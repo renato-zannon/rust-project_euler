@@ -1,12 +1,12 @@
 use num::integer::{Integer, div_mod_floor};
-use std::num::{FromPrimitive, Int};
+use num::FromPrimitive; 
 
 pub trait IntegerExtensions {
     fn is_palindrome(&self) -> bool;
     fn reverse(&self) -> Self;
 }
 
-impl<T: Int + Integer + FromPrimitive> IntegerExtensions for T {
+impl<T: Integer + FromPrimitive + Copy> IntegerExtensions for T {
     fn is_palindrome(&self) -> bool {
         *self == self.reverse()
     }

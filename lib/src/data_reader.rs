@@ -1,19 +1,22 @@
-use std::old_io::{File, BufferedReader};
+use std::fs::File;
+use std::io::{BufReader, BufRead};
+use std::path::Path;
 use std::borrow::ToOwned;
 use std::str;
 
 pub struct DataReader {
-    reader: BufferedReader<File>
+    reader: BufReader<File>
 }
 
 impl Iterator for DataReader {
     type Item = String;
 
     fn next(&mut self) -> Option<String> {
-        self.reader
-            .read_until(',' as u8)
-            .ok()
-            .and_then(trim_markup)
+        let mut buffer = Vec::new();
+
+        return self.reader.read_until(',' as u8, &mut buffer).ok().and_then(|_| {
+            return trim_markup(buffer);
+        });
     }
 }
 
@@ -25,9 +28,9 @@ fn trim_markup(bytes: Vec<u8>) -> Option<String> {
 }
 
 pub fn for_path(path_str: &str) -> DataReader {
-    let path   = &Path::new(path_str);
+    let path   = Path::new(path_str);
     let file   = File::open(path).unwrap();
-    let reader = BufferedReader::new(file);
+    let reader = BufReader::new(file);
 
     DataReader { reader: reader }
 }

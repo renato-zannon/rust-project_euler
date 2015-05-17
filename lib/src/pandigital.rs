@@ -2,10 +2,9 @@ use super::digits;
 use super::std::{slice, iter};
 use self::PandigitalResult::{IsPandigital, TooSmall, TooLarge, HasRepetitions};
 
-use num::Integer;
-use std::num::{FromPrimitive, ToPrimitive};
+use num::{Integer, FromPrimitive, ToPrimitive};
 
-#[derive(Copy)]
+#[derive(Copy, Clone)]
 pub enum PandigitalResult {
     IsPandigital,
     TooSmall,
@@ -51,7 +50,7 @@ impl<'a, N> DigitCollection for &'a [N]
     type Iter = SliceDigits<'a, N>;
 
     fn digit_iter(self) -> SliceDigits<'a, N> {
-        return self.iter().map(transform as fn(&'a N) -> u8);
+        return self.iter().map(transform);
 
         fn transform<'a, N: ToPrimitive>(n: &'a N) -> u8 {
             ToPrimitive::to_u8(n).unwrap()

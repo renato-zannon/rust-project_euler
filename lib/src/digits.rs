@@ -1,11 +1,13 @@
-use num::Integer;
-use std::num::{Int, Float, FromPrimitive, ToPrimitive};
+use num::{PrimInt, Integer, Float, FromPrimitive, ToPrimitive};
+use std::io::{self, Write};
 use std::fmt::Debug;
-use std::old_io::IoResult;
+use std::marker::PhantomData;
 
 pub struct Digits<A, B> {
     remaining: A,
     remaining_digits: u32,
+
+    _marker: PhantomData<B>,
 }
 
 impl<A, B> Iterator for Digits<A, B>
@@ -62,6 +64,7 @@ pub fn new<A, B>(number: A) -> Digits<A, B>
     Digits {
         remaining_digits: number_of_digits(&number),
         remaining: number,
+        _marker: PhantomData,
     }
 }
 
@@ -69,7 +72,7 @@ impl<A, B> Digits<A, B>
     where A: Integer + FromPrimitive + ToPrimitive {
 
     fn current_divisor(&self) -> u32 {
-        10.pow((self.remaining_digits - 1) as usize)
+        10.pow(self.remaining_digits - 1)
     }
 
     pub fn count(self) -> u32 {
@@ -88,11 +91,14 @@ struct DigitCounter {
     count: u32,
 }
 
-impl Writer for DigitCounter {
-    fn write_all(&mut self, buf: &[u8]) -> IoResult<()> {
+impl io::Write for DigitCounter {
+    fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
         self.count += buf.len() as u32;
+        return Ok(buf.len());
+    }
 
-        Ok(())
+    fn flush(&mut self) -> io::Result<()> {
+        return Ok(());
     }
 }
 

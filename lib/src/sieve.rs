@@ -1,17 +1,19 @@
 // Based on the ruby implementation:
 // https://github.com/ruby/ruby/blob/1aa54bebaf274bc08e72f9ad3854c7ad592c344a/lib/prime.rb#L423
 
-use std::iter::RandomAccessIterator;
-use std::num::{from_u8, from_f32, from_uint, from_u16, Int, Float, FromPrimitive, ToPrimitive};
+use std::iter::{Step, RandomAccessIterator};
+use std::num::One;
+use std::ops::Add;
+use num::{Num, Float, FromPrimitive, ToPrimitive};
 
 const WHEEL: &'static [u16] = &[2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101];
 
 const MAX_SEGMENT_SIZE: usize = 10_000;
 
-pub trait Primeable : Int + Ord + FromPrimitive + ToPrimitive {}
+pub trait Primeable: Step + One + Num + Ord + FromPrimitive + ToPrimitive + Copy {}
 
 impl<T> Primeable for T
-  where T: Int + Ord + FromPrimitive + ToPrimitive {}
+  where T: Step + One + Num + Ord + FromPrimitive + ToPrimitive + Copy {}
 
 
 #[derive(Clone)]
@@ -23,7 +25,7 @@ pub struct Sieve<T> {
 
 pub fn new<T: Primeable>() -> Sieve<T> {
     let primes: Vec<T> = WHEEL.iter()
-        .map(|&num| from_u16(num).unwrap())
+        .map(|&num| FromPrimitive::from_u16(num).unwrap())
         .collect();
 
     Sieve {
@@ -33,7 +35,8 @@ pub fn new<T: Primeable>() -> Sieve<T> {
     }
 }
 
-impl<T: Primeable> Iterator for Sieve<T> {
+impl<T: Primeable> Iterator for Sieve<T>
+    where for<'a> &'a T: Add<&'a T, Output = T> {
     type Item = T;
 
     fn next(&mut self) -> Option<T> {
@@ -55,7 +58,8 @@ impl<T: Primeable> Iterator for Sieve<T> {
     }
 }
 
-impl<T: Primeable> RandomAccessIterator for Sieve<T> {
+impl<T: Primeable> RandomAccessIterator for Sieve<T>
+    where for<'a> &'a T: Add<&'a T, Output = T>  {
     fn indexable(&self) -> usize {
         use std::usize;
         usize::MAX
@@ -81,7 +85,9 @@ struct Segment<T> {
     values: Vec<Option<T>>,
 }
 
-impl<T: Primeable> Sieve<T> {
+impl<T: Primeable> Sieve<T>
+    where for<'a> &'a T: Add<&'a T, Output = T>  {
+
     pub fn is_prime(&mut self, number: T) -> bool {
         self.compute_until(number);
         self.primes.binary_search(&number).is_ok()
@@ -98,8 +104,6 @@ impl<T: Primeable> Sieve<T> {
     }
 
     fn compute_primes(&mut self) {
-        use std::iter::range_step;
-
         let mut segment = self.next_segment();
 
         {
@@ -108,10 +112,10 @@ impl<T: Primeable> Sieve<T> {
             for &prime in self.sieving_primes(segment.max).iter() {
                 let first_composite = (prime - (segment.min % prime)) % prime;
 
-                let first_composite = first_composite.to_uint().unwrap();
-                let prime = prime.to_uint().unwrap();
+                let first_composite = first_composite.to_usize().unwrap();
+                let prime = prime.to_usize().unwrap();
 
-                let composites = range_step(first_composite, segment.len, prime);
+                let composites = (first_composite..segment.len).step_by(prime);
 
                 for composite_index in composites  {
                     seg_values[composite_index] = None;
@@ -119,7 +123,7 @@ impl<T: Primeable> Sieve<T> {
             }
         }
 
-        self.max_checked = segment.max - from_u8(1).unwrap();
+        self.max_checked = segment.max - FromPrimitive::from_u8(1).unwrap();
 
         for maybe_num in segment.values.into_iter() {
             match maybe_num {
@@ -132,7 +136,7 @@ impl<T: Primeable> Sieve<T> {
     fn sieving_primes(&self, max: T) -> &[T] {
         let root = max.to_f32()
             .map(|as_float| as_float.sqrt())
-            .and_then(|result| from_f32(result))
+            .and_then(|result| FromPrimitive::from_f32(result))
             .unwrap();
 
         let last = self.primes.iter().position(|&prime| {
@@ -147,19 +151,19 @@ impl<T: Primeable> Sieve<T> {
 
         let max_cached_prime = *self.primes.last().unwrap();
 
-        let min = self.max_checked + from_u8(1).unwrap();
+        let min = self.max_checked + FromPrimitive::from_u8(1).unwrap();
         let max = cmp::min(
-            max_cached_prime * from_u8(2).unwrap(),
-            min + from_uint(MAX_SEGMENT_SIZE).unwrap()
+            max_cached_prime * FromPrimitive::from_u8(2).unwrap(),
+            min + FromPrimitive::from_usize(MAX_SEGMENT_SIZE).unwrap()
         );
 
         let len = max - min;
-        let uint_len = len.to_uint().unwrap();
+        let uint_len = len.to_usize().unwrap();
 
         let mut values = Vec::with_capacity(uint_len);
         let max = min + len;
 
-        values.extend(range(min, max).map(Some));
+        values.extend((min..max).map(Some));
 
         Segment {
             min: min,
