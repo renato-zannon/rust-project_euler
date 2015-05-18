@@ -14,8 +14,12 @@ impl Iterator for DataReader {
     fn next(&mut self) -> Option<String> {
         let mut buffer = Vec::new();
 
-        return self.reader.read_until(',' as u8, &mut buffer).ok().and_then(|_| {
-            return trim_markup(buffer);
+        return self.reader.read_until(',' as u8, &mut buffer).ok().and_then(|bytes| {
+            if bytes > 0 {
+                trim_markup(buffer)
+            } else {
+                None
+            }
         });
     }
 }
