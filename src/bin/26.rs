@@ -17,7 +17,10 @@
  * Find the value of d < 1000 for which 1/d contains the longest recurring cycle in its decimal
  * fraction part. */
 
-#![feature(core, io)]
+#![feature(core)]
+
+use std::io::Write;
+
 fn main() {
     let result = (2usize..1_000).max_by(|&divisor| {
         match division_type(1, divisor) {
