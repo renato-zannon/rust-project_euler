@@ -12,33 +12,29 @@
 #![feature(core)]
 
 extern crate shared;
-
 use shared::data_reader;
-use std::iter::AdditiveIterator;
 
 fn main() {
-    let names: Vec<String> = get_name_list();
+    let mut names: Vec<String> = get_name_list();
+    names.sort();
 
-    let mut values: Vec<Vec<u32>> = names.into_iter().map(|name| {
+    let values: Vec<u32> = names.into_iter().map(|name| {
         alphabetical_value(&name)
     }).collect();
 
-    values.sort();
-
     let result = values.into_iter().enumerate().fold(0, |sum, (index, score)| {
         let index = index as u32;
-        sum + ((index + 1) * score.into_iter().sum())
+        sum + ((index + 1) * score)
     });
 
     println!("{}", result);
 }
 
-fn alphabetical_value(name: &str) -> Vec<u32> {
+fn alphabetical_value(name: &str) -> u32 {
     name.chars().map(|chr| {
         let result = (chr as u8) - ('A' as u8) + 1;
-
         result as u32
-    }).collect::<Vec<u32>>()
+    }).sum()
 }
 
 fn get_name_list() -> Vec<String> {
