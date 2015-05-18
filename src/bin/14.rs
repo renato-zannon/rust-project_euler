@@ -16,11 +16,11 @@
  *
  * NOTE: Once the chain starts the terms are allowed to go above one million. */
 
-#![feature(core, env, std_misc)]
+#![feature(step_by)]
 
 extern crate num;
 use num::Integer;
-use std::thread::Thread;
+use std::thread;
 use std::sync::mpsc::{Receiver, Sender, channel};
 
 const MAX: u64 = 1_000_000;
@@ -42,7 +42,6 @@ fn main() {
 }
 
 fn spawn_workers(max: u64) -> Receiver<WorkResult> {
-    use std::iter::range_step_inclusive;
     use std::env::{self, VarError};
 
     let (master_tx, master_rx) = channel();
@@ -55,10 +54,10 @@ fn spawn_workers(max: u64) -> Receiver<WorkResult> {
 
     let per_task = max / task_count;
 
-    for start in range_step_inclusive(1, max, per_task) {
+    for start in (1..max + 1).step_by(per_task) {
         let master_tx_clone = master_tx.clone();
 
-        Thread::spawn(move || {
+        thread::spawn(move || {
             let end = start + per_task;
             collatz_worker((start, end), master_tx_clone);
         });
