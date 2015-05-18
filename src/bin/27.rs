@@ -25,7 +25,6 @@
 extern crate shared;
 
 use shared::sieve;
-use std::iter::count;
 
 fn main() {
     let mut primes: sieve::Sieve<usize> = sieve::new();
@@ -41,8 +40,8 @@ fn main() {
     for b in possible_bs.into_iter() {
         let b = b as isize;
 
-        for a in (-999is..999) {
-            let prime_count = count(0is, 1).take_while(|&n| {
+        for a in (-999isize..999) {
+            let prime_count = (0isize..).take_while(|&n| {
                 let value = n * n + a * n + b;
                 if value < 0 { return false; }
 
