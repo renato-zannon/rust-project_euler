@@ -16,14 +16,11 @@
  * Find the sum of all the positive integers which cannot be written as the sum of two abundant
  * numbers.*/
 
-#![feature(collections, core)]
+#![feature(step_by, collections, core)]
 extern crate num;
 
-use std::iter::{range_inclusive, range_step_inclusive};
-use std::iter::AdditiveIterator;
 use num::Integer;
 use std::collections::HashSet;
-use std::num::Float;
 
 const MAX_NON_ABUNDANT: usize = 28123;
 
@@ -34,7 +31,7 @@ fn main() {
 fn non_abundant_number_sums() -> usize {
     let sums = abundant_numbers_sum(abundant_numbers_below(MAX_NON_ABUNDANT));
 
-    range_inclusive(1, MAX_NON_ABUNDANT).filter(|num| {
+    (1..MAX_NON_ABUNDANT + 1).filter(|num| {
         ! sums.contains(num)
     }).sum()
 }
@@ -63,7 +60,7 @@ fn abundant_numbers_below(ceil: usize) -> Vec<usize> {
     /* 12 is given as the first abundant by the problem  statement */
     result.push(12);
 
-    for current in range_inclusive(13, ceil) {
+    for current in (13..ceil + 1) {
         if proper_divisor_sum(current) > current {
             result.push(current);
         }
@@ -93,7 +90,7 @@ fn proper_divisor_sum(number: usize) -> usize {
             (2, 1)
         };
 
-    for candidate in range_step_inclusive(first_candidate, last_candidate, step) {
+    for candidate in (first_candidate..last_candidate + 1).step_by(step) {
         if number % candidate == 0 {
             result += candidate + (number / candidate);
         }
