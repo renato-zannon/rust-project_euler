@@ -7,8 +7,6 @@
  *
  * Find the sum of the digits in the number 100! */
 
-#![feature(unicode)]
-
 extern crate num;
 
 use num::One;
@@ -33,6 +31,6 @@ fn factorial(n: u32) -> BigUint {
     result
 }
 
-fn to_i(chr: char) -> usize {
+fn to_i(chr: char) -> u32 {
     chr.to_digit(10).unwrap()
 }
