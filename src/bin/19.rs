@@ -17,10 +17,11 @@
  * How many Sundays fell on the first of the month during the twentieth century
  * (1 Jan 1901 to 31 Dec 2000)? */
 
-#![feature(core)]
+#![feature(plugin, custom_derive)]
+#![plugin(num_macros)]
+
 extern crate num;
-use num::Integer;
-use std::num::from_int;
+use num::{FromPrimitive, Integer};
 
 fn main() {
     let initial_day = Day {
@@ -83,7 +84,7 @@ impl Day {
     }
 }
 
-#[derive(Debug, Copy)]
+#[derive(Debug, Copy, Clone)]
 struct Year {
     number: usize,
 }
@@ -98,7 +99,7 @@ impl Year {
     }
 }
 
-#[derive(PartialEq, FromPrimitive, PartialOrd, Debug, Copy)]
+#[derive(PartialEq, NumFromPrimitive, PartialOrd, Debug, Copy, Clone)]
 enum Month {
     January,
     February,
@@ -125,7 +126,7 @@ impl Month {
 
     fn next(self) -> Month {
         let next_month = (self as isize) + 1;
-        let converted = from_int::<Month>(next_month);
+        let converted = FromPrimitive::from_isize(next_month);
 
         match converted {
             Some(month) => month,
@@ -134,7 +135,7 @@ impl Month {
     }
 }
 
-#[derive(PartialEq, FromPrimitive, Debug, Copy)]
+#[derive(PartialEq, NumFromPrimitive, Debug, Copy, Clone)]
 enum Weekday {
     Sunday,
     Monday,
@@ -148,7 +149,7 @@ enum Weekday {
 impl Weekday {
     fn next(self) -> Weekday {
         let next_day = (self as isize) + 1;
-        let converted = from_int::<Weekday>(next_day);
+        let converted = FromPrimitive::from_isize(next_day);
 
         match converted {
             Some(day) => day,
