@@ -16,8 +16,6 @@ use std::collections::{HashMap, BTreeSet};
 use std::collections::hash_map::Entry;
 use num::Integer;
 use std::iter::range_inclusive as irange;
-use std::iter::AdditiveIterator;
-use std::num::Float;
 
 fn main() {
     let mut divisor_sums: HashMap<u32, u32> = HashMap::new();
@@ -42,7 +40,8 @@ fn main() {
         }
     }
 
-    println!("{}", amicables.iter().map(|&x| x).sum());
+    let result: u32 = amicables.iter().map(|&x| x).sum();
+    println!("{}", result);
 }
 
 fn divisor_sum(num: u32) -> u32 {
