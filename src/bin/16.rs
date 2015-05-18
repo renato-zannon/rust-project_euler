@@ -4,12 +4,9 @@
  *
  * What is the sum of the digits of the number 2^1000? */
 
-#![feature(core, unicode)]
-
 extern crate num;
 
-use std::num::FromPrimitive;
-use num::pow;
+use num::{FromPrimitive, pow};
 use num::bigint::BigUint;
 
 fn main() {
@@ -20,10 +17,10 @@ fn main() {
 }
 
 fn power_of_2(power: usize) -> BigUint {
-    let num: BigUint = FromPrimitive::from_uint(2).unwrap();
+    let num: BigUint = FromPrimitive::from_u32(2).unwrap();
     pow(num, power)
 }
 
-fn to_i(chr: char) -> usize {
+fn to_i(chr: char) -> u32 {
     chr.to_digit(10).unwrap()
 }
