@@ -5,14 +5,11 @@
  *
  * What is the 10 001st prime number? */
 
-#![feature(core)]
-#![allow(unused_imports)]
+#![feature(step_by)]
 
 extern crate shared;
 
-use std::iter::{count, range_step_inclusive};
 use shared::sieve::{self, Sieve};
-use std::num::{ToPrimitive, Float};
 
 fn main() {
 //let mut all_primes = count(1usize, 1).filter(naive_is_prime);
@@ -39,7 +36,8 @@ fn smart_is_prime(&num: &u32) -> bool {
     else if num % 3 == 0  { false }
     else {
         let r = (num as f64).sqrt().ceil() as u32;
-        range_step_inclusive(5, r, 6).all(|f| {
+
+        (5..r + 1).step_by(6).all(|f| {
             num % f != 0 && num % (f + 2) != 0
         })
     }
