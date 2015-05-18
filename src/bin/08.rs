@@ -2,9 +2,7 @@
  *
  * Find the greatest product of five consecutive digits in the 1000-digit number. */
 
-#![feature(core, unicode)]
-
-use std::iter::MultiplicativeIterator;
+#![feature(core)]
 
 const NUMBER: &'static str = include_str!("../../data/08-number.txt");
 
@@ -15,13 +13,13 @@ fn main() {
     println!("digits: {}\nproduct: {}", string, result);
 }
 
-fn find_biggest(slices: consecutive_digits::ConsecutiveDigits) -> (&str, usize) {
+fn find_biggest(slices: consecutive_digits::ConsecutiveDigits) -> (&str, u32) {
     slices.map(|str| (str, multiply(str)))
         .max_by(|&(_, num)| num)
         .unwrap()
 }
 
-fn multiply(num: &str) -> usize {
+fn multiply(num: &str) -> u32 {
     num.chars().map(|chr| chr.to_digit(10).unwrap()).product()
 }
 
