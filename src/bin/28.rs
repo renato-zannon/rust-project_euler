@@ -13,14 +13,12 @@
  *
  * What is the sum of the numbers on the diagonals in a 1001 by 1001 spiral formed in the same way? */
 
-#![feature(core)]
-use std::iter::range_step_inclusive;
+#![feature(core, step_by)]
 
 #[cfg(not(test))]
 fn main() {
-    use std::iter::AdditiveIterator;
-
-    println!("{}", diagonals(1001).into_iter().sum());
+    let result: usize = diagonals(1001).into_iter().sum();
+    println!("{}", result);
 }
 
 fn diagonals(square_size: usize) -> Vec<usize> {
@@ -29,7 +27,7 @@ fn diagonals(square_size: usize) -> Vec<usize> {
     let mut result  = vec!(1);
     let mut current = 1;
 
-    for size in range_step_inclusive(3, square_size, 2) {
+    for size in (3..square_size + 1).step_by(2) {
         for _ in (0usize..4) {
             current += size - 1;
             result.push(current);
