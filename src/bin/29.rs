@@ -1,7 +1,4 @@
-#![feature(core)]
-
 use std::collections::HashSet;
-use std::num::Float;
 
 fn main() {
     let mut powers: HashSet<(usize, usize)> = HashSet::new();
