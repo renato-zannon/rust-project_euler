@@ -18,11 +18,11 @@
  * every second it would take over twenty billion years to check them all. There is an efficient
  * algorithm to solve it. ;o) */
 
-#![feature(core, io, path)]
-
 extern crate shared;
 
-use std::old_io::{File, BufferedReader};
+use std::io::{BufReader, BufRead};
+use std::path::Path;
+use std::fs::File;
 
 use shared::triangle;
 
@@ -34,8 +34,8 @@ fn main() {
 }
 
 fn read_triangle() -> Vec<Vec<u32>> {
-    let path = &Path::new("./data/67-triangle.txt");
-    let mut file = BufferedReader::new(File::open(path));
+    let path = Path::new("./data/67-triangle.txt");
+    let file = BufReader::new(File::open(path).unwrap());
 
     let mut result = Vec::new();
 
