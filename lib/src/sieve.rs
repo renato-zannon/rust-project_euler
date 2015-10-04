@@ -1,7 +1,7 @@
 // Based on the ruby implementation:
 // https://github.com/ruby/ruby/blob/1aa54bebaf274bc08e72f9ad3854c7ad592c344a/lib/prime.rb#L423
 
-use std::iter::{Step, RandomAccessIterator};
+use std::iter::Step;
 use std::num::One;
 use std::ops::Add;
 use num::{Num, Float, FromPrimitive, ToPrimitive};
@@ -49,26 +49,6 @@ impl<T: Primeable> Iterator for Sieve<T>
             match self.primes.get(index) {
                 Some(&prime) => {
                     self.last_prime_index = Some(index);
-                    return Some(prime);
-                },
-
-                None => self.compute_primes()
-            }
-        }
-    }
-}
-
-impl<T: Primeable> RandomAccessIterator for Sieve<T>
-    where for<'a> &'a T: Add<&'a T, Output = T>  {
-    fn indexable(&self) -> usize {
-        use std::usize;
-        usize::MAX
-    }
-
-    fn idx(&mut self, index: usize) -> Option<T> {
-        loop {
-            match self.primes.get(index) {
-                Some(&prime) => {
                     return Some(prime);
                 },
 

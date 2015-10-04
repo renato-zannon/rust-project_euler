@@ -1,7 +1,7 @@
 #![crate_name = "shared"]
 #![crate_type = "lib"]
 
-#![feature(zero_one, step_trait, step_by, iter_cmp, iter_idx)]
+#![feature(zero_one, step_trait, step_by, iter_cmp)]
 
 extern crate num;
 
