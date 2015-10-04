@@ -3,25 +3,29 @@
  * The prime factors of 13195 are 5, 7, 13 and 29.
  * What is the largest prime factor of the number 600851475143 ? */
 
-#![feature(core)]
-use std::iter::Unfold;
-
 fn main() {
-    let factors = Unfold::new((600851475143u64, 2), |state_ptr| {
-        let (remaining, divisor) = *state_ptr;
+    let factors = Factors { remaining: 600851475143u64, divisor: 2 };
+    println!("{}", factors.max().unwrap());
+}
 
-        if remaining <= 1 {
+struct Factors {
+    remaining: u64,
+    divisor: u64,
+}
+
+impl Iterator for Factors {
+    type Item = u64;
+
+    fn next(&mut self) -> Option<u64> {
+        if self.remaining <= 1 {
             return None;
         }
 
-        let mut new_divisor = divisor;
-        while remaining % new_divisor > 0 {
-            new_divisor += 1;
+        while self.remaining % self.divisor > 0 {
+            self.divisor += 1;
         }
 
-        *state_ptr = (remaining / new_divisor, new_divisor);
-        Some(new_divisor)
-    });
-
-    println!("{}", factors.max().unwrap());
+        self.remaining /= self.divisor;
+        Some(self.divisor)
+    }
 }
