@@ -2,25 +2,20 @@
  *
  * Find the greatest product of five consecutive digits in the 1000-digit number. */
 
-#![feature(core)]
-
 const NUMBER: &'static str = include_str!("../../data/08-number.txt");
-
 const DIGIT_COUNT: usize = 5;
 
 fn main() {
-    let (string, result) = find_biggest(consecutive_digits::new(NUMBER, DIGIT_COUNT));
-    println!("digits: {}\nproduct: {}", string, result);
+    let result = find_biggest(consecutive_digits::new(NUMBER, DIGIT_COUNT));
+    println!("{}", result);
 }
 
-fn find_biggest(slices: consecutive_digits::ConsecutiveDigits) -> (&str, u32) {
-    slices.map(|str| (str, multiply(str)))
-        .max_by(|&(_, num)| num)
-        .unwrap()
+fn find_biggest(slices: consecutive_digits::ConsecutiveDigits) -> u32 {
+    slices.map(multiply).max().unwrap()
 }
 
 fn multiply(num: &str) -> u32 {
-    num.chars().map(|chr| chr.to_digit(10).unwrap()).product()
+    num.chars().map(|chr| chr.to_digit(10).unwrap()).fold(1, |factor, product| factor * product)
 }
 
 mod consecutive_digits {
