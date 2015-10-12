@@ -77,7 +77,7 @@ fn collatz_worker(numbers: (u64, u64), tx: Sender<WorkResult>) {
     let mut current = 0;
     let mut max = 0;
 
-    for num in (start as u64..end as u64) {
+    for num in start..end {
         let len = collatz_length(num);
 
         if len > max {
