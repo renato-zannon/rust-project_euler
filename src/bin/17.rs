@@ -10,18 +10,15 @@
  * letters and 115 (one hundred and fifteen) contains 20 letters. The use of "and" when writing out
  * numbers is in compliance with British usage. */
 
-#![feature(core)]
-use std::iter::range_inclusive;
-
 fn main() {
-    let result = range_inclusive(1usize, 1000).fold(0usize, |sum, number| {
+    let result = (1..1001).fold(0, |sum, number| {
         sum + letter_count(number)
     });
 
     println!("{}", result);
 }
 
-fn letter_count(num: usize) -> usize {
+fn letter_count(num: u16) -> u16 {
     match num {
         1  => 3, // "One"
         2  => 3, // "Two"
