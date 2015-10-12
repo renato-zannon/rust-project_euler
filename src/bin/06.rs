@@ -12,9 +12,7 @@
  * Find the difference between the sum of the squares of the first one hundred natural numbers and
  * the square of the sum. */
 
-#![feature(core)]
 extern crate shared;
-
 use shared::combinations;
 
 // (a + b + c + ...)² = a² + b² + c² + ... + 2ab + 2ac + 2ad + 2bc...
@@ -22,11 +20,11 @@ use shared::combinations;
 fn main() {
     let first_natural_numbers: Vec<u32> = (1..101).collect();
 
-    let result: u32 = combinations::new(first_natural_numbers)
+    let terms = combinations::new(first_natural_numbers)
         .filter(|&(a, b)| a != b) // No 2 * a * a
         .filter(|&(a, b)| a <  b) // No 2 * a * b + 2 * b * a
-        .map(|(a, b)| 2 * a * b)
-        .sum();
+        .map(|(a, b)| 2 * a * b);
 
+    let result = terms.fold(0, |result, term| result + term);
     println!("{}", result);
 }
