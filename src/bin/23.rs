@@ -16,35 +16,44 @@
  * Find the sum of all the positive integers which cannot be written as the sum of two abundant
  * numbers.*/
 
-#![feature(step_by, collections, core)]
+#![feature(step_by)]
 extern crate num;
 
 use num::Integer;
-use std::collections::HashSet;
+use std::iter;
 
-const MAX_NON_ABUNDANT: usize = 28123;
+const MAX_NON_ABUNDANT: u32 = 28123;
 
 fn main() {
     println!("{}", non_abundant_number_sums());
 }
 
-fn non_abundant_number_sums() -> usize {
-    let sums = abundant_numbers_sum(abundant_numbers_below(MAX_NON_ABUNDANT));
+fn non_abundant_number_sums() -> u32 {
+    let numbers = abundant_numbers_sum(abundant_numbers_below(MAX_NON_ABUNDANT));
 
-    (1..MAX_NON_ABUNDANT + 1).filter(|num| {
-        ! sums.contains(num)
-    }).sum()
+    numbers.into_iter().enumerate().filter_map(|(index, &result)| {
+        match result {
+            IntegerResult::CanBeWrittenAsSum    => None,
+            IntegerResult::CannotBeWrittenAsSum => Some(index as u32)
+        }
+    }).fold(0, |sum, number| sum + number)
 }
 
-fn abundant_numbers_sum(abundant_numbers: Vec<usize>) -> HashSet<usize> {
-    let mut result = HashSet::new();
+#[derive(PartialEq, Eq, Copy, Clone)]
+enum IntegerResult {
+    CanBeWrittenAsSum,
+    CannotBeWrittenAsSum,
+}
 
-    for (index, &n1) in abundant_numbers.init().iter().enumerate() {
+fn abundant_numbers_sum(abundant_numbers: Vec<u32>) -> [IntegerResult; 1 + MAX_NON_ABUNDANT as usize] {
+    let mut result = [IntegerResult::CannotBeWrittenAsSum; 1 + MAX_NON_ABUNDANT as usize];
+
+    for (index, &n1) in abundant_numbers[..abundant_numbers.len() - 1].iter().enumerate() {
         for &n2 in abundant_numbers[index..].iter() {
             let sum = n1 + n2;
 
             if sum <= MAX_NON_ABUNDANT {
-                result.insert(sum);
+                result[sum as usize] = IntegerResult::CanBeWrittenAsSum;
             } else {
                 break
             }
@@ -54,26 +63,18 @@ fn abundant_numbers_sum(abundant_numbers: Vec<usize>) -> HashSet<usize> {
     result
 }
 
-fn abundant_numbers_below(ceil: usize) -> Vec<usize> {
-    let mut result = vec!();
+fn abundant_numbers_below(ceil: u32) -> Vec<u32> {
+    let abundants = (13..ceil + 1).filter(|&number| proper_divisor_sum(number) > number);
 
-    /* 12 is given as the first abundant by the problem  statement */
-    result.push(12);
-
-    for current in (13..ceil + 1) {
-        if proper_divisor_sum(current) > current {
-            result.push(current);
-        }
-    }
-
-    result
+    /* 12 is given as the first abundant by the problem statement */
+    iter::once(12).chain(abundants).collect()
 }
 
-fn proper_divisor_sum(number: usize) -> usize {
+fn proper_divisor_sum(number: u32) -> u32 {
     let mut result = 1;
 
     let last_candidate = {
-        let sqrt = (number as f64).sqrt().floor() as usize;
+        let sqrt = (number as f64).sqrt().floor() as u32;
 
         if sqrt * sqrt == number {
             result += sqrt;
