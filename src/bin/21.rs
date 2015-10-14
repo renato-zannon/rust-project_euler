@@ -9,52 +9,50 @@
  *
  * Evaluate the sum of all the amicable numbers under 10000. */
 
-#![feature(core)]
 extern crate num;
 
-use std::collections::{HashMap, BTreeSet};
+use std::collections::{HashMap, HashSet};
 use std::collections::hash_map::Entry;
-use num::Integer;
-use std::iter::range_inclusive as irange;
+
+const MAX: u32 = 10_000;
 
 fn main() {
-    let mut divisor_sums: HashMap<u32, u32> = HashMap::new();
-    let mut amicables = BTreeSet::new();
+    let mut divisor_sums: HashMap<u32, u32> = HashMap::with_capacity(MAX as usize);
+    let mut amicables = HashSet::new();
 
-    for num in 1u32..10_000 {
+    for num in 1..MAX {
         if amicables.contains(&num) { continue; }
 
-        let sum = match divisor_sums.entry(num) {
-            Entry::Vacant(entry)   => * entry.insert(divisor_sum(num)),
-            Entry::Occupied(entry) => entry.remove(),
-        };
+        let div_sum     = cached_divisor_sum(num, &mut divisor_sums);
+        let reverse_sum = cached_divisor_sum(div_sum, &mut divisor_sums);
 
-        let reverse_sum = match divisor_sums.entry(sum) {
-            Entry::Vacant(entry)   => * entry.insert(divisor_sum(sum)),
-            Entry::Occupied(entry) => entry.remove(),
-        };
-
-        if num == reverse_sum && sum != num {
+        if num == reverse_sum && div_sum != num {
             amicables.insert(num);
-            amicables.insert(sum);
+            amicables.insert(div_sum);
         }
     }
 
-    let result: u32 = amicables.iter().map(|&x| x).sum();
+    let result: u32 = amicables.into_iter().fold(0, |result, num| num + result);
     println!("{}", result);
+}
+
+fn cached_divisor_sum(num: u32, cache: &mut HashMap<u32, u32>) -> u32 {
+    match cache.entry(num) {
+        Entry::Vacant(entry)   => * entry.insert(divisor_sum(num)),
+        Entry::Occupied(entry) => entry.remove(),
+    }
 }
 
 fn divisor_sum(num: u32) -> u32 {
     let num_sqrt = (num as f64).sqrt() as u32;
 
-    irange(2, num_sqrt).fold(1, |sum, candidate| {
-        let (divided, remainder) = num.div_rem(&candidate);
-        if remainder > 0 { return sum; }
-
-        if candidate != divided {
-            sum + candidate + divided
+    (2..num_sqrt + 1).map(|candidate| {
+        if num % candidate > 0 {
+            0
+        } else if candidate == num_sqrt {
+            candidate
         } else {
-            sum + candidate
+            candidate + (num / candidate)
         }
-    })
+    }).fold(1, |sum, term| sum + term)
 }
