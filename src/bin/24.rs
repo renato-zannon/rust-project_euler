@@ -8,14 +8,18 @@
  *
  * What is the millionth lexicographic permutation of the digits 0, 1, 2, 3, 4, 5, 6, 7, 8 and 9? */
 
-#![feature(core)]
+#![feature(iter_cmp)]
+
+extern crate itertools;
+use itertools::Itertools;
 
 fn main() {
     let result = permutations()
         .skip(1_000_000 - 1)
-        .next();
+        .next()
+        .unwrap();
 
-    println!("{:?}", result.unwrap());
+    println!("{}", result.into_iter().join(""));
 }
 
 fn permutations() -> SEPA<usize> {
@@ -60,17 +64,17 @@ impl<A: Ord+Clone> SEPA<A> {
             after_key_index - 1
         });
 
-        maybe_key_index.map(|key_index| {
+        maybe_key_index.and_then(|key_index| {
             let ref key_element = current_perm[key_index];
 
-            let newkey = (key_index + 1..current_len).filter(|&index| {
+            (key_index + 1..current_len).filter(|&index| {
                 let ref element = current_perm[index];
                 element > key_element
             }).min_by(|&index| {
                 &current_perm[index]
-            }).unwrap();
-
-            (key_index, newkey)
+            }).map(|newkey| {
+                (key_index, newkey)
+            })
         })
     }
 
