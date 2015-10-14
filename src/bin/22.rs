@@ -9,20 +9,17 @@
  *
  * What is the total of all the name scores in the file? */
 
-#![feature(core)]
-
 extern crate shared;
 use shared::data_reader;
+use std::borrow::Borrow;
 
 fn main() {
     let mut names: Vec<String> = get_name_list();
     names.sort();
 
-    let values: Vec<u32> = names.into_iter().map(|name| {
-        alphabetical_value(&name)
-    }).collect();
+    let values = names.into_iter().map(alphabetical_value);
 
-    let result = values.into_iter().enumerate().fold(0, |sum, (index, score)| {
+    let result = values.enumerate().fold(0, |sum, (index, score)| {
         let index = index as u32;
         sum + ((index + 1) * score)
     });
@@ -30,11 +27,11 @@ fn main() {
     println!("{}", result);
 }
 
-fn alphabetical_value(name: &str) -> u32 {
-    name.chars().map(|chr| {
-        let result = (chr as u8) - ('A' as u8) + 1;
-        result as u32
-    }).sum()
+fn alphabetical_value<S: Borrow<str>>(name: S) -> u32 {
+    name.borrow()
+        .chars()
+        .map(|chr| (chr as u8) - ('A' as u8) + 1)
+        .fold(0, |sum, char_value| sum + char_value as u32)
 }
 
 fn get_name_list() -> Vec<String> {
