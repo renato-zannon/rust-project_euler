@@ -20,8 +20,6 @@
  *
  * What is the first term in the Fibonacci sequence to contain 1000 digits? */
 
-#![feature(core)]
-
 extern crate num;
 
 use num::bigint::BigInt;
@@ -30,15 +28,12 @@ use std::iter::repeat;
 fn main() {
     let fibonacci = {
         use num::one;
-        use std::iter::Unfold;
 
         // Rust's BigInt are notoriously inconvenient here: We can't use a literal '1',
         // because it would be interpreted as a 'native' number. The one() function leverages trait
         // dispatch and returns a BigInt '1'
-        let core_fib = Unfold::new((one(), one()), fib_iteration);
-        let initial  = vec!(one(), one()).into_iter();
-
-        initial.chain(core_fib)
+        let core_fib = Fibonacci { prev: one(), pprev: one() };
+        repeat(one()).take(2).chain(core_fib)
     };
 
     let (index, _) = fibonacci.scan(1, |prev, num| {
@@ -54,16 +49,21 @@ fn main() {
     println!("{}", index + 1);
 }
 
-fn fib_iteration(state: &mut (BigInt, BigInt)) -> Option<BigInt> {
-    use std::mem::swap;
+struct Fibonacci {
+    pprev: BigInt,
+    prev: BigInt,
+}
 
-    let &mut (ref mut pprev, ref mut prev) = state;
-    let result = (&*pprev) + (&*prev);
+impl Iterator for Fibonacci {
+    type Item = BigInt;
 
-    swap(pprev, prev);
-    *prev = result.clone();
+    fn next(&mut self) -> Option<BigInt> {
+        use std::mem::replace;
+        let result = (&self.pprev) + (&self.prev);
 
-    Some(result)
+        self.pprev = replace(&mut self.prev, result.clone());
+        Some(result)
+    }
 }
 
 fn number_of_digits(num: &BigInt, minimum_digits: usize) -> usize {
