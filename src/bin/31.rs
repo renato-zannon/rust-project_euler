@@ -11,28 +11,27 @@
  *
  * How many different ways can £2 be made using any number of coins? */
 
-#![feature(core)]
-use std::iter::{AdditiveIterator, range_step_inclusive};
+#![feature(slice_patterns, step_by)]
 
-const DENOMINATIONS: &'static [usize] = &[200, 100, 50, 20, 10, 5, 2, 1];
+const DENOMINATIONS: &'static [u32] = &[200, 100, 50, 20, 10, 5, 2, 1];
 
 fn main() {
     println!("{}", ways_to_make(200, DENOMINATIONS));
 }
 
-fn ways_to_make(value: usize, denominations: &[usize]) -> usize {
+fn ways_to_make(value: u32, denominations: &[u32]) -> u32 {
     match denominations {
         []  => 0,
         [_] => 1,
 
         [denom, remaining_denoms..] => {
-            range_step_inclusive(value % denom, value, denom).map(|rest_val| {
+            (value % denom..value + 1).step_by(denom).fold(0, |acc, rest_val| {
                 if rest_val == 0 {
-                    1
+                    acc + 1
                 } else {
-                    ways_to_make(rest_val, remaining_denoms)
+                    acc + ways_to_make(rest_val, remaining_denoms)
                 }
-            }).sum()
+            })
         }
     }
 }
