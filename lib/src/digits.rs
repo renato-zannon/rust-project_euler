@@ -31,6 +31,8 @@ impl<A, B> Iterator for Digits<A, B>
 
     fn size_hint(&self) -> (usize, Option<usize>) {
         match self.remaining.to_f64() {
+            Some(0f64) => (1, Some(1)),
+
             Some(as_float) => {
                 let log = as_float.log10();
                 (log.floor() as usize, Some(log.ceil() as usize))
