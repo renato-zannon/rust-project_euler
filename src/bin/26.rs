@@ -17,69 +17,58 @@
  * Find the value of d < 1000 for which 1/d contains the longest recurring cycle in its decimal
  * fraction part. */
 
-#![feature(core)]
+#![feature(iter_cmp)]
 
-use std::io::Write;
+use std::collections::HashMap;
 
 fn main() {
-    let result = (2usize..1_000).max_by(|&divisor| {
-        match division_type(1, divisor) {
-            DivisionType::Terminating      => 0,
-            DivisionType::Recurring(cycle) => cycle.len()
+    let mut seen: HashMap<u32, usize> = HashMap::new();
+
+    let result = (2u32..1_000).max_by(|&divisor| {
+        match division_type(1, divisor, &mut seen) {
+            DivisionType::Terminating        => 0,
+            DivisionType::Recurring { size } => size,
         }
     });
 
     println!("{}", result.unwrap());
 }
 
-fn division_type(numerator: usize, denominator: usize) -> DivisionType {
-    let mut seen: Vec<(usize, usize)> = Vec::new();
+fn division_type(numerator: u32, denominator: u32, seen: &mut HashMap<u32, usize>) -> DivisionType {
+    seen.clear();
     let mut remaining = numerator;
 
     loop {
         while remaining < denominator {
             remaining *= 10;
-            seen.push((remaining, 0));
+            let len = seen.len();
+            seen.insert(remaining, len);
         }
 
-        let divided = remaining / denominator;
-        remaining = remaining % denominator;
-
-        if remaining == 0 {
+        let rest = remaining % denominator;
+        if rest == 0 {
             return DivisionType::Terminating;
         }
 
-        remaining *= 10;
+        remaining = rest * 10;
 
-        let maybe_cycle = seen.iter().position(|&(past_remaining, _)| {
-            past_remaining == remaining
-        });
+        let maybe_cycle_start = seen.get(&remaining).cloned();
 
-        match maybe_cycle {
+        let len = seen.len();
+        seen.insert(remaining, len);
+
+        match maybe_cycle_start {
             Some(start) => {
-                return DivisionType::Recurring(seen_to_str(&seen[start..]));
+                return DivisionType::Recurring { size: (seen.len() - start - 1) as u16 };
             },
 
-            None => {
-                seen.push((remaining, divided));
-            }
+            None => (),
         }
     }
-}
-
-fn seen_to_str(vec: &[(usize, usize)]) -> String {
-    let count = vec.len();
-
-    let mut buffer = Vec::with_capacity(count);
-    for &(_, divided) in vec.iter() {
-        (write!(&mut buffer, "{}", divided)).unwrap();
-    }
-
-    String::from_utf8(buffer).unwrap()
 }
 
 #[derive(Debug)]
 enum DivisionType {
     Terminating,
-    Recurring(String)
+    Recurring { size: u16 }
 }
