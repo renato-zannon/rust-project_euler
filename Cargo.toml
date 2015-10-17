@@ -7,7 +7,6 @@ authors = ["Renato Zannon <renato@rrsz.com.br>"]
 num = "*"
 ascii = "*"
 enum-set = "*"
-num-macros = "*"
 itertools = "*"
 
 [dependencies.shared]
