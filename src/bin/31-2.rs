@@ -11,8 +11,7 @@
  *
  * How many different ways can £2 be made using any number of coins? */
 
-#![feature(core)]
-use std::iter::{repeat, range_inclusive};
+use std::iter::repeat;
 
 const DENOMINATIONS: &'static [usize] = &[200, 100, 50, 20, 10, 5, 2, 1];
 
@@ -26,7 +25,7 @@ fn ways_to_make(value: usize, denominations: &[usize]) -> usize {
     ways[0] = 1;
 
     for &denom in denominations.iter() {
-        for current in range_inclusive(denom, value) {
+        for current in denom..value + 1 {
             ways[current] += ways[current - denom];
         }
     }
