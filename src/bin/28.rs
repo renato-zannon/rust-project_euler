@@ -13,22 +13,22 @@
  *
  * What is the sum of the numbers on the diagonals in a 1001 by 1001 spiral formed in the same way? */
 
-#![feature(core, step_by)]
+#![feature(step_by)]
 
 #[cfg(not(test))]
 fn main() {
-    let result: usize = diagonals(1001).into_iter().sum();
+    let result: u32 = diagonals(1001).into_iter().fold(0, |acc, item| acc + item);
     println!("{}", result);
 }
 
-fn diagonals(square_size: usize) -> Vec<usize> {
+fn diagonals(square_size: u32) -> Vec<u32> {
     assert!(square_size % 2 == 1);
 
     let mut result  = vec!(1);
     let mut current = 1;
 
     for size in (3..square_size + 1).step_by(2) {
-        for _ in (0usize..4) {
+        for _ in 0..4 {
             current += size - 1;
             result.push(current);
         }
