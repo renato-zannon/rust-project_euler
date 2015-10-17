@@ -21,13 +21,12 @@
  * Find the product of the coefficients, a and b, for the quadratic expression that produces the
  * maximum number of primes for consecutive values of n, starting with n = 0. */
 
-#![feature(core)]
 extern crate shared;
 
 use shared::sieve;
 
 fn main() {
-    let mut primes: sieve::Sieve<usize> = sieve::new();
+    let mut primes: sieve::Sieve<i32> = sieve::new();
 
     let mut max_product = 0;
     let mut max_prime_count = 0;
@@ -35,17 +34,15 @@ fn main() {
     // Make n = 0 in n² + an + b = p and you get b = p. So, unless b is a prime, the search will stop
     // on the very first iteration. Since I already have a eratosthenes sieve, I might as well use it
     // here to generate the possible values of b and speed things up a bit.
-    let possible_bs: Vec<usize> = primes.by_ref().take_while(|&prime| prime < 1000).collect();
+    let possible_bs: Vec<i32> = primes.by_ref().take_while(|&prime| prime < 1000).collect();
 
     for b in possible_bs.into_iter() {
-        let b = b as isize;
-
-        for a in (-999isize..999) {
-            let prime_count = (0isize..).take_while(|&n| {
+        for a in -999..999 {
+            let prime_count = (0..).take_while(|&n| {
                 let value = n * n + a * n + b;
                 if value < 0 { return false; }
 
-                primes.is_prime(value as usize)
+                primes.is_prime(value)
             }).count();
 
             if prime_count > max_prime_count {
