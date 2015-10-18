@@ -6,35 +6,25 @@
  *
  * (Please note that the palindromic number, in either base, may not include leading zeros.) */
 
-#![feature(core, io)]
-use std::iter::AdditiveIterator;
-use std::fmt;
+#![feature(fmt_radix)]
+extern crate shared;
+use std::fmt::{self, Write};
 
 fn main() {
-    let result = (1usize..1_000_000).filter(|number| {
-        is_palindrome(*number, 10) && is_palindrome(*number, 2)
-    }).sum();
+    let mut buffer = String::with_capacity(50);
+
+    let result = (1..1_000_000).filter(|number| {
+        is_palindrome(*number, 10, &mut buffer) && is_palindrome(*number, 2, &mut buffer)
+    }).fold(0, |acc, num| acc + num);
 
     println!("{}", result);
 }
 
-fn is_palindrome(number: usize, base: u8) -> bool {
-    use std::old_io::BufWriter;
-    use std::str;
+fn is_palindrome(number: u32, base: u8, buffer: &mut String) -> bool {
+    buffer.clear();
+    write!(buffer, "{}", fmt::radix(number, base)).unwrap();
 
-    let mut buffer = [0u8; 50];
-
-    let slice = {
-        let mut writer = BufWriter::new(&mut buffer);
-
-        (write!(&mut writer, "{}", fmt::radix(number, base))).and_then(|_| {
-            return writer.tell()
-        })
-    }.ok().and_then(|size| {
-        str::from_utf8(&buffer[..size as usize]).ok()
-    }).unwrap();
-
-    slice.chars().zip(slice.chars().rev()).all(|(from_start, from_end)| {
+    buffer.chars().zip(buffer.chars().rev()).all(|(from_start, from_end)| {
         from_start == from_end
     })
 }
