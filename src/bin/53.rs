@@ -16,20 +16,16 @@
  * How many, not necessarily distinct, values of  nCr, for 1 ≤ n ≤ 100, are greater than
  * one-million? */
 
-#![feature(core)]
-use std::iter::AdditiveIterator;
-use std::iter::range_inclusive;
-
 const MAX_N: usize     = 100;
 const MIN_VALUE: usize = 1_000_000;
 
 fn main() {
-    let count = range_inclusive(1usize, MAX_N).map(|n| {
+    let count = (1..MAX_N + 1).fold(0, |prev, n| {
         let mut value = 1usize;
 
         // Multiplicative formula from:
         // http://en.wikipedia.org/wiki/Binomial_coefficient#Multiplicative_formula
-        let first_k = range_inclusive(1usize, n / 2).find(|&k| {
+        let first_k = (1..n / 2 + 1).find(|&k| {
             let old_value = value;
             value = old_value * (n + 1 - k) / k;
 
@@ -39,10 +35,10 @@ fn main() {
         // Since the binomial is symmetrical, we can easily know how many results > 1_000_000 are there,
         // given we know what the first one is.
         match first_k {
-            Some(k) => n + 1 - 2*k,
-            None    => 0,
+            Some(k) => prev + n + 1 - 2*k,
+            None    => prev,
         }
-    }).sum();
+    });
 
     println!("{}", count);
 }
