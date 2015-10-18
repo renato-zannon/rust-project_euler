@@ -6,12 +6,11 @@
  * {20,48,52}, {24,45,51}, {30,40,50}
  *
  * For which value of p ≤ 1000, is the number of solutions maximised? */
-
-#![feature(core)]
+#![feature(iter_cmp)]
 
 #[cfg(not(test))]
 fn main() {
-    let result = (1usize..1_000)
+    let result = (1..1_000).into_iter()
         .max_by(|&perimeter| solution_count(perimeter))
         .unwrap();
 
@@ -23,10 +22,10 @@ fn solution_count(perimeter: usize) -> usize {
     let perimeter_by_3 = perimeter / 3;
     let half_perimeter = perimeter / 2;
 
-    for a in (1..perimeter_by_3) {
+    for a in 1..perimeter_by_3 {
         let a_squared = a * a;
 
-        for b in (half_perimeter - a..perimeter_by_3 + a) {
+        for b in half_perimeter - a..perimeter_by_3 + a {
             let c = perimeter - (a + b);
 
             let b_squared = b * b;
