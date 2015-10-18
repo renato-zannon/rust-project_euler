@@ -11,19 +11,16 @@
  * Find the pair of pentagonal numbers, Pj and Pk, for which their sum and difference are pentagonal
  * and D = |Pk − Pj| is minimised; what is the value of D? */
 
-#![feature(core)]
 extern crate num;
-
-use std::iter::count;
-use std::num::{ToPrimitive, Float};
+use num::ToPrimitive;
 
 fn main() {
     let mut found: Vec<u32> = Vec::new();
 
-    for n in count(1, 1) {
+    for n in 1.. {
         let pent1 = calculate_pentagonal_for(n);
 
-        for &pent2 in found.iter() {
+        for &pent2 in &found {
             if is_pentagonal(pent1 - pent2) && is_pentagonal(pent1 + pent2) {
                 println!("{}", pent1 - pent2);
                 return;
