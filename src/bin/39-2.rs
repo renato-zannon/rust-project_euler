@@ -7,9 +7,6 @@
  *
  * For which value of p ≤ 1000, is the number of solutions maximised? */
 
-#![feature(core)]
-use std::num::Float;
-
 const MAX_PERIMETER: f64 = 1_000.0;
 
 // Alternative implementation for problem 39. Much faster
@@ -31,7 +28,10 @@ fn main() {
             let c = (a_squared + b_squared).sqrt();
             let is_integer = c == c.floor();
 
-            if !is_integer { continue; }
+            if !is_integer {
+                b += 1.0;
+                continue;
+            }
 
             let perimeter = a + b + c;
 
