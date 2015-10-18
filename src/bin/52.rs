@@ -6,17 +6,14 @@
  * Find the smallest positive integer, x, such that 2x, 3x, 4x, 5x, and 6x, contain the same
  * digits. */
 
-#![feature(core)]
-
 extern crate shared;
 use shared::digits;
-use std::iter::{range_inclusive, count};
 
 fn main() {
-    let result = count(1, 1).find(|&number| {
+    let result = (1..).find(|&number| {
         let num_digits = digit_set(number);
 
-        range_inclusive(2, 6).rev().all(|multiplier| {
+        (2..7).rev().all(|multiplier| {
             yields_same_digits(number * multiplier, &num_digits)
         })
     }).unwrap();
