@@ -12,18 +12,15 @@
  * HINT: Some products can be obtained in more than one way so be sure to only include it once in
  * your sum. */
 
-#![feature(core)]
-
 extern crate shared;
 use shared::digits;
 use shared::pandigital::{is_9_pandigital, PandigitalResult};
-use std::iter::AdditiveIterator;
 
 fn main() {
     let mut products = Vec::new();
 
     for x in 1u32..10_000 {
-        for y in (1..x) {
+        for y in 1..x {
             let result = x * y;
 
             match pandigital_product(&[x, y, result]) {
@@ -39,7 +36,7 @@ fn main() {
         }
     }
 
-    println!("{}", products.into_iter().sum());
+    println!("{}", products.into_iter().fold(0, |acc, num| acc + num));
 }
 
 fn pandigital_product(numbers: &[u32]) -> PandigitalResult {
