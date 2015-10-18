@@ -10,12 +10,8 @@
  *
  * Which prime, below one-million, can be written as the sum of the most consecutive primes? */
 
-#![feature(core)]
-
 extern crate shared;
-use shared::sieve;
-use shared::sieve::Sieve;
-use std::iter::AdditiveIterator;
+use shared::sieve::{self, Sieve};
 
 const MAX_PRIME: usize = 1_000_000;
 
@@ -27,7 +23,7 @@ fn main() {
         .collect();
 
     let mut sequence = PrimeSequenceSum {
-        value: primes.iter().map(|prime| *prime).sum(),
+        value: primes.iter().cloned().fold(0, |sum, prime| sum + prime),
         start_index: 0,
         end_index:   primes.len() - 1,
         all_primes: &primes
