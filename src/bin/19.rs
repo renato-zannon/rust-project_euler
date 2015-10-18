@@ -17,9 +17,8 @@
  * How many Sundays fell on the first of the month during the twentieth century
  * (1 Jan 1901 to 31 Dec 2000)? */
 
-#![feature(plugin, custom_derive)]
-#![plugin(num_macros)]
-
+#[macro_use]
+extern crate enum_primitive;
 extern crate num;
 use num::{FromPrimitive, Integer};
 
@@ -99,7 +98,8 @@ impl Year {
     }
 }
 
-#[derive(PartialEq, NumFromPrimitive, PartialOrd, Debug, Copy, Clone)]
+enum_from_primitive! {
+#[derive(PartialEq, PartialOrd, Debug, Copy, Clone)]
 enum Month {
     January,
     February,
@@ -113,6 +113,7 @@ enum Month {
     October,
     November,
     December,
+}
 }
 
 impl Month {
@@ -135,7 +136,8 @@ impl Month {
     }
 }
 
-#[derive(PartialEq, NumFromPrimitive, Debug, Copy, Clone)]
+enum_from_primitive! {
+#[derive(PartialEq, Debug, Copy, Clone)]
 enum Weekday {
     Sunday,
     Monday,
@@ -144,6 +146,7 @@ enum Weekday {
     Thursday,
     Friday,
     Saturday,
+}
 }
 
 impl Weekday {
