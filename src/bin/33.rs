@@ -12,7 +12,6 @@
  * If the product of these four fractions is given in its lowest common terms, find the value of the
  * denominator. */
 
-#![feature(core)]
 extern crate shared;
 extern crate num;
 
@@ -70,8 +69,6 @@ fn cancel_fraction(numerator: u32, denominator: u32) -> CancelResult {
 }
 
 fn build_from_digits(digits: Vec<u32>, except: &HashSet<u32>) -> u32 {
-    use std::num::Int;
-
     let mut used_shared = HashSet::with_capacity(except.len());
 
     let used_digits = digits.into_iter().filter(|digit| {
@@ -83,8 +80,9 @@ fn build_from_digits(digits: Vec<u32>, except: &HashSet<u32>) -> u32 {
         }
     });
 
-    used_digits.enumerate().fold(0, |sum, (power, digit)| {
-        sum + digit * 10.pow(power)
+    used_digits.enumerate().fold(0, |sum, (index, digit)| {
+        let power = index as u32;
+        sum + digit * 10u32.pow(power)
     })
 }
 
