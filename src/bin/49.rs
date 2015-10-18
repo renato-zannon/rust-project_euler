@@ -9,22 +9,22 @@
  *
  * What 12-digit number do you form by concatenating the three terms in this sequence? */
 
-#![feature(collections)]
-
 extern crate shared;
-use shared::{digits, sieve};
+use shared::{digits, sieve, Permutations};
 
 const MEMBER_GAP: usize = 3330;
 
 fn main() {
     let mut sieve = sieve::new::<usize>();
+    sieve.compute_until(9999);
 
     let primes = sieve.clone()
         .skip_while(|&prime| prime < 999)
         .take_while(|&prime| prime <= 9999);
 
     let sequences = primes.filter_map(|prime| {
-        let digits: Vec<usize> = digits::new(prime).rev().collect();
+        let mut digits: Vec<usize> = digits::new(prime).rev().collect();
+        digits.sort();
 
         let matching_permutations = digits.permutations()
             .map(|digits| to_number(&digits))
