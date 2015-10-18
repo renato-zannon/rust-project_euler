@@ -7,7 +7,6 @@
  *
  * How many circular primes are there below one million? */
 
-#![feature(core)]
 extern crate shared;
 use shared::{digits, sieve};
 
@@ -29,10 +28,8 @@ fn is_circular(prime: u32, sieve: &mut sieve::Sieve<u32>) -> bool {
 }
 
 fn rotations_of(number: u32) -> Vec<u32> {
-    use std::num::Int;
-
-    let number_count = digits::new::<u32, u8>(number).count() as usize;
-    let biggest_unit = 10.pow(number_count - 1);
+    let number_count = digits::new::<u32, u8>(number).count();
+    let biggest_unit = 10u32.pow(number_count - 1);
 
     (0..number_count).scan(number, |state, _| {
         let prev_rotation = *state;
