@@ -11,7 +11,6 @@
  * Find the smallest prime which, by replacing part of the number (not necessarily adjacent digits)
  * with the same digit, is part of an eight prime value family. */
 
-#![feature(core)]
 extern crate shared;
 use shared::{digits, sieve};
 
@@ -66,11 +65,11 @@ fn families_from_variables(count: usize, digits: &Vec<usize>) -> Vec<FamilyItera
             let next_value = current + 1;
 
             if next_value > max_index {
-                var_slice[current_index] = match var_slice.get(current_index - 1) {
-                    Some(&prev_var) => prev_var + 2,
-                    None            => return result,
-                };
+                if current_index == 0 {
+                    return result;
+                }
 
+                var_slice[current_index] = var_slice[current_index - 1] + 2;
                 max_index -= 1;
             } else {
                 var_slice[current_index] = next_value;
