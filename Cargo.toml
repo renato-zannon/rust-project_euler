@@ -5,6 +5,7 @@ authors = ["Renato Zannon <renato@rrsz.com.br>"]
 
 [dependencies]
 num = "*"
+enum_primitive = "*"
 ascii = "*"
 enum-set = "*"
 itertools = "*"

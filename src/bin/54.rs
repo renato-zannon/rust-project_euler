@@ -39,10 +39,12 @@
  *
  * How many hands does Player 1 win? */
 
-#![feature(core)]
+#[macro_use]
+extern crate enum_primitive;
+extern crate num;
 
 use std::cmp::Ordering;
-use std::num::FromPrimitive;
+use num::FromPrimitive;
 
 #[derive(PartialEq, Eq, PartialOrd, Ord, Debug)]
 enum Rank {
@@ -58,7 +60,8 @@ enum Rank {
     RoyalFlush,                       // Royal Flush: Ten, Jack, Queen, King, Ace, in same suit.
 }
 
-#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, FromPrimitive, Debug, Copy)]
+enum_from_primitive! {
+#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Debug, Copy)]
 enum CardValue {
     Two   = 0,
     Three = 1,
@@ -73,6 +76,7 @@ enum CardValue {
     Queen = 10,
     King  = 11,
     Ace   = 12
+}
 }
 
 impl CardValue {
@@ -96,12 +100,14 @@ impl CardValue {
     }
 }
 
-#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, FromPrimitive, Copy)]
+enum_from_primitive! {
+#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy)]
 enum CardSuit {
     Spades   = 0,
     Hearts   = 1,
     Diamonds = 2,
     Clubs    = 3,
+}
 }
 
 impl CardSuit {
@@ -253,7 +259,7 @@ impl Hand {
             let value1 = window[0].value;
             let value2 = window[1].value;
 
-            let consecutive_value = FromPrimitive::from_int((value1 as isize) + 1);
+            let consecutive_value = FromPrimitive::from_isize((value1 as isize) + 1);
 
             if consecutive_value != Some(value2) {
                 current_consecutives = None;
@@ -288,7 +294,7 @@ impl Hand {
 
         fn into_sorted_vec<T: FromPrimitive + Ord>(values: &[usize]) -> Vec<(T, usize)> {
             let mut vec: Vec<(T, usize)> = values.iter().enumerate().map(|(idx, &count)| {
-                (FromPrimitive::from_uint(idx).unwrap(), count)
+                (FromPrimitive::from_usize(idx).unwrap(), count)
             }).collect();
 
             vec.sort_by(|&(ref k1, ref v1), &(ref k2, ref v2)| {
