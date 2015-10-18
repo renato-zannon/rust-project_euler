@@ -15,11 +15,9 @@
  *
  * Find the sum of all 0 to 9 pandigital numbers with this property. */
 
-#![feature(collections, core)]
+#![feature(step_by)]
 
 extern crate shared;
-
-use std::iter::{AdditiveIterator, range_step};
 use shared::digits;
 
 const DIVISORS: &'static [u32] = &[2, 3, 5, 7, 11, 13, 17];
@@ -27,9 +25,9 @@ const DIVISORS: &'static [u32] = &[2, 3, 5, 7, 11, 13, 17];
 fn main() {
     // Start with a collection of all 3-digit numbers divisible by 17 that don't
     // that don't have repeated digits
-    let bases = range_step(102, 1000, 17).filter_map(|multiple| {
+    let bases = (102..1000).step_by(17).filter_map(|multiple| {
         let mut found_digits = [false; 10];
-        let num_digits = digits::new(multiple).collect::<Vec<u32>>();
+        let num_digits = digits::new(multiple).collect::<Vec<u8>>();
 
         for &digit in num_digits.iter() {
             let index = digit as usize;
@@ -44,8 +42,8 @@ fn main() {
         Some(num_digits)
     }).collect::<Vec<_>>();
 
-    let divisible_by_all = DIVISORS.init().iter().rev().fold(bases, |numbers, &divisor| {
-        let mut next_digits: Vec<Vec<u32>> = Vec::new();
+    let divisible_by_all = DIVISORS[0..DIVISORS.len() - 1].iter().rev().fold(bases, |numbers, &divisor| {
+        let mut next_digits: Vec<Vec<u8>> = Vec::new();
 
         for digits in numbers.into_iter() {
             let next = plus_one_digit(digits).filter(|more_digits| {
@@ -59,19 +57,18 @@ fn main() {
     });
 
     let result = divisible_by_all.into_iter()
-        .map(|digits| to_number(&digits))
-        .sum();
+        .fold(0,|sum, digits| sum + to_number(&digits));
 
     println!("{}", result);
 }
 
-fn to_number(digits: &[u32]) -> u32 {
+fn to_number(digits: &[u8]) -> u32 {
     digits.iter().fold(0, |acc, &digit| {
-        acc * 10 + digit
+        acc * 10 + (digit as u32)
     })
 }
 
-fn plus_one_digit(base: Vec<u32>) -> PlusOneDigit {
+fn plus_one_digit(base: Vec<u8>) -> PlusOneDigit {
     let mut used_digits = [false; 10];
 
     for &digit in base.iter() {
@@ -87,18 +84,18 @@ fn plus_one_digit(base: Vec<u32>) -> PlusOneDigit {
 
 struct PlusOneDigit {
     used_digits: [bool; 10],
-    base: Vec<u32>,
+    base: Vec<u8>,
 }
 
 impl Iterator for PlusOneDigit {
-    type Item = Vec<u32>;
+    type Item = Vec<u8>;
 
-    fn next(&mut self) -> Option<Vec<u32>> {
+    fn next(&mut self) -> Option<Vec<u8>> {
         self.get_next_digit().map(|next_digit| {
             let mut combination = Vec::with_capacity(self.base.capacity() + 1);
 
             combination.push(next_digit);
-            combination.push_all(&self.base);
+            combination.extend(&self.base);
 
             let index = next_digit as usize;
             self.used_digits[index] = true;
@@ -109,10 +106,10 @@ impl Iterator for PlusOneDigit {
 }
 
 impl PlusOneDigit {
-    fn get_next_digit(&self) -> Option<u32> {
+    fn get_next_digit(&self) -> Option<u8> {
         for (index, &was_used) in self.used_digits.iter().enumerate() {
             if !was_used {
-                let digit = index as u32;
+                let digit = index as u8;
                 return Some(digit);
             }
         }
