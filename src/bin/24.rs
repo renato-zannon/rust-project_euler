@@ -8,90 +8,20 @@
  *
  * What is the millionth lexicographic permutation of the digits 0, 1, 2, 3, 4, 5, 6, 7, 8 and 9? */
 
-#![feature(iter_cmp)]
-
 extern crate itertools;
+extern crate shared;
+
 use itertools::Itertools;
+use shared::Permutations;
 
 fn main() {
-    let result = permutations()
+    let digits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+    let result = digits
+        .permutations()
         .skip(1_000_000 - 1)
         .next()
         .unwrap();
 
     println!("{}", result.into_iter().join(""));
-}
-
-fn permutations() -> SEPA<usize> {
-    SEPA {
-        current: vec!(0, 1, 2, 3, 4, 5, 6, 7, 8, 9),
-        first: true,
-    }
-}
-
-// http://permute.tchs.info/soda_submit.php
-struct SEPA<A> {
-    current: Vec<A>,
-    first: bool,
-}
-
-impl<A: Ord+Clone> Iterator for SEPA<A> {
-    type Item = Vec<A>;
-
-    fn next(&mut self) -> Option<Vec<A>> {
-        if self.first {
-            self.first = false;
-            return Some(self.current.clone());
-        }
-
-        self.keys().map(|(key, newkey)| {
-            self.permute(key, newkey)
-        })
-    }
-}
-
-impl<A: Ord+Clone> SEPA<A> {
-    fn keys(&self) -> Option<(usize, usize)> {
-        let current_perm = &self.current[..];
-        let current_len  = current_perm.len();
-
-        let maybe_key_index: Option<usize> = (1..current_len).rev().find(|&index| {
-            let ref element = current_perm[index];
-            let ref element_before = current_perm[index - 1];
-
-            element > element_before
-        }).map(|after_key_index| {
-            after_key_index - 1
-        });
-
-        maybe_key_index.and_then(|key_index| {
-            let ref key_element = current_perm[key_index];
-
-            (key_index + 1..current_len).filter(|&index| {
-                let ref element = current_perm[index];
-                element > key_element
-            }).min_by(|&index| {
-                &current_perm[index]
-            }).map(|newkey| {
-                (key_index, newkey)
-            })
-        })
-    }
-
-    fn permute(&mut self, key: usize, newkey: usize) -> Vec<A> {
-        let current_perm = &mut self.current[..];
-
-        current_perm.swap(key, newkey);
-
-        let mut from_start = key + 1;
-        let mut from_end   = current_perm.len() - 1;
-
-        while from_end > from_start {
-            current_perm.swap(from_end, from_start);
-            from_end   -= 1;
-            from_start += 1;
-        }
-
-        current_perm.to_vec()
-    }
 }
