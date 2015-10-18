@@ -5,17 +5,16 @@
  *
  * What is the largest n-digit pandigital prime that exists? */
 
-#![feature(collections)]
-
 extern crate shared;
 use shared::primes;
+use shared::Permutations;
 
 fn main() {
     let all_digits = [1u32, 2, 3, 4, 5, 6, 7, 8, 9];
 
     let permutations = (1usize..9).flat_map(|end| {
         let digit_slice = &all_digits[..end];
-        digit_slice.permutations()
+        digit_slice.to_vec().permutations()
     });
 
     let primes = permutations.filter_map(|permutation| {
