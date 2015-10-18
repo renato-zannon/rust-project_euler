@@ -15,18 +15,15 @@
  * What is the largest 1 to 9 pandigital 9-digit number that can be formed as the concatenated
  * product of an integer with (1,2, ... , n) where n > 1? */
 
-#![feature(core)]
-
 extern crate shared;
 use shared::pandigital::{is_9_pandigital, PandigitalResult};
 use shared::digits;
-use std::iter::{count, range_inclusive};
 
 fn main() {
     let mut largest = 0;
 
     for n in 2u32..9 {
-        for start in count(1, 1) {
+        for start in 1.. {
             let prod = concat_product(start, n);
 
             match is_9_pandigital(&prod[..]) {
@@ -48,12 +45,7 @@ fn main() {
 }
 
 fn concat_product(number: u32, max_factor: u32) -> Vec<u32> {
-    range_inclusive(1, max_factor).map(|factor| {
-        number * factor
-    }).fold(Vec::with_capacity(9), |mut result, n| {
-        result.extend(digits::new(n));
-        result
-    })
+    (1..max_factor + 1).map(|factor| number * factor).flat_map(digits::new).collect()
 }
 
 fn to_num(digits: Vec<u32>) -> u32 {
