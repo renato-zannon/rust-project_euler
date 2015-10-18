@@ -15,24 +15,22 @@
  * What is the smallest odd composite that cannot be written as the sum of a prime and twice a
  * square? */
 
-#![feature(collections, core)]
+#![feature(step_by)]
 extern crate shared;
 
 use shared::sieve;
 use shared::sieve::Sieve as PrimeSieve;
-use std::iter::{count, range_inclusive};
-use std::num::Float;
 
 const SEGMENT_SIZE: usize = 101;
 
 fn main() {
     let mut sieve = sieve::new();
 
-    for segment_start in count(3, OddNumberSegment::length() + 1) {
+    for segment_start in (3..).step_by(OddNumberSegment::length() + 1) {
         let mut segment = new_segment(segment_start);
         mark_odd_composites(&mut segment, &mut sieve);
 
-        for unmarked in segment.unmarked_numbers().into_iter() {
+        for unmarked in segment.unmarked_numbers() {
             if !sieve.is_prime(unmarked) {
                 println!("{}", unmarked);
                 return;
@@ -47,8 +45,7 @@ fn mark_odd_composites(segment: &mut OddNumberSegment, sieve: &mut PrimeSieve<us
 
     sieve.compute_until(segment_end);
 
-    let primes = sieve.found_primes()
-        .tail() // Skip 2, as 2 + 2*x² is always even
+    let primes = sieve.found_primes()[1..] // Skip 2, as 2 + 2*x² is always even
         .iter()
         .take_while(|prime| **prime < segment_end);
 
@@ -56,7 +53,7 @@ fn mark_odd_composites(segment: &mut OddNumberSegment, sieve: &mut PrimeSieve<us
         let min_squared_number = min_half_square(prime, segment_start, Rounding::Up);
         let max_squared_number = min_half_square(prime, segment_end, Rounding::Down);
 
-        for number in range_inclusive(min_squared_number, max_squared_number) {
+        for number in min_squared_number..max_squared_number + 1 {
             let result = prime + 2 * number * number;
             segment.mark_number(result);
         }
@@ -87,7 +84,6 @@ fn min_half_square(prime: usize, end: usize, rounding: Rounding) -> usize {
 struct OddNumberSegment {
     values: [bool; SEGMENT_SIZE],
     start: usize,
-    unmarked_count: usize,
 }
 
 fn new_segment(start: usize) -> OddNumberSegment {
@@ -99,7 +95,6 @@ fn new_segment(start: usize) -> OddNumberSegment {
     OddNumberSegment {
         values: [false; SEGMENT_SIZE],
         start: start,
-        unmarked_count: SEGMENT_SIZE,
     }
 }
 
@@ -116,7 +111,6 @@ impl OddNumberSegment {
             (number - self.start) / 2
         };
 
-        self.unmarked_count -= 1;
         self.values[index] = true;
     }
 
@@ -127,7 +121,7 @@ impl OddNumberSegment {
             } else {
                 Some(index * 2 + self.start)
             }
-        }).take(self.unmarked_count).collect()
+        }).collect()
     }
 
     fn length() -> usize {
