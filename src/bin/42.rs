@@ -10,12 +10,10 @@
  * Using words.txt (right click and 'Save Link/Target As...'), a 16K text file containing nearly
  * two-thousand common English words, how many are triangle words? */
 
-#![feature(core)]
-
 extern crate shared;
+extern crate num;
 
-use std::num::{ToPrimitive, Float};
-use std::iter::AdditiveIterator;
+use num::ToPrimitive;
 use shared::data_reader;
 
 fn main() {
@@ -29,9 +27,10 @@ fn main() {
 }
 
 fn is_triangular_word(word: &str) -> bool {
-    let as_number = word.chars().map(|chr| {
-        (chr as u32) - ('A' as u32) + 1
-    }).sum();
+    let as_number = word.chars().fold(0, |total, chr| {
+        let num_chr = (chr as u32) - ('A' as u32) + 1;
+        total + num_chr
+    });
 
     triangular_index(as_number).is_some()
 }
