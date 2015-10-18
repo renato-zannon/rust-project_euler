@@ -11,27 +11,28 @@
 
 extern crate shared;
 use shared::{digits, sieve};
-use std::iter::AdditiveIterator;
 
 fn main() {
-    let search_space = sieve::new::<usize>().skip_while(|&prime| prime < 10usize);
+    let mut primes = sieve::new::<u32>();
+    let mut found = Vec::with_capacity(11);
 
-    let mut prime_checker = sieve::new();
+    while found.len() < 11 {
+        let prime = primes.next().unwrap();
 
-    let truncatable_primes = search_space
-        .filter(|&prime| is_truncatable(prime, &mut prime_checker))
-        .take(11);
+        if prime > 10 && is_truncatable(prime, &mut primes) {
+            found.push(prime);
+        }
+    }
 
-    println!("{}", truncatable_primes.sum());
+    println!("{}", found.into_iter().fold(0, |acc, n| acc + n));
 }
 
-fn is_truncatable(prime: usize, sieve: &mut sieve::Sieve<usize>) -> bool {
-    truncatable_from_left(prime, sieve) &&
-        truncatable_from_right(prime, sieve)
+fn is_truncatable(prime: u32, sieve: &mut sieve::Sieve<u32>) -> bool {
+    truncatable_from_right(prime, sieve) && truncatable_from_left(prime, sieve)
 }
 
-fn truncatable_from_left(prime: usize, sieve: &mut sieve::Sieve<usize>) -> bool {
-    let prime_digits = digits::new::<_, usize>(prime);
+fn truncatable_from_left(prime: u32, sieve: &mut sieve::Sieve<u32>) -> bool {
+    let prime_digits = digits::new::<_, u32>(prime);
 
     prime_digits.rev().scan((0, 1), |state, digit| {
         let (previous, multiplier) = *state;
@@ -44,7 +45,7 @@ fn truncatable_from_left(prime: usize, sieve: &mut sieve::Sieve<usize>) -> bool 
     })
 }
 
-fn truncatable_from_right(prime: usize, sieve: &mut sieve::Sieve<usize>) -> bool {
+fn truncatable_from_right(prime: u32, sieve: &mut sieve::Sieve<u32>) -> bool {
     let mut remaining = prime / 10;
 
     while remaining > 0 {
