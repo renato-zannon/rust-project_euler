@@ -14,4 +14,4 @@ itertools = "*"
 path = "lib"
 
 [profile.release]
-lto = true
+debug = true

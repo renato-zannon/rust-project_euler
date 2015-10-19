@@ -27,21 +27,29 @@
  * NOTE: Wording was modified slightly on 24 April 2007 to emphasise the theoretical nature of Lychrel
  * numbers. */
 
-#![feature(core)]
 extern crate shared;
-use shared::IntegerExtensions;
-use std::iter::{range_inclusive, Unfold};
+extern crate num;
+extern crate itertools;
 
-const MAX: usize = 10_000;
+use shared::IntegerExtensions;
+use itertools::Unfold;
+use num::bigint::BigUint;
+use num::FromPrimitive;
+use std::mem;
+
+const MAX: u32 = 10_000;
 const MAX_ITERATIONS: usize = 50;
 
 fn main() {
-    let mut lychrel_count = 0usize;
+    let mut lychrel_count = 0;
 
-    for num in range_inclusive(1usize, MAX) {
+    for num in 1..MAX + 1 {
+        let num: BigUint = FromPrimitive::from_u32(num).unwrap();
+
         let first_palindrome = Unfold::new(num, |current| {
-            *current += current.reverse();
-            Some(*current)
+            let new_value = (&*current) + current.reverse();
+
+            Some(mem::replace(current, new_value))
         }).take(MAX_ITERATIONS).find(|number| number.is_palindrome());
 
         match first_palindrome {
