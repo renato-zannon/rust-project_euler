@@ -21,9 +21,6 @@
  * Find the value of D ≤ 1000 in minimal solutions of x for which the largest value of x is
  * obtained. */
 
-#![feature(collections, core)]
-
-use std::num::Float;
 use std::u64;
 use std::collections::BTreeSet;
 
@@ -43,18 +40,18 @@ fn main() {
     let mut ds_to_solve: BTreeSet<u64> = (1..MAX_D).collect();
     let mut ds_to_remove = Vec::with_capacity(MAX_D as usize);
 
-    for root in 1..(Float::sqrt(MAX_D as f64).ceil() as u64) {
+    for root in 1..((MAX_D as f64).sqrt().ceil() as u64) {
         ds_to_solve.remove(&(root * root));
     }
 
-    let max_y = Float::sqrt(u64::MAX as f64).ceil() as u64;
+    let max_y = (u64::MAX as f64).sqrt().ceil() as u64;
     let mut solution = Solution { d: 0, x: 0 };
 
     // D = (x² - 1) / y²
     // y²D = x² - 1
     // x² = y²D + 1
     // xx = yyD + 1
-    for y in (2..max_y) {
+    for y in 2..max_y {
         let y_squared = y * y;
 
         for &d in ds_to_solve.iter() {
@@ -74,7 +71,7 @@ fn main() {
             }
         }
 
-        for d_to_remove in ds_to_remove.drain() {
+        for d_to_remove in ds_to_remove.drain(..) {
             ds_to_solve.remove(&d_to_remove);
         }
 
