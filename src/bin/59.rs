@@ -23,8 +23,6 @@
  * text must contain common English words, decrypt the message and find the sum of the ASCII values
  * in the original text. */
 
-#![feature(core)]
-
 extern crate ascii;
 
 use ascii::*;
@@ -38,7 +36,7 @@ fn main() {
         .map(|num| num.trim_right_matches('\n').parse().unwrap())
         .collect();
 
-    let mut buffer = Vec::with_capacity(cipher.len());
+    let mut buffer = AsciiString::with_capacity(cipher.len());
     let mut key_gen = KeysGenerator::new();
 
     loop {
@@ -48,15 +46,12 @@ fn main() {
         let decryptor = Decryptor::new(&cipher, key);
         buffer.extend(decryptor);
 
-        let buffer_slice = &buffer[..];
-        let string = buffer_slice.as_str();
-
-        if COMMON_WORDS.iter().all(|&word| string.contains(word)) {
+        if COMMON_WORDS.iter().all(|&word| buffer.as_str().contains(word)) {
             break;
         }
     }
 
-    let result: u32 = buffer.iter().fold(0, |total, chr| {
+    let result: u32 = buffer.chars().fold(0, |total, chr| {
        total + (chr.as_byte() as u32)
     });
 
@@ -77,21 +72,21 @@ impl<'a> Decryptor<'a> {
 }
 
 impl<'a> Iterator for Decryptor<'a> {
-    type Item = Ascii;
+    type Item = AsciiChar;
 
-    fn next(&mut self) -> Option<Ascii> {
+    fn next(&mut self) -> Option<AsciiChar> {
         let pos = self.position;
 
         self.source.get(pos).and_then(|&value| {
             let result = value ^ self.key[pos % KEY_LEN].byte;
             self.position += 1;
 
-            result.to_ascii().ok()
+            result.to_ascii_char().ok()
         })
     }
 }
 
-#[derive(Copy)]
+#[derive(Copy, Clone)]
 struct LowerCaseCharacter {
     byte: u8
 }
@@ -140,7 +135,7 @@ impl KeysGenerator {
             }
         };
 
-        for index in (0..KEY_LEN) {
+        for index in 0..KEY_LEN {
             match last[index].next() {
                 Some(new_value) => {
                     last[index] = new_value;
