@@ -17,14 +17,12 @@
  * Find the value of d < 1000 for which 1/d contains the longest recurring cycle in its decimal
  * fraction part. */
 
-#![feature(iter_cmp)]
-
 use std::collections::HashMap;
 
 fn main() {
     let mut seen: HashMap<u32, usize> = HashMap::new();
 
-    let result = (2u32..1_000).max_by(|&divisor| {
+    let result = (2u32..1_000).max_by_key(|&divisor| {
         match division_type(1, divisor, &mut seen) {
             DivisionType::Terminating        => 0,
             DivisionType::Recurring { size } => size,
