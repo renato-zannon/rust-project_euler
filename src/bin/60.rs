@@ -8,7 +8,7 @@
  * Find the lowest sum for a set of five primes for which any two primes concatenate to produce
  * another prime. */
 
-#![feature(core)]
+#![feature(step_by)]
 extern crate shared;
 
 use shared::sieve::{self, Sieve};
@@ -17,7 +17,6 @@ use shared::digits;
 
 use std::collections::{BTreeMap, BTreeSet};
 use std::cell::{RefCell, RefMut};
-use std::iter::{count, AdditiveIterator};
 
 type Prime = u32;
 type PrimeSets = BTreeMap<Prime, RefCell<BTreeSet<Prime>>>;
@@ -29,13 +28,13 @@ fn main() {
     let mut sieve: Sieve<Prime> = sieve::new();
     let mut sets:  PrimeSets = BTreeMap::new();
 
-    for (first_index, last_index) in count(0, SEGMENT_SIZE).zip(count(SEGMENT_SIZE, SEGMENT_SIZE)) {
+    for (first_index, last_index) in (0..).step_by(SEGMENT_SIZE).zip((SEGMENT_SIZE..).step_by(SEGMENT_SIZE)) {
         for prime in sieve.by_ref().take(SEGMENT_SIZE) {
             sets.insert(prime, RefCell::new(BTreeSet::new()));
         }
 
-        for &prime in sieve.found_primes()[first_index..last_index].iter() {
-            let mut prime_set: RefMut<BTreeSet<Prime>> = sets[prime].borrow_mut();
+        for &prime in &sieve.found_primes()[first_index..last_index] {
+            let mut prime_set: RefMut<BTreeSet<Prime>> = sets[&prime].borrow_mut();
 
             for (&other_prime, other_set_ref) in sets.iter() {
                 if other_prime >= prime { break }
@@ -50,7 +49,7 @@ fn main() {
 
         for &prime in sets.keys() {
             if let Some(result) = search_set(&[], prime, &sets) {
-                println!("{}", result.into_iter().sum());
+                println!("{}", result.into_iter().sum::<u32>());
                 return;
             }
         }
@@ -58,7 +57,7 @@ fn main() {
 }
 
 fn search_set(prev: &[Prime], prime: Prime, sets: &PrimeSets) -> Option<Vec<Prime>> {
-    let concats_with_all_stack = prev.iter().all(|&prev_prime| {
+    let concats_with_all_stack = prev.iter().all(|prev_prime| {
         sets[prev_prime].borrow().contains(&prime)
     });
 
@@ -74,7 +73,7 @@ fn search_set(prev: &[Prime], prime: Prime, sets: &PrimeSets) -> Option<Vec<Prim
         return Some(stack)
     }
 
-    for &other_prime in sets[prime].borrow().iter() {
+    for &other_prime in sets[&prime].borrow().iter() {
         match search_set(&stack[..], other_prime, sets) {
             Some(v) => return Some(v),
             None    => continue,
@@ -85,12 +84,10 @@ fn search_set(prev: &[Prime], prime: Prime, sets: &PrimeSets) -> Option<Vec<Prim
 }
 
 fn concats_generate_primes(p1: Prime, p2: Prime) -> bool {
-    use std::num::Int;
-
     return primes::is_prime(concat(p1, p2)) && primes::is_prime(concat(p2, p1));
 
     fn concat(start: Prime, end: Prime) -> Prime {
         let end_len = digits::new::<Prime, u8>(end).count();
-        return start * 10.pow(end_len as usize) + end;
+        return start * 10u32.pow(end_len) + end;
     }
 }
