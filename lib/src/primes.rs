@@ -1,10 +1,9 @@
-use num::{Num, Float, FromPrimitive, ToPrimitive};
+use num::{Num, FromPrimitive, ToPrimitive};
 use std::iter::Step;
-use std::num::Zero;
 
 // Adapted from the problem 07 overview PDF
 pub fn is_prime<T>(num: T) -> bool
-    where T : Num + Eq + Ord + FromPrimitive + Clone + ToPrimitive + Step + Zero + Copy {
+    where T : Num + Eq + Ord + FromPrimitive + Clone + ToPrimitive + Step + Copy {
 
     let zero:  T = literal(0);
     let one:   T = literal(1);
@@ -76,7 +75,7 @@ pub fn distinct_prime_factors(n: u32) -> DistinctPrimeFactors {
     }
 }
 
-struct UniqueFilter<T> {
+pub struct UniqueFilter<T> {
     last: Option<u32>,
     iter: T
 }

@@ -59,8 +59,8 @@ impl<A: Ord+Clone, T: AsMut<[A]> + AsRef<[A]>> SEPA<T, A> {
             (key_index + 1..current_len).filter(|&index| {
                 let ref element = current_perm[index];
                 element > key_element
-            }).min_by(|&index| {
-                &current_perm[index]
+            }).min_by(|&index1, &index2| {
+                current_perm[index1].cmp(&current_perm[index2])
             }).map(|newkey| {
                 (key_index, newkey)
             })

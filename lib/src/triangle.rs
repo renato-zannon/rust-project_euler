@@ -1,6 +1,5 @@
 use std::collections::BTreeMap;
 use std::cell::RefCell;
-use std::cmp::Eq;
 
 #[derive(Eq, PartialEq, Debug)]
 struct Value {
@@ -49,7 +48,12 @@ impl Triangle {
             .filter_map(|(&(row, _), value)| {
                 if row == self.height - 1 { Some(value) } else { None }
             })
-            .max_by(|refvalue| refvalue.borrow().maximum)
+            .max_by(|v1ref, v2ref| {
+                let v1 = v1ref.borrow().maximum;
+                let v2 = v2ref.borrow().maximum;
+
+                v1.cmp(&v2)
+            })
             .and_then(|refmax| refmax.borrow().maximum)
             .unwrap()
     }

@@ -2,18 +2,17 @@
 // https://github.com/ruby/ruby/blob/1aa54bebaf274bc08e72f9ad3854c7ad592c344a/lib/prime.rb#L423
 
 use std::iter::Step;
-use std::num::One;
 use std::ops::Add;
-use num::{Num, Float, FromPrimitive, ToPrimitive};
+use num::{Num, FromPrimitive, ToPrimitive};
 
 const WHEEL: &'static [u16] = &[2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101];
 
 const MAX_SEGMENT_SIZE: usize = 10_000;
 
-pub trait Primeable: Step + One + Num + Ord + FromPrimitive + ToPrimitive + Copy {}
+pub trait Primeable: Step + Num + Ord + FromPrimitive + ToPrimitive + Copy {}
 
 impl<T> Primeable for T
-  where T: Step + One + Num + Ord + FromPrimitive + ToPrimitive + Copy {}
+  where T: Step + Num + Ord + FromPrimitive + ToPrimitive + Copy {}
 
 
 #[derive(Clone)]

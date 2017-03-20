@@ -1,4 +1,4 @@
-use num::{PrimInt, Integer, Float, FromPrimitive, ToPrimitive};
+use num::{PrimInt, Integer, FromPrimitive, ToPrimitive};
 use std::io::{self, Write};
 use std::fmt::Debug;
 use std::marker::PhantomData;
