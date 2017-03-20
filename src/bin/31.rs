@@ -21,10 +21,10 @@ fn main() {
 
 fn ways_to_make(value: u32, denominations: &[u32]) -> u32 {
     match denominations {
-        []  => 0,
-        [_] => 1,
+        &[]  => 0,
+        &[_] => 1,
 
-        [denom, remaining_denoms..] => {
+        &[denom, ref remaining_denoms..] => {
             (value % denom..value + 1).step_by(denom).fold(0, |acc, rest_val| {
                 if rest_val == 0 {
                     acc + 1
