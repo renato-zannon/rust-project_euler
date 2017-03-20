@@ -21,14 +21,12 @@
  * triangle, square, pentagonal, hexagonal, heptagonal, and octagonal, is represented by a different
  * number in the set. */
 
-#![feature(core)]
 extern crate enum_set;
 extern crate shared;
 
 use shared::digits;
 
 use std::mem;
-use std::iter::AdditiveIterator;
 use std::collections::BTreeMap;
 use enum_set::{EnumSet, CLike};
 
@@ -54,7 +52,7 @@ fn main() {
     let candidates = build_candidates();
     let set = find_set(candidates);
 
-    println!("{}", set.iter().map(|&n| n).sum());
+    println!("{}", set.iter().map(|&n| n).sum::<u32>());
 }
 
 fn build_candidates() -> Vec<NumberInfo> {
@@ -76,7 +74,7 @@ fn build_candidates() -> Vec<NumberInfo> {
             .take_while(|&n| n < 10_000);
 
         for candidate in iter_candidates {
-            if !map.contains_key(& candidate) {
+            let mut candidate_info = map.entry(candidate).or_insert_with(|| {
                 let mut value_digits = digits::new::<_, u8>(candidate);
 
                 let first_digits = [
@@ -91,15 +89,15 @@ fn build_candidates() -> Vec<NumberInfo> {
 
                 let classifications = EnumSet::new();
 
-                map.insert(candidate, NumberInfo {
+                NumberInfo {
                     value: candidate,
                     classifications: classifications,
                     first_digits: first_digits,
                     last_digits:  last_digits
-                });
-            }
+                }
+            });
 
-            map[candidate].classifications.insert(iter_classification);
+            candidate_info.classifications.insert(iter_classification);
         }
     }
 
