@@ -89,7 +89,7 @@ fn step(prev: Step) -> (u32, Step) {
 
 #[cfg(test)]
 mod tests {
-    use std::num::Float;
+    use num::Float;
     use super::{step, divide_square, Step};
     use super::FractionType::{Exact, Periodic};
 
