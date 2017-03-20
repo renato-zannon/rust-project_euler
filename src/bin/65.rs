@@ -27,13 +27,10 @@
  *
  * Find the sum of digits in the numerator of the 100th convergent of the continued fraction for e */
 
-#![feature(core)]
-
 extern crate num;
 extern crate shared;
 
 use shared::digits;
-use std::num::Int;
 use std::cmp;
 use std::iter::repeat;
 
@@ -90,7 +87,7 @@ fn calculate_numerator(term: u32, numerator: &[u8], denominator: &[u8]) -> Vec<u
     }
 
     if carry > 0 {
-        final_number.extend(digits::new(carry).rev());
+        final_number.extend(digits::new::<_, u8>(carry).rev());
     }
 
     final_number
