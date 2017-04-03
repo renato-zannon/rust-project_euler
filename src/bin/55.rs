@@ -32,7 +32,6 @@ extern crate num;
 extern crate itertools;
 
 use shared::IntegerExtensions;
-use itertools::Unfold;
 use num::bigint::BigUint;
 use num::FromPrimitive;
 use std::mem;
@@ -46,7 +45,7 @@ fn main() {
     for num in 1..MAX + 1 {
         let num: BigUint = FromPrimitive::from_u32(num).unwrap();
 
-        let first_palindrome = Unfold::new(num, |current| {
+        let first_palindrome = itertools::unfold(num, |current| {
             let new_value = (&*current) + current.reverse();
 
             Some(mem::replace(current, new_value))
