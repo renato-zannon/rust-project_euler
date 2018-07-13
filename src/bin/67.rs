@@ -20,9 +20,9 @@
 
 extern crate shared;
 
-use std::io::{BufReader, BufRead};
-use std::path::Path;
 use std::fs::File;
+use std::io::{BufRead, BufReader};
+use std::path::Path;
 
 use shared::triangle;
 
@@ -46,7 +46,7 @@ fn read_triangle() -> Vec<Vec<u32>> {
         for atom in line_text.trim().split(' ') {
             match atom.parse::<u32>() {
                 Ok(num) => parsed_line.push(num),
-                Err(_)  => continue,
+                Err(_) => continue,
             }
         }
 

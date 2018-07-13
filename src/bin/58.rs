@@ -52,7 +52,7 @@ impl Square {
     }
 
     fn grow(&mut self) {
-        let increment  = (self.size + 1) as u32;
+        let increment = (self.size + 1) as u32;
 
         self.update_diagonal(0, 3, increment);
         self.update_diagonal(1, 0, increment);

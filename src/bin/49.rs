@@ -18,7 +18,8 @@ fn main() {
     let mut sieve = sieve::new::<usize>();
     sieve.compute_until(9999);
 
-    let primes = sieve.clone()
+    let primes = sieve
+        .clone()
         .skip_while(|&prime| prime < 999)
         .take_while(|&prime| prime <= 9999);
 
@@ -26,12 +27,11 @@ fn main() {
         let mut digits: Vec<usize> = digits::new(prime).rev().collect();
         digits.sort();
 
-        let matching_permutations = digits.permutations()
+        let matching_permutations = digits
+            .permutations()
             .map(|digits| to_number(&digits))
             .filter(|&perm| {
-                perm > prime &&
-                    (perm - prime) % MEMBER_GAP == 0 &&
-                    sieve.is_prime(perm)
+                perm > prime && (perm - prime) % MEMBER_GAP == 0 && sieve.is_prime(perm)
             });
 
         let mut sequence: Vec<usize> = matching_permutations.collect();
@@ -49,7 +49,8 @@ fn main() {
 
     let sequence = sequences.filter(|seq| seq[0] != 1487).next().unwrap();
 
-    let result = sequence.into_iter()
+    let result = sequence
+        .into_iter()
         .map(|num| num.to_string())
         .collect::<Vec<String>>()
         .concat();
@@ -58,7 +59,5 @@ fn main() {
 }
 
 fn to_number(digits: &[usize]) -> usize {
-    digits.iter().fold(0, |result, &digit| {
-        result * 10 + digit
-    })
+    digits.iter().fold(0, |result, &digit| result * 10 + digit)
 }

@@ -44,7 +44,8 @@ fn is_palindrome<T: NumberFormatter>(number: u32, buffer: &mut String) -> bool {
     buffer.clear();
     T::format(number, buffer);
 
-    buffer.chars().zip(buffer.chars().rev()).all(|(from_start, from_end)| {
-        from_start == from_end
-    })
+    buffer
+        .chars()
+        .zip(buffer.chars().rev())
+        .all(|(from_start, from_end)| from_start == from_end)
 }

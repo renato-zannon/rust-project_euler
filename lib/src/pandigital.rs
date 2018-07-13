@@ -1,8 +1,8 @@
+use self::PandigitalResult::{HasRepetitions, IsPandigital, TooLarge, TooSmall};
 use super::digits;
-use super::std::{slice, iter};
-use self::PandigitalResult::{IsPandigital, TooSmall, TooLarge, HasRepetitions};
+use super::std::{iter, slice};
 
-use num::{Integer, FromPrimitive, ToPrimitive};
+use num::{FromPrimitive, Integer, ToPrimitive};
 
 #[derive(Copy, Clone)]
 pub enum PandigitalResult {
@@ -16,7 +16,7 @@ impl PandigitalResult {
     pub fn to_bool(&self) -> bool {
         match *self {
             IsPandigital => true,
-            _            => false,
+            _ => false,
         }
     }
 }
@@ -24,17 +24,18 @@ impl PandigitalResult {
 pub trait DigitCollection {
     type Iter: Iterator<Item = u8>;
 
-    fn digit_iter(self)     -> <Self as DigitCollection>::Iter;
+    fn digit_iter(self) -> <Self as DigitCollection>::Iter;
     fn digit_len(&mut self) -> u32;
 }
 
 impl<A> DigitCollection for digits::Digits<A, u8>
-    where A: Integer + FromPrimitive + ToPrimitive {
-
+where
+    A: Integer + FromPrimitive + ToPrimitive,
+{
     type Iter = digits::Digits<A, u8>;
 
     fn digit_iter(self) -> digits::Digits<A, u8> {
-        return self
+        return self;
     }
 
     fn digit_len(&mut self) -> u32 {
@@ -45,8 +46,9 @@ impl<A> DigitCollection for digits::Digits<A, u8>
 pub type SliceDigits<'a, N> = iter::Map<slice::Iter<'a, N>, fn(&'a N) -> u8>;
 
 impl<'a, N> DigitCollection for &'a [N]
-    where N: ToPrimitive + Clone {
-
+where
+    N: ToPrimitive + Clone,
+{
     type Iter = SliceDigits<'a, N>;
 
     fn digit_iter(self) -> SliceDigits<'a, N> {
@@ -63,21 +65,21 @@ impl<'a, N> DigitCollection for &'a [N]
 }
 
 pub fn is_9_pandigital<T: DigitCollection>(mut digits: T) -> PandigitalResult {
-    use std::cmp::Ordering::{Less, Greater, Equal};
+    use std::cmp::Ordering::{Equal, Greater, Less};
 
     match digits.digit_len().cmp(&9) {
-        Less    => return TooSmall,
+        Less => return TooSmall,
         Greater => return TooLarge,
-        Equal   => (),
+        Equal => (),
     }
 
     let mut found_numbers = [false; 9];
 
     let only_uniques = digits.digit_iter().all(|digit| {
         let found = match digit {
-            0     => return false,
+            0 => return false,
             1...9 => &mut found_numbers[(digit as usize) - 1],
-            _     => unreachable!(),
+            _ => unreachable!(),
         };
 
         if *found {
@@ -121,6 +123,8 @@ mod tests {
 
     #[test]
     fn test_rejects_zeroes() {
-        assert!(is_9_pandigital(&[1, 3, 5, 9, 7, 0, 0, 2, 8, 0, 0, 0, 4, 6, 0][..]).to_bool() == false);
+        assert!(
+            is_9_pandigital(&[1, 3, 5, 9, 7, 0, 0, 2, 8, 0, 0, 0, 4, 6, 0][..]).to_bool() == false
+        );
     }
 }

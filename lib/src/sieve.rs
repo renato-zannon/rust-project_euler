@@ -13,11 +13,7 @@ const MAX_SEGMENT_SIZE: usize = 10_000;
 
 pub trait Primeable: Num + Ord + FromPrimitive + ToPrimitive + Copy {}
 
-impl<T> Primeable for T
-where
-    T: Num + Ord + FromPrimitive + ToPrimitive + Copy,
-{
-}
+impl<T> Primeable for T where T: Num + Ord + FromPrimitive + ToPrimitive + Copy {}
 
 #[derive(Clone)]
 pub struct Sieve<T> {
@@ -123,7 +119,8 @@ where
     }
 
     fn sieving_primes(&self, max: T) -> &[T] {
-        let root = max.to_f32()
+        let root = max
+            .to_f32()
             .map(|as_float| as_float.sqrt())
             .and_then(|result| FromPrimitive::from_f32(result))
             .unwrap();

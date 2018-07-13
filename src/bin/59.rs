@@ -32,7 +32,8 @@ const KEY_LEN: usize = 3;
 const COMMON_WORDS: &'static [&'static str] = &["the", "be", "to", "of", "and"];
 
 fn main() {
-    let cipher: Vec<u8> = CIPHER.split(',')
+    let cipher: Vec<u8> = CIPHER
+        .split(',')
         .map(|num| num.trim_right_matches('\n').parse().unwrap())
         .collect();
 
@@ -46,14 +47,17 @@ fn main() {
         let decryptor = Decryptor::new(&cipher, key);
         buffer.extend(decryptor);
 
-        if COMMON_WORDS.iter().all(|&word| buffer.as_str().contains(word)) {
+        if COMMON_WORDS
+            .iter()
+            .all(|&word| buffer.as_str().contains(word))
+        {
             break;
         }
     }
 
-    let result: u32 = buffer.chars().fold(0, |total, chr| {
-       total + (chr.as_byte() as u32)
-    });
+    let result: u32 = buffer
+        .chars()
+        .fold(0, |total, chr| total + (chr.as_byte() as u32));
 
     println!("{}", result);
 }
@@ -67,7 +71,11 @@ struct Decryptor<'a> {
 
 impl<'a> Decryptor<'a> {
     fn new(source: &'a [u8], key: &'a [LowerCaseCharacter]) -> Decryptor<'a> {
-        Decryptor { source: source, key: key, position: 0 }
+        Decryptor {
+            source: source,
+            key: key,
+            position: 0,
+        }
     }
 }
 
@@ -88,11 +96,11 @@ impl<'a> Iterator for Decryptor<'a> {
 
 #[derive(Copy, Clone)]
 struct LowerCaseCharacter {
-    byte: u8
+    byte: u8,
 }
 
 const FIRST_LOWERCASE: u8 = b'a';
-const LAST_LOWERCASE:  u8 = b'z';
+const LAST_LOWERCASE: u8 = b'z';
 
 impl LowerCaseCharacter {
     fn from_byte(byte: u8) -> LowerCaseCharacter {
@@ -117,7 +125,7 @@ impl LowerCaseCharacter {
 }
 
 struct KeysGenerator {
-    last: Option<[LowerCaseCharacter; KEY_LEN]>
+    last: Option<[LowerCaseCharacter; KEY_LEN]>,
 }
 
 impl KeysGenerator {
@@ -131,7 +139,7 @@ impl KeysGenerator {
 
             None => {
                 self.last = Some([LowerCaseCharacter::first(); KEY_LEN]);
-                return self.last.as_ref().map(|result| &result[..])
+                return self.last.as_ref().map(|result| &result[..]);
             }
         };
 
@@ -140,7 +148,7 @@ impl KeysGenerator {
                 Some(new_value) => {
                     last[index] = new_value;
                     return Some(&last[..]);
-                },
+                }
 
                 None => {
                     last[index] = LowerCaseCharacter::first();

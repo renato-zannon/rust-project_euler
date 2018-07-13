@@ -41,20 +41,19 @@ fn main() {
     let (terms, last_term) = {
         let mut iter = Term::initial();
 
-        let terms: Vec<_> = [INITIAL_TERM].iter().map(|&n| n)
+        let terms: Vec<_> = [INITIAL_TERM]
+            .iter()
+            .map(|&n| n)
             .chain(iter.by_ref())
-            .take(CONVERGENT_INDEX).collect();
+            .take(CONVERGENT_INDEX)
+            .collect();
 
         let last = iter.next().unwrap();
 
         (terms, last)
     };
 
-
-    let last_fraction: (Vec<u8>, Vec<u8>) = (
-        digits::new(last_term).rev().collect(),
-        vec![1]
-    );
+    let last_fraction: (Vec<u8>, Vec<u8>) = (digits::new(last_term).rev().collect(), vec![1]);
 
     let rev_terms = terms.into_iter().rev();
 
@@ -66,11 +65,14 @@ fn main() {
         (new_numerator, new_denominator)
     });
 
-    println!("{}", result.into_iter().fold(0u16, |acc, n| acc + (n as u16)));
+    println!(
+        "{}",
+        result.into_iter().fold(0u16, |acc, n| acc + (n as u16))
+    );
 }
 
 fn calculate_numerator(term: u32, numerator: &[u8], denominator: &[u8]) -> Vec<u8> {
-    let numerator_iter   = numerator.iter().map(|&n| n).chain(repeat(0));
+    let numerator_iter = numerator.iter().map(|&n| n).chain(repeat(0));
     let denominator_iter = denominator.iter().map(|&n| n).chain(repeat(0));
 
     let sum_len = cmp::max(numerator.len(), denominator.len());
@@ -107,7 +109,7 @@ impl Term {
     fn value(&self) -> u32 {
         match *self {
             Term::LeadingOne(_) | Term::TrailingOne(_) => 1,
-            Term::Multiple(v)                          => v,
+            Term::Multiple(v) => v,
         }
     }
 }
@@ -117,9 +119,9 @@ impl Iterator for Term {
 
     fn next(&mut self) -> Option<u32> {
         let new_term = match *self {
-            Term::LeadingOne(v)  => Some(Term::Multiple(v)),
-            Term::Multiple(v)    => Some(Term::TrailingOne(v)),
-            Term::TrailingOne(v) => v.checked_add(2).map(|n| Term::LeadingOne(n))
+            Term::LeadingOne(v) => Some(Term::Multiple(v)),
+            Term::Multiple(v) => Some(Term::TrailingOne(v)),
+            Term::TrailingOne(v) => v.checked_add(2).map(|n| Term::LeadingOne(n)),
         };
 
         new_term.map(|term| {

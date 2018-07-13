@@ -13,16 +13,16 @@ fn main() {
     let max_number = {
         let max_single_digit_factorial = factorial(9);
 
-        let max_digits = (1..).find(|&digits| {
-            max_single_digit_factorial * digits < max_number_with_digits(digits)
-        }).unwrap();
+        let max_digits = (1..)
+            .find(|&digits| max_single_digit_factorial * digits < max_number_with_digits(digits))
+            .unwrap();
 
         max_single_digit_factorial * max_digits
     };
 
-    let result = (3u32..max_number).filter(|&number| {
-        number_eqls_fact_sum(number)
-    }).fold(0, |acc, num| acc + num);
+    let result = (3u32..max_number)
+        .filter(|&number| number_eqls_fact_sum(number))
+        .fold(0, |acc, num| acc + num);
 
     println!("{}", result);
 }
@@ -42,9 +42,7 @@ fn number_eqls_fact_sum(number: u32) -> bool {
 }
 
 fn factorial(n: u32) -> u32 {
-    (1..n + 1).fold(1, |num, result| {
-        num * result
-    })
+    (1..n + 1).fold(1, |num, result| num * result)
 }
 
 fn max_number_with_digits(digit_count: u32) -> u32 {

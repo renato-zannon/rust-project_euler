@@ -21,8 +21,8 @@
  * Find the value of D ≤ 1000 in minimal solutions of x for which the largest value of x is
  * obtained. */
 
-use std::u64;
 use std::collections::BTreeSet;
+use std::u64;
 
 const MAX_D: u64 = 1000;
 
@@ -34,7 +34,10 @@ const MAX_D: u64 = 1000;
 // x² - Dy² = 1
 // x² = Dy² + 1
 
-struct Solution { d: u64, x: u64 }
+struct Solution {
+    d: u64,
+    x: u64,
+}
 
 fn main() {
     let mut ds_to_solve: BTreeSet<u64> = (1..MAX_D).collect();
@@ -65,7 +68,7 @@ fn main() {
                     if x > solution.x {
                         solution = Solution { x: x, d: d };
                     }
-                },
+                }
 
                 None => continue,
             }

@@ -41,18 +41,18 @@
 
 extern crate shared;
 
-use shared::continued_fraction::{FractionType, divide_square};
+use shared::continued_fraction::{divide_square, FractionType};
 
 const MAX_N: u32 = 10_000;
 
 #[cfg(not(test))]
 fn main() {
-    let result = (2..MAX_N + 1).filter(|&n| {
-        match divide_square(n) {
+    let result = (2..MAX_N + 1)
+        .filter(|&n| match divide_square(n) {
             FractionType::Exact => false,
             FractionType::Periodic(_, v) => (v.len() % 2 == 1),
-        }
-    }).count();
+        })
+        .count();
 
     println!("{}", result);
 }

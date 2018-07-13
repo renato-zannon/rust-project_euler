@@ -16,8 +16,8 @@
  * product of an integer with (1,2, ... , n) where n > 1? */
 
 extern crate shared;
-use shared::pandigital::{is_9_pandigital, PandigitalResult};
 use shared::digits;
+use shared::pandigital::{is_9_pandigital, PandigitalResult};
 
 fn main() {
     let mut largest = 0;
@@ -33,10 +33,10 @@ fn main() {
                     if num_prod > largest {
                         largest = num_prod;
                     }
-                },
+                }
 
                 PandigitalResult::TooLarge => break,
-                _                          => (),
+                _ => (),
             }
         }
     }
@@ -45,7 +45,10 @@ fn main() {
 }
 
 fn concat_product(number: u32, max_factor: u32) -> Vec<u32> {
-    (1..max_factor + 1).map(|factor| number * factor).flat_map(digits::new).collect()
+    (1..max_factor + 1)
+        .map(|factor| number * factor)
+        .flat_map(digits::new)
+        .collect()
 }
 
 fn to_num(digits: Vec<u32>) -> u32 {

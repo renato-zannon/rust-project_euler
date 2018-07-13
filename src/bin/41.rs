@@ -31,7 +31,5 @@ fn main() {
 }
 
 fn to_number(digits: &[u32]) -> u32 {
-    digits.iter().fold(0, |acc, &digit| {
-        acc * 10 + digit
-    })
+    digits.iter().fold(0, |acc, &digit| acc * 10 + digit)
 }

@@ -43,21 +43,21 @@
 extern crate enum_primitive;
 extern crate num;
 
-use std::cmp::Ordering;
 use num::FromPrimitive;
+use std::cmp::Ordering;
 
 #[derive(PartialEq, Eq, PartialOrd, Ord, Debug)]
 enum Rank {
-    HighCard(CardValue),              // High Card: Highest value card.
-    OnePair(CardValue),               // One Pair: Two cards of the same value.
-    TwoPairs(CardValue, CardValue),   // Two Pairs: Two different pairs.
-    ThreeOfAKind(CardValue),          // Three of a Kind: Three cards of the same value.
-    Straight,                         // Straight: All cards are consecutive values.
-    Flush,                            // Flush: All cards of the same suit.
-    FullHouse(CardValue, CardValue),  // Full House: Three of a kind and a pair.
-    FourOfAKind(CardValue),           // Four of a Kind: Four cards of the same value.
-    StraightFlush,                    // Straight Flush: All cards are consecutive values of same suit.
-    RoyalFlush,                       // Royal Flush: Ten, Jack, Queen, King, Ace, in same suit.
+    HighCard(CardValue),             // High Card: Highest value card.
+    OnePair(CardValue),              // One Pair: Two cards of the same value.
+    TwoPairs(CardValue, CardValue),  // Two Pairs: Two different pairs.
+    ThreeOfAKind(CardValue),         // Three of a Kind: Three cards of the same value.
+    Straight,                        // Straight: All cards are consecutive values.
+    Flush,                           // Flush: All cards of the same suit.
+    FullHouse(CardValue, CardValue), // Full House: Three of a kind and a pair.
+    FourOfAKind(CardValue),          // Four of a Kind: Four cards of the same value.
+    StraightFlush, // Straight Flush: All cards are consecutive values of same suit.
+    RoyalFlush,    // Royal Flush: Ten, Jack, Queen, King, Ace, in same suit.
 }
 
 enum_from_primitive! {
@@ -95,7 +95,7 @@ impl CardValue {
             "Q" => Some(CardValue::Queen),
             "K" => Some(CardValue::King),
             "A" => Some(CardValue::Ace),
-            _   => None,
+            _ => None,
         }
     }
 }
@@ -117,7 +117,7 @@ impl CardSuit {
             "S" => Some(CardSuit::Spades),
             "C" => Some(CardSuit::Clubs),
             "D" => Some(CardSuit::Diamonds),
-            _   => None
+            _ => None,
         }
     }
 }
@@ -131,12 +131,13 @@ struct Card {
 impl Card {
     fn parse(s: &str) -> Option<Card> {
         let value = &s[..1];
-        let suit  = &s[1..];
+        let suit = &s[1..];
 
         match (CardValue::parse(value), CardSuit::parse(suit)) {
-            (Some(card_value), Some(card_suit)) => {
-                Some(Card { value: card_value, suit: card_suit })
-            },
+            (Some(card_value), Some(card_suit)) => Some(Card {
+                value: card_value,
+                suit: card_suit,
+            }),
 
             _ => None,
         }
@@ -145,35 +146,35 @@ impl Card {
 
 impl PartialOrd for Card {
     fn partial_cmp(&self, other: &Card) -> Option<Ordering> {
-        self.value.partial_cmp(& other.value)
+        self.value.partial_cmp(&other.value)
     }
 }
 
 impl Ord for Card {
     fn cmp(&self, other: &Card) -> Ordering {
-        self.value.cmp(& other.value)
+        self.value.cmp(&other.value)
     }
 }
 
 struct Hand {
-    cards: [Card; 5]
+    cards: [Card; 5],
 }
 
 impl Hand {
     fn beats(&self, other: &Hand) -> bool {
         match self.rank().cmp(&other.rank()) {
-            Ordering::Less    => false,
+            Ordering::Less => false,
             Ordering::Greater => true,
 
             Ordering::Equal => {
-                let my_cards    = &self.cards[..];
+                let my_cards = &self.cards[..];
                 let other_cards = &other.cards[..];
 
                 for (my, hers) in my_cards.iter().rev().zip(other_cards.iter().rev()) {
                     match my.cmp(hers) {
-                        Ordering::Less    => return false,
+                        Ordering::Less => return false,
                         Ordering::Greater => return true,
-                        Ordering::Equal   => continue,
+                        Ordering::Equal => continue,
                     }
                 }
 
@@ -183,17 +184,17 @@ impl Hand {
     }
 
     fn parse(s: &str) -> Option<Hand> {
-        let parse_cards = s.split(' ')
-            .map(Card::parse)
-            .collect::<Option<Vec<Card>>>();
+        let parse_cards = s.split(' ').map(Card::parse).collect::<Option<Vec<Card>>>();
 
         return parse_cards.and_then(|mut cards| {
-            if cards.len() != 5 { return None }
+            if cards.len() != 5 {
+                return None;
+            }
 
             cards.sort();
 
             Some(Hand {
-                cards: [cards[0], cards[1], cards[2], cards[3], cards[4]]
+                cards: [cards[0], cards[1], cards[2], cards[3], cards[4]],
             })
         });
     }
@@ -206,7 +207,7 @@ impl Hand {
             CardValue::Jack,
             CardValue::Queen,
             CardValue::King,
-            CardValue::Ace
+            CardValue::Ace,
         ];
 
         let cards_in_order = &self.cards[..];
@@ -215,26 +216,30 @@ impl Hand {
 
         let (suits, values) = self.card_counts();
 
-        let all_same_suit   = suits[0].1 == 5;
+        let all_same_suit = suits[0].1 == 5;
         let all_consecutive = consecutives == 5;
 
         let values_in_order = cards_in_order.iter().map(|card| card.value);
 
         if all_same_suit && all_consecutive {
-            if ROYAL_FLUSH.iter().zip(values_in_order).all(|(&v1, v2)| v1 == v2) {
+            if ROYAL_FLUSH
+                .iter()
+                .zip(values_in_order)
+                .all(|(&v1, v2)| v1 == v2)
+            {
                 return Rank::RoyalFlush;
             } else {
                 return Rank::StraightFlush;
             }
         }
 
-        let (first_value,  first_value_count)  = values[0];
+        let (first_value, first_value_count) = values[0];
         let (second_value, second_value_count) = values[1];
 
         match (first_value_count, second_value_count) {
             (4, _) => return Rank::FourOfAKind(first_value),
             (3, 2) => return Rank::FullHouse(first_value, second_value),
-            _      => (),
+            _ => (),
         };
 
         if all_same_suit {
@@ -247,7 +252,7 @@ impl Hand {
             (3, _) => Rank::ThreeOfAKind(first_value),
             (2, 2) => Rank::TwoPairs(first_value, second_value),
             (2, _) => Rank::OnePair(first_value),
-            _      => Rank::HighCard(values_in_order.last().unwrap()),
+            _ => Rank::HighCard(values_in_order.last().unwrap()),
         };
     }
 
@@ -268,7 +273,7 @@ impl Hand {
 
             let new_consecutives = match current_consecutives {
                 Some(value) => value + 1,
-                None        => 2,
+                None => 2,
             };
 
             if new_consecutives > max_consecutive {
@@ -286,22 +291,22 @@ impl Hand {
         let mut values = [0; 13];
 
         for &Card { suit, value } in self.cards.iter() {
-            suites[suit as usize]  += 1;
+            suites[suit as usize] += 1;
             values[value as usize] += 1;
         }
 
         return (into_sorted_vec(&suites), into_sorted_vec(&values));
 
         fn into_sorted_vec<T: FromPrimitive + Ord>(values: &[usize]) -> Vec<(T, usize)> {
-            let mut vec: Vec<(T, usize)> = values.iter().enumerate().map(|(idx, &count)| {
-                (FromPrimitive::from_usize(idx).unwrap(), count)
-            }).collect();
+            let mut vec: Vec<(T, usize)> = values
+                .iter()
+                .enumerate()
+                .map(|(idx, &count)| (FromPrimitive::from_usize(idx).unwrap(), count))
+                .collect();
 
-            vec.sort_by(|&(ref k1, ref v1), &(ref k2, ref v2)| {
-                match v2.cmp(v1) {
-                    Ordering::Equal => k2.cmp(k1),
-                    ord   => ord
-                }
+            vec.sort_by(|&(ref k1, ref v1), &(ref k2, ref v2)| match v2.cmp(v1) {
+                Ordering::Equal => k2.cmp(k1),
+                ord => ord,
             });
 
             return vec;
@@ -313,23 +318,26 @@ impl Hand {
 fn main() {
     const HANDS: &'static str = include_str!("../../data/54-poker.txt");
 
-    let player_1_victories = HANDS.lines().filter(|line| {
-        let maybe_hand1 = Hand::parse(&line[..14]);
-        let maybe_hand2 = Hand::parse(&line[15..]);
+    let player_1_victories = HANDS
+        .lines()
+        .filter(|line| {
+            let maybe_hand1 = Hand::parse(&line[..14]);
+            let maybe_hand2 = Hand::parse(&line[15..]);
 
-        match (maybe_hand1, maybe_hand2) {
-            (Some(ref hand1), Some(ref hand2)) => hand1.beats(hand2),
+            match (maybe_hand1, maybe_hand2) {
+                (Some(ref hand1), Some(ref hand2)) => hand1.beats(hand2),
 
-            _ => panic!("Parsing problem on line:\n{}", line)
-        }
-    }).count();
+                _ => panic!("Parsing problem on line:\n{}", line),
+            }
+        })
+        .count();
 
     println!("{}", player_1_victories);
 }
 
 #[cfg(test)]
 mod tests {
-    use super::{Rank, Hand};
+    use super::{Hand, Rank};
 
     fn hand(s: &str) -> Hand {
         Hand::parse(s).unwrap()
@@ -358,8 +366,8 @@ mod tests {
 
     #[test]
     fn test_four_of_a_kind() {
+        use super::CardValue::{Five, Nine};
         use super::Rank::FourOfAKind;
-        use super::CardValue::{Nine, Five};
 
         assert_eq!(FourOfAKind(Five), rank("5H 5C 5D 5S 9H"));
         assert_eq!(FourOfAKind(Nine), rank("9H 9D KH 9C 9S"));
@@ -370,10 +378,22 @@ mod tests {
         use super::CardValue;
         use super::Rank::FullHouse;
 
-        assert_eq!(FullHouse(CardValue::Five,  CardValue::Nine), rank("5H 5C 5D 9S 9H"));
-        assert_eq!(FullHouse(CardValue::Nine,  CardValue::Five), rank("9H 9D 5H 5C 9S"));
-        assert_eq!(FullHouse(CardValue::Four,  CardValue::Two),  rank("2H 2D 4C 4D 4S"));
-        assert_eq!(FullHouse(CardValue::Three, CardValue::Nine), rank("3C 3D 3S 9S 9D"));
+        assert_eq!(
+            FullHouse(CardValue::Five, CardValue::Nine),
+            rank("5H 5C 5D 9S 9H")
+        );
+        assert_eq!(
+            FullHouse(CardValue::Nine, CardValue::Five),
+            rank("9H 9D 5H 5C 9S")
+        );
+        assert_eq!(
+            FullHouse(CardValue::Four, CardValue::Two),
+            rank("2H 2D 4C 4D 4S")
+        );
+        assert_eq!(
+            FullHouse(CardValue::Three, CardValue::Nine),
+            rank("3C 3D 3S 9S 9D")
+        );
     }
 
     #[test]
@@ -395,18 +415,18 @@ mod tests {
 
     #[test]
     fn test_three_of_a_kind() {
+        use super::CardValue::{Ace, Five, Nine};
         use super::Rank::ThreeOfAKind;
-        use super::CardValue::{Nine, Five, Ace};
 
         assert_eq!(ThreeOfAKind(Five), rank("5H 5C 5D 9S AH"));
         assert_eq!(ThreeOfAKind(Nine), rank("9H 2D 5H 9C 9S"));
-        assert_eq!(ThreeOfAKind(Ace),  rank("2D 9C AS AH AC"));
+        assert_eq!(ThreeOfAKind(Ace), rank("2D 9C AS AH AC"));
     }
 
     #[test]
     fn test_two_pairs() {
-        use super::Rank::TwoPairs;
         use super::CardValue::{Five, Nine};
+        use super::Rank::TwoPairs;
 
         assert_eq!(TwoPairs(Nine, Five), rank("5H AC 5D 9S 9H"));
         assert_eq!(TwoPairs(Nine, Five), rank("9H 2D 5H 5C 9S"));
@@ -414,12 +434,12 @@ mod tests {
 
     #[test]
     fn test_one_pair() {
+        use super::CardValue::{Eight, Five, Nine, Queen};
         use super::Rank::OnePair;
-        use super::CardValue::{Five, Nine, Eight, Queen};
 
-        assert_eq!(OnePair(Five),  rank("2H AC 5D 9S 5H"));
-        assert_eq!(OnePair(Nine),  rank("AH 2D 9H 5C 9S"));
-        assert_eq!(OnePair(Five),  rank("5H 5C 6S 7S KD"));
+        assert_eq!(OnePair(Five), rank("2H AC 5D 9S 5H"));
+        assert_eq!(OnePair(Nine), rank("AH 2D 9H 5C 9S"));
+        assert_eq!(OnePair(Five), rank("5H 5C 6S 7S KD"));
         assert_eq!(OnePair(Eight), rank("2C 3S 8S 8D TD"));
         assert_eq!(OnePair(Queen), rank("4D 6S 9H QH QC"));
         assert_eq!(OnePair(Queen), rank("3D 6D 7H QD QS"));
@@ -427,23 +447,23 @@ mod tests {
 
     #[test]
     fn test_high_card() {
+        use super::CardValue::{Ace, King, Queen};
         use super::Rank::HighCard;
-        use super::CardValue::{Queen, King, Ace};
 
         assert_eq!(HighCard(Queen), rank("2H QC 5D 9S TH"));
-        assert_eq!(HighCard(King),  rank("KH 2D 9H 5C 3S"));
-        assert_eq!(HighCard(Ace),   rank("5D 8C 9S JS AC"));
+        assert_eq!(HighCard(King), rank("KH 2D 9H 5C 3S"));
+        assert_eq!(HighCard(Ace), rank("5D 8C 9S JS AC"));
         assert_eq!(HighCard(Queen), rank("2C 5C 7D 8S QH"));
     }
 
     #[test]
     fn test_rank_beats() {
-        use super::Rank::{RoyalFlush, StraightFlush, FourOfAKind, FullHouse};
-        use super::CardValue::{King, Queen, Ace};
+        use super::CardValue::{Ace, King, Queen};
+        use super::Rank::{FourOfAKind, FullHouse, RoyalFlush, StraightFlush};
 
-        assert!(RoyalFlush            > StraightFlush);
-        assert!(StraightFlush         > FourOfAKind(Ace));
-        assert!(FourOfAKind(Ace)      > FourOfAKind(King));
+        assert!(RoyalFlush > StraightFlush);
+        assert!(StraightFlush > FourOfAKind(Ace));
+        assert!(FourOfAKind(Ace) > FourOfAKind(King));
         assert!(FullHouse(Queen, Ace) > FullHouse(Queen, King));
     }
 
@@ -451,7 +471,7 @@ mod tests {
         let hand1 = hand(hand1_str);
         let hand2 = hand(hand2_str);
 
-        hand1.beats(& hand2)
+        hand1.beats(&hand2)
     }
 
     #[test]

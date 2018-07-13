@@ -6,8 +6,8 @@
 
 extern crate num;
 
-use num::{FromPrimitive, pow};
 use num::bigint::BigUint;
+use num::{pow, FromPrimitive};
 
 fn main() {
     let strnum = power_of_2(1_000).to_string();

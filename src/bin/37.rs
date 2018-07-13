@@ -34,15 +34,16 @@ fn is_truncatable(prime: u32, sieve: &mut sieve::Sieve<u32>) -> bool {
 fn truncatable_from_left(prime: u32, sieve: &mut sieve::Sieve<u32>) -> bool {
     let prime_digits = digits::new::<_, u32>(prime);
 
-    prime_digits.rev().scan((0, 1), |state, digit| {
-        let (previous, multiplier) = *state;
-        let truncation = previous + digit * multiplier;
+    prime_digits
+        .rev()
+        .scan((0, 1), |state, digit| {
+            let (previous, multiplier) = *state;
+            let truncation = previous + digit * multiplier;
 
-        *state = (truncation, multiplier * 10);
-        Some(truncation)
-    }).all(|truncation| {
-        sieve.is_prime(truncation)
-    })
+            *state = (truncation, multiplier * 10);
+            Some(truncation)
+        })
+        .all(|truncation| sieve.is_prime(truncation))
 }
 
 fn truncatable_from_right(prime: u32, sieve: &mut sieve::Sieve<u32>) -> bool {

@@ -28,8 +28,10 @@ fn ways_to_reach(row: u16, column: u16, cache: &mut HashMap<(u16, u16), u64>) ->
 
 fn compute(row: u16, column: u16, cache: &mut HashMap<(u16, u16), u64>) -> u64 {
     match (row, column) {
-        (_, 0)        => 1,
-        (0, _)        => 1,
-        (row, column) => ways_to_reach(row - 1, column, cache) + ways_to_reach(row, column - 1, cache)
+        (_, 0) => 1,
+        (0, _) => 1,
+        (row, column) => {
+            ways_to_reach(row - 1, column, cache) + ways_to_reach(row, column - 1, cache)
+        }
     }
 }

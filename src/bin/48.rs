@@ -6,9 +6,7 @@
 
 fn main() {
     let ten_to_ten = 10u64.pow(10);
-    let take_10_digits = |number: u64| {
-        number % ten_to_ten
-    };
+    let take_10_digits = |number: u64| number % ten_to_ten;
 
     let mut result: u64 = 0;
 

@@ -14,7 +14,7 @@ fn main() {
     let mut counts = [0usize; MAX_PERIMETER as usize];
 
     let max_perimeter_by_3 = MAX_PERIMETER / 3.0;
-    let two_thirds_of_max  = 2.0 * max_perimeter_by_3;
+    let two_thirds_of_max = 2.0 * max_perimeter_by_3;
 
     let mut a = 1.0;
 

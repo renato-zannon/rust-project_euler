@@ -13,9 +13,9 @@
 const TARGET: u32 = 40755;
 
 fn main() {
-    let mut triangles   = numbers_from_formula(|n| n * (n + 1) / 2);
-    let mut pentagonals = numbers_from_formula(|n| n * (3*n - 1) / 2);
-    let hexagonals      = numbers_from_formula(|n| n * (2*n - 1));
+    let mut triangles = numbers_from_formula(|n| n * (n + 1) / 2);
+    let mut pentagonals = numbers_from_formula(|n| n * (3 * n - 1) / 2);
+    let hexagonals = numbers_from_formula(|n| n * (2 * n - 1));
 
     for hex in hexagonals.skip_while(|&h| h <= TARGET) {
         let pent = pentagonals.find(|&p| p >= hex).unwrap();
@@ -33,19 +33,28 @@ fn main() {
     }
 }
 
-fn numbers_from_formula<F>(formula: F) -> NumbersFromFormula<F> where F: Fn(u32) -> u32 {
+fn numbers_from_formula<F>(formula: F) -> NumbersFromFormula<F>
+where
+    F: Fn(u32) -> u32,
+{
     NumbersFromFormula {
         last_n: 0,
-        formula: formula
+        formula: formula,
     }
 }
 
-struct NumbersFromFormula<F> where F: Fn(u32) -> u32 {
+struct NumbersFromFormula<F>
+where
+    F: Fn(u32) -> u32,
+{
     last_n: u32,
     formula: F,
 }
 
-impl<F> Iterator for NumbersFromFormula<F> where F: Fn(u32) -> u32 {
+impl<F> Iterator for NumbersFromFormula<F>
+where
+    F: Fn(u32) -> u32,
+{
     type Item = u32;
 
     fn next(&mut self) -> Option<u32> {

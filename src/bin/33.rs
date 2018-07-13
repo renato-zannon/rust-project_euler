@@ -12,13 +12,13 @@
  * If the product of these four fractions is given in its lowest common terms, find the value of the
  * denominator. */
 
-extern crate shared;
 extern crate num;
+extern crate shared;
 
+use self::CancelResult::{Cancelable, NonCancelable};
+use num::integer::gcd;
 use shared::digits;
 use std::collections::HashSet;
-use num::integer::gcd;
-use self::CancelResult::{Cancelable, NonCancelable};
 
 fn main() {
     let mut result = (1, 1);
@@ -46,7 +46,8 @@ fn cancel_fraction(numerator: u32, denominator: u32) -> CancelResult {
     let num_digits: Vec<u32> = digits::new(numerator).collect();
     let den_digits: Vec<u32> = digits::new(denominator).collect();
 
-    let shared_digits: HashSet<u32> = num_digits.iter()
+    let shared_digits: HashSet<u32> = num_digits
+        .iter()
         .map(|&digit| digit)
         .filter(|digit| digit != &0 && den_digits.contains(digit))
         .collect();
@@ -55,11 +56,11 @@ fn cancel_fraction(numerator: u32, denominator: u32) -> CancelResult {
         return NonCancelable;
     }
 
-    let cancelled_numerator   = build_from_digits(num_digits, &shared_digits);
+    let cancelled_numerator = build_from_digits(num_digits, &shared_digits);
     let cancelled_denominator = build_from_digits(den_digits, &shared_digits);
 
-    let matching_fractions = !(cancelled_denominator == 0 || cancelled_numerator == 0) &&
-        numerator * cancelled_denominator == denominator * cancelled_numerator;
+    let matching_fractions = !(cancelled_denominator == 0 || cancelled_numerator == 0)
+        && numerator * cancelled_denominator == denominator * cancelled_numerator;
 
     if matching_fractions {
         Cancelable(cancelled_numerator, cancelled_denominator)

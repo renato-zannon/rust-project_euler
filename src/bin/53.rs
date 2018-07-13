@@ -16,7 +16,7 @@
  * How many, not necessarily distinct, values of  nCr, for 1 ≤ n ≤ 100, are greater than
  * one-million? */
 
-const MAX_N: usize     = 100;
+const MAX_N: usize = 100;
 const MIN_VALUE: usize = 1_000_000;
 
 fn main() {
@@ -35,8 +35,8 @@ fn main() {
         // Since the binomial is symmetrical, we can easily know how many results > 1_000_000 are there,
         // given we know what the first one is.
         match first_k {
-            Some(k) => prev + n + 1 - 2*k,
-            None    => prev,
+            Some(k) => prev + n + 1 - 2 * k,
+            None => prev,
         }
     });
 

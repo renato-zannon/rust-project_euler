@@ -26,9 +26,9 @@ extern crate shared;
 
 use shared::digits;
 
-use std::mem;
+use enum_set::{CLike, EnumSet};
 use std::collections::BTreeMap;
-use enum_set::{EnumSet, CLike};
+use std::mem;
 
 struct NumberInfo {
     value: u32,
@@ -43,7 +43,7 @@ impl Clone for NumberInfo {
             value: self.value,
             first_digits: self.first_digits,
             last_digits: self.last_digits,
-            classifications: self.classifications.clone()
+            classifications: self.classifications.clone(),
         }
     }
 }
@@ -69,23 +69,15 @@ fn build_candidates() -> Vec<NumberInfo> {
 
     for iter in iterators.into_iter() {
         let iter_classification = iter.classification;
-        let iter_candidates = iter
-            .skip_while(|&n| n < 1_000)
-            .take_while(|&n| n < 10_000);
+        let iter_candidates = iter.skip_while(|&n| n < 1_000).take_while(|&n| n < 10_000);
 
         for candidate in iter_candidates {
             let mut candidate_info = map.entry(candidate).or_insert_with(|| {
                 let mut value_digits = digits::new::<_, u8>(candidate);
 
-                let first_digits = [
-                    value_digits.next().unwrap(),
-                    value_digits.next().unwrap(),
-                ];
+                let first_digits = [value_digits.next().unwrap(), value_digits.next().unwrap()];
 
-                let last_digits  = [
-                    value_digits.next().unwrap(),
-                    value_digits.next().unwrap(),
-                ];
+                let last_digits = [value_digits.next().unwrap(), value_digits.next().unwrap()];
 
                 let classifications = EnumSet::new();
 
@@ -93,7 +85,7 @@ fn build_candidates() -> Vec<NumberInfo> {
                     value: candidate,
                     classifications: classifications,
                     first_digits: first_digits,
-                    last_digits:  last_digits
+                    last_digits: last_digits,
                 }
             });
 
@@ -114,7 +106,7 @@ fn find_set(candidates: Vec<NumberInfo>) -> Vec<u32> {
     return recurse(&mut Context {
         stack: Vec::new(),
         used_types: EnumSet::new(),
-        candidates: &candidates[..]
+        candidates: &candidates[..],
     }).unwrap();
 
     fn recurse(context: &mut Context) -> Option<Vec<u32>> {
@@ -129,17 +121,19 @@ fn find_set(candidates: Vec<NumberInfo>) -> Vec<u32> {
             }
 
             let fits_on_set = match context.stack.len() {
-                0         => true,
+                0 => true,
                 n @ 1...4 => context.stack[n - 1].last_digits == candidate.first_digits,
-                5         => {
-                    context.stack[4].last_digits == candidate.first_digits &&
-                    candidate.last_digits == context.stack[0].first_digits
-                },
+                5 => {
+                    context.stack[4].last_digits == candidate.first_digits
+                        && candidate.last_digits == context.stack[0].first_digits
+                }
 
                 _ => unreachable!(),
             };
 
-            if !fits_on_set { continue; }
+            if !fits_on_set {
+                continue;
+            }
 
             context.stack.push(candidate.clone());
 
@@ -149,7 +143,7 @@ fn find_set(candidates: Vec<NumberInfo>) -> Vec<u32> {
                 match recurse(context) {
                     None => {
                         context.used_types.remove(&classification);
-                    },
+                    }
 
                     result @ Some(_) => {
                         return result;

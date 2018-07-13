@@ -27,13 +27,13 @@
  * NOTE: Wording was modified slightly on 24 April 2007 to emphasise the theoretical nature of Lychrel
  * numbers. */
 
-extern crate shared;
-extern crate num;
 extern crate itertools;
+extern crate num;
+extern crate shared;
 
-use shared::IntegerExtensions;
 use num::bigint::BigUint;
 use num::FromPrimitive;
+use shared::IntegerExtensions;
 use std::mem;
 
 const MAX: u32 = 10_000;
@@ -49,7 +49,8 @@ fn main() {
             let new_value = (&*current) + current.reverse();
 
             Some(mem::replace(current, new_value))
-        }).take(MAX_ITERATIONS).find(|number| number.is_palindrome());
+        }).take(MAX_ITERATIONS)
+            .find(|number| number.is_palindrome());
 
         match first_palindrome {
             Some(_) => continue,

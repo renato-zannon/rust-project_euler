@@ -15,7 +15,9 @@ fn find_biggest(slices: consecutive_digits::ConsecutiveDigits) -> u32 {
 }
 
 fn multiply(num: &str) -> u32 {
-    num.chars().map(|chr| chr.to_digit(10).unwrap()).fold(1, |factor, product| factor * product)
+    num.chars()
+        .map(|chr| chr.to_digit(10).unwrap())
+        .fold(1, |factor, product| factor * product)
 }
 
 mod consecutive_digits {
@@ -30,7 +32,7 @@ mod consecutive_digits {
 
         fn next(&mut self) -> Option<&'a str> {
             let start = self.current;
-            let end   = start + self.length;
+            let end = start + self.length;
 
             if end > self.string.len() - 1 {
                 None

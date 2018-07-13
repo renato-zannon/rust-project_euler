@@ -63,7 +63,8 @@ fn main() {
 }
 
 fn search_set(prev: &[Prime], prime: Prime, sets: &PrimeSets) -> Option<Vec<Prime>> {
-    let concats_with_all_stack = prev.iter()
+    let concats_with_all_stack = prev
+        .iter()
         .all(|prev_prime| sets[prev_prime].borrow().contains(&prime));
 
     if !concats_with_all_stack {

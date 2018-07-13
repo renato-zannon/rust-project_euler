@@ -14,13 +14,13 @@ use std::mem;
 const MAX_DIGITS: usize = 200;
 
 const MAX_BASE: u8 = 100;
-const MAX_EXP:  u8 = 100;
+const MAX_EXP: u8 = 100;
 
 fn main() {
     let mut max_sum = 0;
 
     for base in 2..MAX_BASE {
-        let mut buffer      = Vec::with_capacity(MAX_DIGITS);
+        let mut buffer = Vec::with_capacity(MAX_DIGITS);
         let mut prev_buffer = Vec::with_capacity(MAX_DIGITS);
 
         prev_buffer.extend(digits::new::<_, u8>(base).rev());
@@ -29,13 +29,13 @@ fn main() {
             buffer.clear();
 
             let mut carry: u16 = 0;
-            let mut sum:   u16 = 0;
+            let mut sum: u16 = 0;
 
             for &old_digit in prev_buffer.iter() {
                 let result = multiply_digit(old_digit, base, carry);
 
                 carry = result.carry;
-                sum  += result.digit as u16;
+                sum += result.digit as u16;
                 buffer.push(result.digit);
             }
 
@@ -68,5 +68,8 @@ fn multiply_digit(digit: u8, multiplier: u8, carry: u16) -> MultiplicationResult
     let new_digit = (value % 10) as u8;
     let new_carry = value / 10;
 
-    MultiplicationResult { digit: new_digit, carry: new_carry }
+    MultiplicationResult {
+        digit: new_digit,
+        carry: new_carry,
+    }
 }

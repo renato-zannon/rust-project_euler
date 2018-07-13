@@ -22,11 +22,9 @@ use std::collections::HashMap;
 fn main() {
     let mut seen: HashMap<u32, usize> = HashMap::new();
 
-    let result = (2u32..1_000).max_by_key(|&divisor| {
-        match division_type(1, divisor, &mut seen) {
-            DivisionType::Terminating        => 0,
-            DivisionType::Recurring { size } => size,
-        }
+    let result = (2u32..1_000).max_by_key(|&divisor| match division_type(1, divisor, &mut seen) {
+        DivisionType::Terminating => 0,
+        DivisionType::Recurring { size } => size,
     });
 
     println!("{}", result.unwrap());
@@ -57,8 +55,10 @@ fn division_type(numerator: u32, denominator: u32, seen: &mut HashMap<u32, usize
 
         match maybe_cycle_start {
             Some(start) => {
-                return DivisionType::Recurring { size: (seen.len() - start - 1) as u16 };
-            },
+                return DivisionType::Recurring {
+                    size: (seen.len() - start - 1) as u16,
+                };
+            }
 
             None => (),
         }
@@ -68,5 +68,5 @@ fn division_type(numerator: u32, denominator: u32, seen: &mut HashMap<u32, usize
 #[derive(Debug)]
 enum DivisionType {
     Terminating,
-    Recurring { size: u16 }
+    Recurring { size: u16 },
 }

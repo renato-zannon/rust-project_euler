@@ -38,12 +38,16 @@ fn main() {
 
     for b in possible_bs.into_iter() {
         for a in -999..999 {
-            let prime_count = (0..).take_while(|&n| {
-                let value = n * n + a * n + b;
-                if value < 0 { return false; }
+            let prime_count = (0..)
+                .take_while(|&n| {
+                    let value = n * n + a * n + b;
+                    if value < 0 {
+                        return false;
+                    }
 
-                primes.is_prime(value)
-            }).count();
+                    primes.is_prime(value)
+                })
+                .count();
 
             if prime_count > max_prime_count {
                 max_product = a * b;

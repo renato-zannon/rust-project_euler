@@ -23,11 +23,11 @@ impl<'a> Iterator for Counter<'a> {
             Some(value) => {
                 self.position += 1;
                 Some((base, value.clone()))
-            },
+            }
 
             None => {
                 self.position = 0;
-                self.values = & self.values[1..];
+                self.values = &self.values[1..];
                 self.next()
             }
         }
@@ -36,12 +36,12 @@ impl<'a> Iterator for Counter<'a> {
 
 fn main() {
     let values: Vec<u32> = (100..1000).collect();
-    let pairs = Counter { values: &values, position: 0 };
+    let pairs = Counter {
+        values: &values,
+        position: 0,
+    };
 
-    let result = pairs
-        .filter_map(select_palindromes)
-        .max()
-        .unwrap();
+    let result = pairs.filter_map(select_palindromes).max().unwrap();
 
     println!("{}", result);
 }

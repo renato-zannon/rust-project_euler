@@ -21,9 +21,9 @@ fn lcm(n1: u64, n2: u64) -> u64 {
         let n2_multiple = n2 * n2_factor;
 
         match n1_multiple.cmp(&n2_multiple) {
-            Ordering::Less    => n1_factor += 1,
+            Ordering::Less => n1_factor += 1,
             Ordering::Greater => n2_factor += 1,
-            Ordering::Equal   => return n1_multiple,
+            Ordering::Equal => return n1_multiple,
         }
     }
 }

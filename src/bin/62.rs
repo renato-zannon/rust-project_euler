@@ -25,9 +25,7 @@ fn main() {
             ord
         };
 
-        let set: &mut BTreeSet<u64> = map.entry(cube_digits).or_insert_with(|| {
-            BTreeSet::new()
-        });
+        let set: &mut BTreeSet<u64> = map.entry(cube_digits).or_insert_with(|| BTreeSet::new());
 
         set.insert(cube);
 

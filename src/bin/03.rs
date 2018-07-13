@@ -4,7 +4,10 @@
  * What is the largest prime factor of the number 600851475143 ? */
 
 fn main() {
-    let factors = Factors { remaining: 600851475143u64, divisor: 2 };
+    let factors = Factors {
+        remaining: 600851475143u64,
+        divisor: 2,
+    };
     println!("{}", factors.max().unwrap());
 }
 

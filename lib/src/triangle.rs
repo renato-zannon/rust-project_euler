@@ -1,5 +1,5 @@
-use std::collections::BTreeMap;
 use std::cell::RefCell;
+use std::collections::BTreeMap;
 
 #[derive(Eq, PartialEq, Debug)]
 struct Value {
@@ -23,13 +23,20 @@ pub fn new(raw: &[&[u32]]) -> Triangle {
 
         for (index, &raw_value) in row.iter().enumerate() {
             let coord = (row_index, index as u32);
-            let value = Value { coord: coord, value: raw_value, maximum: None };
+            let value = Value {
+                coord: coord,
+                value: raw_value,
+                maximum: None,
+            };
 
             values.insert(coord, RefCell::new(value));
         }
     }
 
-    Triangle { values: values, height: raw.len() as u32 }
+    Triangle {
+        values: values,
+        height: raw.len() as u32,
+    }
 }
 
 impl Triangle {
@@ -46,7 +53,11 @@ impl Triangle {
         self.values
             .iter()
             .filter_map(|(&(row, _), value)| {
-                if row == self.height - 1 { Some(value) } else { None }
+                if row == self.height - 1 {
+                    Some(value)
+                } else {
+                    None
+                }
             })
             .max_by(|v1ref, v2ref| {
                 let v1 = v1ref.borrow().maximum;
@@ -65,9 +76,9 @@ impl Triangle {
             Some((left, right)) => {
                 self.update_value(initial_ref, left);
                 self.update_value(initial_ref, right);
-            },
+            }
 
-            None => return
+            None => return,
         }
     }
 
@@ -80,7 +91,7 @@ impl Triangle {
 
             let adj_max = match adjacent.maximum {
                 Some(adj_max) => adj_max,
-                None => 0
+                None => 0,
             };
 
             (adj_max, new_maximum)
@@ -98,7 +109,7 @@ impl Triangle {
 
     fn values_below(&self, (row, col): (u32, u32)) -> Option<(&RefCell<Value>, &RefCell<Value>)> {
         if row + 1 < self.height {
-            let left  = self.get_coord((row + 1, col));
+            let left = self.get_coord((row + 1, col));
             let right = self.get_coord((row + 1, col + 1));
 
             Some((left, right))

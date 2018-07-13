@@ -10,8 +10,8 @@
  * Using words.txt (right click and 'Save Link/Target As...'), a 16K text file containing nearly
  * two-thousand common English words, how many are triangle words? */
 
-extern crate shared;
 extern crate num;
+extern crate shared;
 
 use num::ToPrimitive;
 use shared::data_reader;
@@ -19,9 +19,7 @@ use shared::data_reader;
 fn main() {
     let reader = data_reader::for_path("./data/42-words.txt");
 
-    let result = reader.filter(|word| {
-        is_triangular_word(&word)
-    }).count();
+    let result = reader.filter(|word| is_triangular_word(&word)).count();
 
     println!("{}", result);
 }
@@ -48,9 +46,7 @@ fn triangular_index(number: u32) -> Option<u32> {
         .and_then(ensure_divisible);
 
     fn take_sqrt(delta: u32) -> Option<f64> {
-        delta.to_f64().map(|as_float| {
-            as_float.sqrt()
-        })
+        delta.to_f64().map(|as_float| as_float.sqrt())
     }
 
     fn ensure_integer(delta_sqrt: f64) -> Option<u32> {

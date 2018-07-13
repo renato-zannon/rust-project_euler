@@ -32,19 +32,26 @@ fn main() {
         // Rust's BigInt are notoriously inconvenient here: We can't use a literal '1',
         // because it would be interpreted as a 'native' number. The one() function leverages trait
         // dispatch and returns a BigInt '1'
-        let core_fib = Fibonacci { prev: one(), pprev: one() };
+        let core_fib = Fibonacci {
+            prev: one(),
+            pprev: one(),
+        };
         repeat(one()).take(2).chain(core_fib)
     };
 
-    let (index, _) = fibonacci.scan(1, |prev, num| {
-        if *prev >= 1000 {
-            None
-        } else {
-            let result = number_of_digits(&num, *prev);
-            *prev = result;
-            Some(num)
-        }
-    }).enumerate().last().unwrap();
+    let (index, _) = fibonacci
+        .scan(1, |prev, num| {
+            if *prev >= 1000 {
+                None
+            } else {
+                let result = number_of_digits(&num, *prev);
+                *prev = result;
+                Some(num)
+            }
+        })
+        .enumerate()
+        .last()
+        .unwrap();
 
     println!("{}", index + 1);
 }
@@ -70,7 +77,7 @@ fn number_of_digits(num: &BigInt, minimum_digits: usize) -> usize {
     use num::zero;
 
     let bigzero: BigInt = zero();
-    let big10:   BigInt = "10".parse().unwrap();
+    let big10: BigInt = "10".parse().unwrap();
 
     let mut digits = minimum_digits;
 

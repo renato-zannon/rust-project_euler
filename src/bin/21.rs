@@ -11,8 +11,8 @@
 
 extern crate num;
 
-use std::collections::{HashMap, HashSet};
 use std::collections::hash_map::Entry;
+use std::collections::{HashMap, HashSet};
 
 const MAX: u32 = 10_000;
 
@@ -21,9 +21,11 @@ fn main() {
     let mut amicables = HashSet::new();
 
     for num in 1..MAX {
-        if amicables.contains(&num) { continue; }
+        if amicables.contains(&num) {
+            continue;
+        }
 
-        let div_sum     = cached_divisor_sum(num, &mut divisor_sums);
+        let div_sum = cached_divisor_sum(num, &mut divisor_sums);
         let reverse_sum = cached_divisor_sum(div_sum, &mut divisor_sums);
 
         if num == reverse_sum && div_sum != num {
@@ -38,7 +40,7 @@ fn main() {
 
 fn cached_divisor_sum(num: u32, cache: &mut HashMap<u32, u32>) -> u32 {
     match cache.entry(num) {
-        Entry::Vacant(entry)   => * entry.insert(divisor_sum(num)),
+        Entry::Vacant(entry) => *entry.insert(divisor_sum(num)),
         Entry::Occupied(entry) => entry.remove(),
     }
 }
@@ -46,13 +48,15 @@ fn cached_divisor_sum(num: u32, cache: &mut HashMap<u32, u32>) -> u32 {
 fn divisor_sum(num: u32) -> u32 {
     let num_sqrt = (num as f64).sqrt() as u32;
 
-    (2..num_sqrt + 1).map(|candidate| {
-        if num % candidate > 0 {
-            0
-        } else if candidate == num_sqrt {
-            candidate
-        } else {
-            candidate + (num / candidate)
-        }
-    }).fold(1, |sum, term| sum + term)
+    (2..num_sqrt + 1)
+        .map(|candidate| {
+            if num % candidate > 0 {
+                0
+            } else if candidate == num_sqrt {
+                candidate
+            } else {
+                candidate + (num / candidate)
+            }
+        })
+        .fold(1, |sum, term| sum + term)
 }

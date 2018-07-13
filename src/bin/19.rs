@@ -27,7 +27,7 @@ fn main() {
         number: 1,
         month: Month::January,
         weekday: Weekday::Monday,
-        year: Year { number: 1900 }
+        year: Year { number: 1900 },
     };
 
     let mut current: Day = initial_day;
@@ -62,22 +62,22 @@ impl Day {
 
         if self.number < self.month.day_count(self.year) {
             Day {
-                number:  self.number + 1,
-                month:   self.month,
-                year:    self.year,
-                weekday: next_weekday
+                number: self.number + 1,
+                month: self.month,
+                year: self.year,
+                weekday: next_weekday,
             }
         } else {
             let year = match self.month {
                 Month::December => self.year.next(),
-                _               => self.year
+                _ => self.year,
             };
 
             Day {
-                number:  1,
-                month:   self.month.next(),
-                year:    year,
-                weekday: next_weekday
+                number: 1,
+                month: self.month.next(),
+                year: year,
+                weekday: next_weekday,
             }
         }
     }
@@ -94,7 +94,9 @@ impl Year {
     }
 
     fn next(&self) -> Year {
-        Year { number: self.number + 1 }
+        Year {
+            number: self.number + 1,
+        }
     }
 }
 
@@ -120,8 +122,12 @@ impl Month {
     fn day_count(self, year: Year) -> usize {
         match self {
             Month::September | Month::April | Month::June | Month::November => 30,
-            Month::February => if year.is_leap() { 29 } else { 28 },
-            _               => 31,
+            Month::February => if year.is_leap() {
+                29
+            } else {
+                28
+            },
+            _ => 31,
         }
     }
 
@@ -131,7 +137,7 @@ impl Month {
 
         match converted {
             Some(month) => month,
-            None        => Month::January,
+            None => Month::January,
         }
     }
 }
@@ -156,7 +162,7 @@ impl Weekday {
 
         match converted {
             Some(day) => day,
-            None      => Weekday::Sunday,
+            None => Weekday::Sunday,
         }
     }
 }

@@ -23,21 +23,23 @@ const CONSECUTIVE_COUNT: usize = 4;
 
 fn main() {
     let mut sieve = sieve::new();
-    let mut memo  = HashMap::new();
+    let mut memo = HashMap::new();
 
-    let result = (1..).find(|&first_number| {
-        (first_number..first_number + CONSECUTIVE_COUNT).all(|number| {
-            sieve.compute_until(number);
+    let result = (1..)
+        .find(|&first_number| {
+            (first_number..first_number + CONSECUTIVE_COUNT).all(|number| {
+                sieve.compute_until(number);
 
-            let count = factors_for_number(FactorCount {
-                remaining: number,
-                memo:      &mut memo,
-                primes:    sieve.found_primes(),
-            });
+                let count = factors_for_number(FactorCount {
+                    remaining: number,
+                    memo: &mut memo,
+                    primes: sieve.found_primes(),
+                });
 
-            count == CONSECUTIVE_COUNT
+                count == CONSECUTIVE_COUNT
+            })
         })
-    }).unwrap();
+        .unwrap();
 
     println!("{}", result);
 }
@@ -51,31 +53,36 @@ fn factors_for_number(count: FactorCount) -> usize {
 
 struct FactorCount<'a> {
     remaining: usize,
-    memo:      Memo<'a>,
-    primes:    &'a [usize]
+    memo: Memo<'a>,
+    primes: &'a [usize],
 }
 
 fn factors(mut count: FactorCount) -> (Memo, HashSet<usize>) {
     match count.memo.get(&count.remaining).cloned() {
         Some(cached) => {
             return (count.memo, cached);
-        },
+        }
 
-        None => ()
+        None => (),
     }
 
-    let first_factor = count.primes.iter().find(|&&prime| {
-        count.remaining % prime == 0
-    }).map(|value| *value);
+    let first_factor = count
+        .primes
+        .iter()
+        .find(|&&prime| count.remaining % prime == 0)
+        .map(|value| *value);
 
     let (new_memo, result) = match first_factor {
         Some(factor) => {
-            let subcount = FactorCount { remaining: count.remaining / factor, ..count };
+            let subcount = FactorCount {
+                remaining: count.remaining / factor,
+                ..count
+            };
             let (new_memo, mut result) = factors(subcount);
 
             result.insert(factor);
             (new_memo, result)
-        },
+        }
 
         None => (count.memo, HashSet::new()),
     };

@@ -17,11 +17,7 @@ use shared::Permutations;
 fn main() {
     let digits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-    let result = digits
-        .permutations()
-        .skip(1_000_000 - 1)
-        .next()
-        .unwrap();
+    let result = digits.permutations().skip(1_000_000 - 1).next().unwrap();
 
     println!("{}", result.into_iter().join(""));
 }

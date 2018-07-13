@@ -28,7 +28,8 @@ where
         return false;
     }
 
-    let r: T = num.to_f32()
+    let r: T = num
+        .to_f32()
         .map(|as_float| as_float.sqrt())
         .map(|result| result.ceil())
         .and_then(|result| FromPrimitive::from_f32(result))

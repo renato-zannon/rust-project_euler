@@ -8,7 +8,6 @@
  * By considering the terms in the Fibonacci sequence whose values do not exceed four million, find
  * the sum of the even-valued terms. */
 
-
 fn main() {
     let result = fibs()
         .take_while(|&n| n < 4_000_000)
@@ -19,12 +18,15 @@ fn main() {
 }
 
 fn fibs() -> Fibonacci {
-    Fibonacci { pprev: None, prev: None }
+    Fibonacci {
+        pprev: None,
+        prev: None,
+    }
 }
 
 struct Fibonacci {
-    prev:  Option<u64>,
-    pprev: Option<u64>
+    prev: Option<u64>,
+    pprev: Option<u64>,
 }
 
 impl Iterator for Fibonacci {
@@ -32,7 +34,7 @@ impl Iterator for Fibonacci {
 
     fn next(&mut self) -> Option<u64> {
         let pprev = self.pprev;
-        let prev  = self.prev;
+        let prev = self.prev;
 
         if pprev.is_none() {
             self.pprev = Some(1);
@@ -44,7 +46,7 @@ impl Iterator for Fibonacci {
             let current = Some(prev.unwrap() + pprev.unwrap());
 
             self.pprev = prev;
-            self.prev  = current;
+            self.prev = current;
 
             current
         }

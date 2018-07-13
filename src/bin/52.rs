@@ -10,19 +10,23 @@ extern crate shared;
 use shared::digits;
 
 fn main() {
-    let result = (1..).find(|&number| {
-        let num_digits = digit_set(number);
+    let result = (1..)
+        .find(|&number| {
+            let num_digits = digit_set(number);
 
-        (2..7).rev().all(|multiplier| {
-            yields_same_digits(number * multiplier, &num_digits)
+            (2..7)
+                .rev()
+                .all(|multiplier| yields_same_digits(number * multiplier, &num_digits))
         })
-    }).unwrap();
+        .unwrap();
 
     println!("{}", result);
 }
 
 fn yields_same_digits(number: usize, digits: &[bool]) -> bool {
-    digits::new::<_, usize>(number).rev().all(|digit| digits[digit])
+    digits::new::<_, usize>(number)
+        .rev()
+        .all(|digit| digits[digit])
 }
 
 fn digit_set(number: usize) -> [bool; 10] {

@@ -9,8 +9,8 @@
 
 extern crate num;
 
-use num::One;
 use num::bigint::{BigUint, ToBigUint};
+use num::One;
 
 fn main() {
     let strnum = factorial(100).to_string();

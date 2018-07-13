@@ -15,9 +15,15 @@ extern crate shared;
 use shared::digits;
 
 fn main() {
-    let result: u32 = [1, 10, 100, 1000, 10000, 100000, 1000000].iter().map(|&position| {
-        (1..).flat_map(digits::new::<_, u32>).nth(position as usize - 1).unwrap()
-    }).fold(1, |acc, n| acc * n);
+    let result: u32 = [1, 10, 100, 1000, 10000, 100000, 1000000]
+        .iter()
+        .map(|&position| {
+            (1..)
+                .flat_map(digits::new::<_, u32>)
+                .nth(position as usize - 1)
+                .unwrap()
+        })
+        .fold(1, |acc, n| acc * n);
 
     println!("{}", result);
 }

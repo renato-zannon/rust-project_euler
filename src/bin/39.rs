@@ -9,7 +9,8 @@
 
 #[cfg(not(test))]
 fn main() {
-    let result = (1..1_000).into_iter()
+    let result = (1..1_000)
+        .into_iter()
         .max_by_key(|&perimeter| solution_count(perimeter))
         .unwrap();
 

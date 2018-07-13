@@ -9,14 +9,11 @@
  *
  * Find the product abc. */
 
-
 fn main() {
-    let (result, (a, b, c)) = triplets::new().find(|&(a, b, c)| {
-        a + b + c == 1000
-    }).map(|(a, b, c)| {
-        (a * b * c, (a, b, c))
-    }).unwrap();
-
+    let (result, (a, b, c)) = triplets::new()
+        .find(|&(a, b, c)| a + b + c == 1000)
+        .map(|(a, b, c)| (a * b * c, (a, b, c)))
+        .unwrap();
 
     println!("{} ({}, {}, {})", result, a, b, c);
 }
@@ -39,14 +36,18 @@ pub mod triplets {
     }
 
     pub fn new() -> Triplets {
-        let counter = Counter { last_c: 1, last_b: 0, last_a: 0 };
+        let counter = Counter {
+            last_c: 1,
+            last_b: 0,
+            last_a: 0,
+        };
         Triplets { counter: counter }
     }
 
     struct Counter {
         last_c: usize,
         last_b: usize,
-        last_a: usize
+        last_a: usize,
     }
 
     impl Iterator for Counter {
