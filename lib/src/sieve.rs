@@ -1,19 +1,23 @@
 // Based on the ruby implementation:
 // https://github.com/ruby/ruby/blob/1aa54bebaf274bc08e72f9ad3854c7ad592c344a/lib/prime.rb#L423
 
-use std::iter::Step;
-use std::ops::Add;
-use num::{Num, FromPrimitive, ToPrimitive};
+use num::{FromPrimitive, Num, ToPrimitive};
+use std::ops::{Add, Range};
 
-const WHEEL: &'static [u16] = &[2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101];
+const WHEEL: &'static [u16] = &[
+    2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97,
+    101,
+];
 
 const MAX_SEGMENT_SIZE: usize = 10_000;
 
-pub trait Primeable: Step + Num + Ord + FromPrimitive + ToPrimitive + Copy {}
+pub trait Primeable: Num + Ord + FromPrimitive + ToPrimitive + Copy {}
 
 impl<T> Primeable for T
-  where T: Step + Num + Ord + FromPrimitive + ToPrimitive + Copy {}
-
+where
+    T: Num + Ord + FromPrimitive + ToPrimitive + Copy,
+{
+}
 
 #[derive(Clone)]
 pub struct Sieve<T> {
@@ -23,7 +27,8 @@ pub struct Sieve<T> {
 }
 
 pub fn new<T: Primeable>() -> Sieve<T> {
-    let primes: Vec<T> = WHEEL.iter()
+    let primes: Vec<T> = WHEEL
+        .iter()
         .map(|&num| FromPrimitive::from_u16(num).unwrap())
         .collect();
 
@@ -35,13 +40,16 @@ pub fn new<T: Primeable>() -> Sieve<T> {
 }
 
 impl<T: Primeable> Iterator for Sieve<T>
-    where for<'a> &'a T: Add<&'a T, Output = T> {
+where
+    for<'a> &'a T: Add<&'a T, Output = T>,
+    Range<T>: Iterator<Item = T>,
+{
     type Item = T;
 
     fn next(&mut self) -> Option<T> {
         let index = match self.last_prime_index {
             Some(last_index) => last_index + 1,
-            None             => 0
+            None => 0,
         };
 
         loop {
@@ -49,9 +57,9 @@ impl<T: Primeable> Iterator for Sieve<T>
                 Some(&prime) => {
                     self.last_prime_index = Some(index);
                     return Some(prime);
-                },
+                }
 
-                None => self.compute_primes()
+                None => self.compute_primes(),
             }
         }
     }
@@ -65,8 +73,10 @@ struct Segment<T> {
 }
 
 impl<T: Primeable> Sieve<T>
-    where for<'a> &'a T: Add<&'a T, Output = T>  {
-
+where
+    for<'a> &'a T: Add<&'a T, Output = T>,
+    Range<T>: Iterator<Item = T>,
+{
     pub fn is_prime(&mut self, number: T) -> bool {
         self.compute_until(number);
         self.primes.binary_search(&number).is_ok()
@@ -96,7 +106,7 @@ impl<T: Primeable> Sieve<T>
 
                 let composites = (first_composite..segment.len).step_by(prime);
 
-                for composite_index in composites  {
+                for composite_index in composites {
                     seg_values[composite_index] = None;
                 }
             }
@@ -107,7 +117,7 @@ impl<T: Primeable> Sieve<T>
         for maybe_num in segment.values.into_iter() {
             match maybe_num {
                 Some(prime) => self.primes.push(prime),
-                None        => (),
+                None => (),
             }
         }
     }
@@ -118,9 +128,7 @@ impl<T: Primeable> Sieve<T>
             .and_then(|result| FromPrimitive::from_f32(result))
             .unwrap();
 
-        let last = self.primes.iter().position(|&prime| {
-            prime > root
-        }).unwrap();
+        let last = self.primes.iter().position(|&prime| prime > root).unwrap();
 
         &self.primes[..last]
     }
@@ -133,7 +141,7 @@ impl<T: Primeable> Sieve<T>
         let min = self.max_checked + FromPrimitive::from_u8(1).unwrap();
         let max = cmp::min(
             max_cached_prime * FromPrimitive::from_u8(2).unwrap(),
-            min + FromPrimitive::from_usize(MAX_SEGMENT_SIZE).unwrap()
+            min + FromPrimitive::from_usize(MAX_SEGMENT_SIZE).unwrap(),
         );
 
         let len = max - min;
@@ -148,7 +156,7 @@ impl<T: Primeable> Sieve<T>
             min: min,
             max: max,
             len: uint_len,
-            values: values
+            values: values,
         }
     }
 }

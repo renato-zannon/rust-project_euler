@@ -14,8 +14,6 @@
  * Find the first four consecutive integers to have four distinct prime factors. What is the first
  * of these numbers? */
 
-#![feature(step_by)]
-
 extern crate shared;
 use shared::sieve;
 use std::cmp::Ordering;
@@ -34,7 +32,11 @@ fn main() {
 
         sieve.compute_until(segment_end);
 
-        for prime in sieve.found_primes().iter().take_while(|&&p| p <= segment_end) {
+        for prime in sieve
+            .found_primes()
+            .iter()
+            .take_while(|&&p| p <= segment_end)
+        {
             let prime = *prime;
 
             let first_composite = match prime.cmp(&segment_start) {
@@ -98,10 +100,15 @@ impl Segment {
 
     fn add_factor(&mut self, number: usize, factor: usize) {
         let first = self.first_number();
-        let last  = self.last_number();
+        let last = self.last_number();
 
-        assert!(number >= first && number <= last,
-            "Number {} outside allowed range - [{}, {}]", number, first, last);
+        assert!(
+            number >= first && number <= last,
+            "Number {} outside allowed range - [{}, {}]",
+            number,
+            first,
+            last
+        );
 
         let factor_count = &mut self.values[number - first];
         factor_count.add_factor(factor);
@@ -135,7 +142,7 @@ impl FactorCount {
                     self.count += 1;
                     *maybe_factor = Some(factor);
                     return;
-                },
+                }
 
                 Some(fact) if fact == factor => return,
                 _ => continue,
@@ -155,7 +162,7 @@ impl<'a> Iterator for NumberFactors<'a> {
                 self.values = &self.values[1..];
 
                 Some((number, factor_count.count))
-            },
+            }
 
             None => None,
         }

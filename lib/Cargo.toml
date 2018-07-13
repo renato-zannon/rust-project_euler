@@ -5,6 +5,7 @@ authors = ["Renato Zannon <renato@rrsz.com.br>"]
 
 [lib]
 name = "shared"
+path = "src/shared.rs"
 
 [dependencies]
 num = "*"

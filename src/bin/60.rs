@@ -8,27 +8,29 @@
  * Find the lowest sum for a set of five primes for which any two primes concatenate to produce
  * another prime. */
 
-#![feature(step_by)]
 extern crate shared;
 
-use shared::sieve::{self, Sieve};
-use shared::primes;
 use shared::digits;
+use shared::primes;
+use shared::sieve::{self, Sieve};
 
-use std::collections::{BTreeMap, BTreeSet};
 use std::cell::{RefCell, RefMut};
+use std::collections::{BTreeMap, BTreeSet};
 
 type Prime = u32;
 type PrimeSets = BTreeMap<Prime, RefCell<BTreeSet<Prime>>>;
 
-const SET_SIZE: usize     = 5;
+const SET_SIZE: usize = 5;
 const SEGMENT_SIZE: usize = 200;
 
 fn main() {
     let mut sieve: Sieve<Prime> = sieve::new();
-    let mut sets:  PrimeSets = BTreeMap::new();
+    let mut sets: PrimeSets = BTreeMap::new();
 
-    for (first_index, last_index) in (0..).step_by(SEGMENT_SIZE).zip((SEGMENT_SIZE..).step_by(SEGMENT_SIZE)) {
+    for (first_index, last_index) in (0..)
+        .step_by(SEGMENT_SIZE)
+        .zip((SEGMENT_SIZE..).step_by(SEGMENT_SIZE))
+    {
         for prime in sieve.by_ref().take(SEGMENT_SIZE) {
             sets.insert(prime, RefCell::new(BTreeSet::new()));
         }
@@ -37,8 +39,12 @@ fn main() {
             let mut prime_set: RefMut<BTreeSet<Prime>> = sets[&prime].borrow_mut();
 
             for (&other_prime, other_set_ref) in sets.iter() {
-                if other_prime >= prime { break }
-                if !concats_generate_primes(prime, other_prime) { continue }
+                if other_prime >= prime {
+                    break;
+                }
+                if !concats_generate_primes(prime, other_prime) {
+                    continue;
+                }
 
                 let mut other_set: RefMut<BTreeSet<Prime>> = other_set_ref.borrow_mut();
 
@@ -57,11 +63,12 @@ fn main() {
 }
 
 fn search_set(prev: &[Prime], prime: Prime, sets: &PrimeSets) -> Option<Vec<Prime>> {
-    let concats_with_all_stack = prev.iter().all(|prev_prime| {
-        sets[prev_prime].borrow().contains(&prime)
-    });
+    let concats_with_all_stack = prev.iter()
+        .all(|prev_prime| sets[prev_prime].borrow().contains(&prime));
 
-    if !concats_with_all_stack { return None; }
+    if !concats_with_all_stack {
+        return None;
+    }
 
     let stack = {
         let mut stack = prev.to_vec();
@@ -70,13 +77,13 @@ fn search_set(prev: &[Prime], prime: Prime, sets: &PrimeSets) -> Option<Vec<Prim
     };
 
     if stack.len() == SET_SIZE {
-        return Some(stack)
+        return Some(stack);
     }
 
     for &other_prime in sets[&prime].borrow().iter() {
         match search_set(&stack[..], other_prime, sets) {
             Some(v) => return Some(v),
-            None    => continue,
+            None => continue,
         }
     }
 

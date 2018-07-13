@@ -15,7 +15,6 @@
  * What is the smallest odd composite that cannot be written as the sum of a prime and twice a
  * square? */
 
-#![feature(step_by)]
 extern crate shared;
 
 use shared::sieve;
@@ -41,7 +40,7 @@ fn main() {
 
 fn mark_odd_composites(segment: &mut OddNumberSegment, sieve: &mut PrimeSieve<usize>) {
     let segment_start = segment.first();
-    let segment_end   = segment.last();
+    let segment_end = segment.last();
 
     sieve.compute_until(segment_end);
 
@@ -69,11 +68,11 @@ fn min_half_square(prime: usize, end: usize, rounding: Rounding) -> usize {
     if prime >= end {
         0
     } else {
-        let diff   = (end - prime) as f64;
+        let diff = (end - prime) as f64;
         let result = (diff / 2.0).sqrt();
 
         let rounded = match rounding {
-            Rounding::Up   => result.ceil(),
+            Rounding::Up => result.ceil(),
             Rounding::Down => result.floor(),
         };
 
@@ -90,7 +89,7 @@ fn new_segment(start: usize) -> OddNumberSegment {
     let end = start + SEGMENT_SIZE - 1;
 
     assert!(start % 2 == 1, "segment start is not odd: {}", start);
-    assert!(end % 2 == 1,   "segment end is not odd: {}", end);
+    assert!(end % 2 == 1, "segment end is not odd: {}", end);
 
     OddNumberSegment {
         values: [false; SEGMENT_SIZE],
@@ -105,8 +104,13 @@ impl OddNumberSegment {
             assert!(is_odd, "{} is not an odd number!", number);
 
             let in_range = number >= self.start && number <= self.last();
-            assert!(in_range, "{} is out of the segment range [{}..{}]",
-                            number, self.start, self.last());
+            assert!(
+                in_range,
+                "{} is out of the segment range [{}..{}]",
+                number,
+                self.start,
+                self.last()
+            );
 
             (number - self.start) / 2
         };
@@ -115,13 +119,17 @@ impl OddNumberSegment {
     }
 
     fn unmarked_numbers(&self) -> Vec<usize> {
-        self.values.iter().enumerate().filter_map(|(index, value)| {
-            if *value {
-                None
-            } else {
-                Some(index * 2 + self.start)
-            }
-        }).collect()
+        self.values
+            .iter()
+            .enumerate()
+            .filter_map(|(index, value)| {
+                if *value {
+                    None
+                } else {
+                    Some(index * 2 + self.start)
+                }
+            })
+            .collect()
     }
 
     fn length() -> usize {

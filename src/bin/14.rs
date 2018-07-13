@@ -16,12 +16,11 @@
  *
  * NOTE: Once the chain starts the terms are allowed to go above one million. */
 
-#![feature(step_by)]
-
 extern crate num;
+
 use num::Integer;
+use std::sync::mpsc::{channel, Receiver, Sender};
 use std::thread;
-use std::sync::mpsc::{Receiver, Sender, channel};
 
 const MAX: u64 = 1_000_000;
 
@@ -29,9 +28,13 @@ fn main() {
     let master_rx = spawn_workers(MAX);
 
     let mut result = 0;
-    let mut max    = 0;
+    let mut max = 0;
 
-    for WorkResult { number: num, result: current } in master_rx.iter() {
+    for WorkResult {
+        number: num,
+        result: current,
+    } in master_rx.iter()
+    {
         if current > max {
             max = current;
             result = num;
@@ -54,7 +57,7 @@ fn spawn_workers(max: u64) -> Receiver<WorkResult> {
 
     let per_task = max / task_count;
 
-    for start in (1..max + 1).step_by(per_task) {
+    for start in (1..max + 1).step_by(per_task as usize) {
         let master_tx_clone = master_tx.clone();
 
         thread::spawn(move || {
@@ -86,7 +89,10 @@ fn collatz_worker(numbers: (u64, u64), tx: Sender<WorkResult>) {
         }
     }
 
-    tx.send(WorkResult { number: current, result: max as u32 }).unwrap();
+    tx.send(WorkResult {
+        number: current,
+        result: max as u32,
+    }).unwrap();
 }
 
 fn collatz_length(number: u64) -> usize {
@@ -94,12 +100,11 @@ fn collatz_length(number: u64) -> usize {
     let mut current_number = number;
 
     while current_number > 1 {
-        current_number =
-            if current_number.is_even() {
-                current_number / 2
-            } else {
-                3 * current_number + 1
-            };
+        current_number = if current_number.is_even() {
+            current_number / 2
+        } else {
+            3 * current_number + 1
+        };
 
         length += 1;
     }

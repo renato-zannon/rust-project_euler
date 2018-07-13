@@ -11,8 +11,6 @@
  *
  * How many different ways can £2 be made using any number of coins? */
 
-#![feature(slice_patterns, step_by)]
-
 const DENOMINATIONS: &'static [u32] = &[200, 100, 50, 20, 10, 5, 2, 1];
 
 fn main() {
@@ -20,18 +18,18 @@ fn main() {
 }
 
 fn ways_to_make(value: u32, denominations: &[u32]) -> u32 {
-    match denominations {
-        &[]  => 0,
-        &[_] => 1,
+    match denominations.split_first() {
+        None => 0,
+        Some((_, &[])) => 1,
 
-        &[denom, ref remaining_denoms..] => {
-            (value % denom..value + 1).step_by(denom).fold(0, |acc, rest_val| {
+        Some((denom, remaining_denoms)) => (value % denom..value + 1)
+            .step_by(*denom as usize)
+            .fold(0, |acc, rest_val| {
                 if rest_val == 0 {
                     acc + 1
                 } else {
                     acc + ways_to_make(rest_val, remaining_denoms)
                 }
-            })
-        }
+            }),
     }
 }

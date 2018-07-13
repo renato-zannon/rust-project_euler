@@ -13,8 +13,6 @@
  *
  * What is the sum of the numbers on the diagonals in a 1001 by 1001 spiral formed in the same way? */
 
-#![feature(step_by)]
-
 #[cfg(not(test))]
 fn main() {
     let result: u32 = diagonals(1001).into_iter().fold(0, |acc, item| acc + item);
@@ -24,7 +22,7 @@ fn main() {
 fn diagonals(square_size: u32) -> Vec<u32> {
     assert!(square_size % 2 == 1);
 
-    let mut result  = vec!(1);
+    let mut result = vec![1];
     let mut current = 1;
 
     for size in (3..square_size + 1).step_by(2) {
@@ -43,21 +41,24 @@ mod tests {
 
     #[test]
     fn test_width_1() {
-        assert_eq!(diagonals(1), vec!(1));
+        assert_eq!(diagonals(1), vec![1]);
     }
 
     #[test]
     fn test_width_3() {
-        assert_eq!(diagonals(3), vec!(1, 3, 5, 7, 9));
+        assert_eq!(diagonals(3), vec![1, 3, 5, 7, 9]);
     }
 
     #[test]
     fn test_width_5() {
-        assert_eq!(diagonals(5), vec!(1, 3, 5, 7, 9, 13, 17, 21, 25));
+        assert_eq!(diagonals(5), vec![1, 3, 5, 7, 9, 13, 17, 21, 25]);
     }
 
     #[test]
     fn test_width_7() {
-        assert_eq!(diagonals(7), vec!(1, 3, 5, 7, 9, 13, 17, 21, 25, 31, 37, 43, 49));
+        assert_eq!(
+            diagonals(7),
+            vec![1, 3, 5, 7, 9, 13, 17, 21, 25, 31, 37, 43, 49]
+        );
     }
 }

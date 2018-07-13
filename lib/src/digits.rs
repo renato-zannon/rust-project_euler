@@ -1,6 +1,6 @@
-use num::{PrimInt, Integer, FromPrimitive, ToPrimitive};
-use std::io::{self, Write};
+use num::{FromPrimitive, Integer, PrimInt, ToPrimitive};
 use std::fmt::Debug;
+use std::io::{self, Write};
 use std::marker::PhantomData;
 
 pub struct Digits<A, B> {
@@ -11,8 +11,10 @@ pub struct Digits<A, B> {
 }
 
 impl<A, B> Iterator for Digits<A, B>
-    where A: Integer + FromPrimitive + ToPrimitive, B: FromPrimitive {
-
+where
+    A: Integer + FromPrimitive + ToPrimitive,
+    B: FromPrimitive,
+{
     type Item = B;
 
     fn next(&mut self) -> Option<B> {
@@ -31,21 +33,23 @@ impl<A, B> Iterator for Digits<A, B>
 
     fn size_hint(&self) -> (usize, Option<usize>) {
         match self.remaining.to_f64() {
-            Some(0f64) => (1, Some(1)),
+            Some(f) if f == 0.0 => (1, Some(1)),
 
             Some(as_float) => {
                 let log = as_float.log10();
                 (log.floor() as usize, Some(log.ceil() as usize))
-            },
+            }
 
-            None => (0, None)
+            None => (0, None),
         }
     }
-
 }
 
 impl<A, B> DoubleEndedIterator for Digits<A, B>
-    where A: Integer + FromPrimitive + ToPrimitive, B: FromPrimitive {
+where
+    A: Integer + FromPrimitive + ToPrimitive,
+    B: FromPrimitive,
+{
     fn next_back(&mut self) -> Option<B> {
         if self.remaining_digits == 0 {
             return None;
@@ -62,7 +66,9 @@ impl<A, B> DoubleEndedIterator for Digits<A, B>
 }
 
 pub fn new<A, B>(number: A) -> Digits<A, B>
-    where A: ToPrimitive + Debug {
+where
+    A: ToPrimitive + Debug,
+{
     Digits {
         remaining_digits: number_of_digits(&number),
         remaining: number,
@@ -71,8 +77,9 @@ pub fn new<A, B>(number: A) -> Digits<A, B>
 }
 
 impl<A, B> Digits<A, B>
-    where A: Integer + FromPrimitive + ToPrimitive {
-
+where
+    A: Integer + FromPrimitive + ToPrimitive,
+{
     fn current_divisor(&self) -> u32 {
         10.pow(self.remaining_digits - 1)
     }

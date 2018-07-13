@@ -16,7 +16,6 @@
  * Find the sum of all the positive integers which cannot be written as the sum of two abundant
  * numbers.*/
 
-#![feature(step_by)]
 extern crate num;
 
 use num::Integer;
@@ -31,12 +30,14 @@ fn main() {
 fn non_abundant_number_sums() -> u32 {
     let numbers = abundant_numbers_sum(abundant_numbers_below(MAX_NON_ABUNDANT));
 
-    numbers.into_iter().enumerate().filter_map(|(index, &result)| {
-        match result {
-            IntegerResult::CanBeWrittenAsSum    => None,
-            IntegerResult::CannotBeWrittenAsSum => Some(index as u32)
-        }
-    }).fold(0, |sum, number| sum + number)
+    numbers
+        .into_iter()
+        .enumerate()
+        .filter_map(|(index, &result)| match result {
+            IntegerResult::CanBeWrittenAsSum => None,
+            IntegerResult::CannotBeWrittenAsSum => Some(index as u32),
+        })
+        .fold(0, |sum, number| sum + number)
 }
 
 #[derive(PartialEq, Eq, Copy, Clone)]
@@ -45,17 +46,22 @@ enum IntegerResult {
     CannotBeWrittenAsSum,
 }
 
-fn abundant_numbers_sum(abundant_numbers: Vec<u32>) -> [IntegerResult; 1 + MAX_NON_ABUNDANT as usize] {
+fn abundant_numbers_sum(
+    abundant_numbers: Vec<u32>,
+) -> [IntegerResult; 1 + MAX_NON_ABUNDANT as usize] {
     let mut result = [IntegerResult::CannotBeWrittenAsSum; 1 + MAX_NON_ABUNDANT as usize];
 
-    for (index, &n1) in abundant_numbers[..abundant_numbers.len() - 1].iter().enumerate() {
+    for (index, &n1) in abundant_numbers[..abundant_numbers.len() - 1]
+        .iter()
+        .enumerate()
+    {
         for &n2 in abundant_numbers[index..].iter() {
             let sum = n1 + n2;
 
             if sum <= MAX_NON_ABUNDANT {
                 result[sum as usize] = IntegerResult::CanBeWrittenAsSum;
             } else {
-                break
+                break;
             }
         }
     }
@@ -84,12 +90,7 @@ fn proper_divisor_sum(number: u32) -> u32 {
         }
     };
 
-    let (first_candidate, step) =
-        if number.is_odd() {
-            (3, 2)
-        } else {
-            (2, 1)
-        };
+    let (first_candidate, step) = if number.is_odd() { (3, 2) } else { (2, 1) };
 
     for candidate in (first_candidate..last_candidate + 1).step_by(step) {
         if number % candidate == 0 {
