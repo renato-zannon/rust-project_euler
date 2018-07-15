@@ -17,82 +17,20 @@
  * NOTE: Once the chain starts the terms are allowed to go above one million. */
 
 extern crate num;
+extern crate rayon;
 
 use num::Integer;
-use std::sync::mpsc::{channel, Receiver, Sender};
-use std::thread;
+use rayon::prelude::*;
 
 const MAX: u64 = 1_000_000;
 
 fn main() {
-    let master_rx = spawn_workers(MAX);
+    let result = (1..MAX)
+        .into_par_iter()
+        .map(|i| (i, collatz_length(i)))
+        .max_by_key(|(_, length)| *length);
 
-    let mut result = 0;
-    let mut max = 0;
-
-    for WorkResult {
-        number: num,
-        result: current,
-    } in master_rx.iter()
-    {
-        if current > max {
-            max = current;
-            result = num;
-        }
-    }
-
-    println!("{}", result);
-}
-
-fn spawn_workers(max: u64) -> Receiver<WorkResult> {
-    use std::env::{self, VarError};
-
-    let (master_tx, master_rx) = channel();
-
-    let task_count: u64 = match env::var("NPROC") {
-        Ok(num) => num.parse().unwrap(),
-        Err(VarError::NotPresent) => 4,
-        Err(err) => panic!("{}", err),
-    };
-
-    let per_task = max / task_count;
-
-    for start in (1..max + 1).step_by(per_task as usize) {
-        let master_tx_clone = master_tx.clone();
-
-        thread::spawn(move || {
-            let end = start + per_task;
-            collatz_worker((start, end), master_tx_clone);
-        });
-    }
-
-    return master_rx;
-}
-
-struct WorkResult {
-    number: u64,
-    result: u32,
-}
-
-fn collatz_worker(numbers: (u64, u64), tx: Sender<WorkResult>) {
-    let (start, end) = numbers;
-
-    let mut current = 0;
-    let mut max = 0;
-
-    for num in start..end {
-        let len = collatz_length(num);
-
-        if len > max {
-            current = num;
-            max = len;
-        }
-    }
-
-    tx.send(WorkResult {
-        number: current,
-        result: max as u32,
-    }).unwrap();
+    println!("{}", result.unwrap().0);
 }
 
 fn collatz_length(number: u64) -> usize {
