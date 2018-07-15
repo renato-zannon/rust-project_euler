@@ -9,3 +9,4 @@ path = "src/shared.rs"
 
 [dependencies]
 num = "*"
+fnv = "1.0.6"

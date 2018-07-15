@@ -1,5 +1,5 @@
-use num::{self, Float, FromPrimitive, Integer, ToPrimitive};
-use std::collections::BTreeSet;
+use fnv::FnvHashSet;
+use num::{self, Float, ToPrimitive};
 
 #[derive(Debug, PartialEq)]
 pub enum FractionType {
@@ -18,7 +18,7 @@ pub fn divide_square(number: u32) -> FractionType {
         square_root.floor() as u32
     };
 
-    let mut period = Vec::new();
+    let mut period = Vec::with_capacity(10);
 
     let mut prev_step = Step {
         closest_square: closest_square,
@@ -27,7 +27,7 @@ pub fn divide_square(number: u32) -> FractionType {
         rest: closest_square,
     };
 
-    let mut seen_steps = BTreeSet::new();
+    let mut seen_steps = FnvHashSet::with_capacity_and_hasher(10, Default::default());
 
     loop {
         let (step_result, next_step) = step(prev_step);
@@ -37,14 +37,14 @@ pub fn divide_square(number: u32) -> FractionType {
         }
 
         prev_step = next_step.clone();
-        seen_steps.insert(next_step.clone());
+        seen_steps.insert(next_step);
         period.push(step_result);
     }
 
     FractionType::Periodic(closest_square, period)
 }
 
-#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone, Hash)]
 struct Step {
     closest_square: u32,
     numerator: u32,

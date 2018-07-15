@@ -1,6 +1,7 @@
 #![crate_name = "shared"]
 #![crate_type = "lib"]
 
+extern crate fnv;
 extern crate num;
 
 pub use integer_extensions::IntegerExtensions;
