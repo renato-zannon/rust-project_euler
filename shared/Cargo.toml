@@ -3,10 +3,6 @@ name = "shared"
 version = "0.0.1"
 authors = ["Renato Zannon <renato@rrsz.com.br>"]
 
-[lib]
-name = "shared"
-path = "src/shared.rs"
-
 [dependencies]
-num = "*"
+num = "0.2"
 fnv = "1.0.6"

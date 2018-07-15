@@ -9,12 +9,10 @@ enum-set = "0.0.7"
 enum_primitive = "0.1"
 itertools = "0.7"
 num = "0.2"
-
-[dependencies.shared]
-path = "lib"
+shared = { path = "shared" }
 
 [profile.release]
 debug = true
 
 [workspace]
-members = ["lib"]
+members = ["shared"]
