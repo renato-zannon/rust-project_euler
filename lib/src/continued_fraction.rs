@@ -1,4 +1,4 @@
-use num::Float;
+use num::{self, Float, FromPrimitive, Integer, ToPrimitive};
 use std::collections::BTreeSet;
 
 #[derive(Debug, PartialEq)]
@@ -74,27 +74,88 @@ fn step(prev: Step) -> (u32, Step) {
     )
 }
 
-// struct ConvergentIterator {
-//     number: u32,
-//     last_pair: Option<(u32, u32)>,
-// }
-//
-// impl Iterator for ConvergentIterator {
-//     type Item = (u32, u32);
-//
-//     fn next(&mut self) -> Option<(u32, u32)> {
-//         let last_pair = match self.last_pair {
-//             Some(pair) => pair,
-//
-//             None => {
-//                 // k0 = 1 + (x - 1) / 2 = (x + 1)/2
-//                 let pair = Some((self.number + 1, 2));
-//                 self.last_pair = pair.clone();
-//                 return pair;
-//             }
-//         };
-//     }
-// }
+#[derive(Clone, Copy, Debug)]
+pub struct ConvergentPair<T> {
+    pub numerator: T,
+    pub denominator: T,
+}
+
+pub struct ConvergentIterator<T> {
+    period: Vec<T>,
+    index: usize,
+    next_a: T,
+    prev_pair: ConvergentPair<T>,
+    pprev_pair: ConvergentPair<T>,
+}
+
+pub fn convergent_iterator<T>(number: T) -> ConvergentIterator<T>
+where
+    T: ToPrimitive + From<u32>,
+{
+    match divide_square(number.to_u32().unwrap()) {
+        FractionType::Exact => unimplemented!(),
+
+        FractionType::Periodic(n, period) => {
+            let period = period.into_iter().map(From::from).collect();
+
+            ConvergentIterator {
+                index: 0,
+                period,
+                next_a: From::from(n),
+                prev_pair: ConvergentPair {
+                    numerator: From::from(1),
+                    denominator: From::from(0),
+                },
+
+                pprev_pair: ConvergentPair {
+                    numerator: From::from(0),
+                    denominator: From::from(1),
+                },
+            }
+        }
+    }
+}
+
+impl<T> Iterator for ConvergentIterator<T>
+where
+    T: Clone + num::CheckedMul + num::CheckedAdd,
+{
+    type Item = ConvergentPair<T>;
+
+    fn next(&mut self) -> Option<ConvergentPair<T>> {
+        use std::mem::swap;
+
+        let pair = {
+            let a = &self.next_a;
+
+            let numerator = self.prev_pair
+                .numerator
+                .checked_mul(a)
+                .and_then(|m| m.checked_add(&self.pprev_pair.numerator));
+
+            let denominator = self.prev_pair
+                .denominator
+                .checked_mul(a)
+                .and_then(|m| m.checked_add(&self.pprev_pair.denominator));
+
+            match (numerator, denominator) {
+                (Some(n), Some(d)) => ConvergentPair {
+                    numerator: n,
+                    denominator: d,
+                },
+
+                _ => return None,
+            }
+        };
+
+        self.next_a = self.period[self.index % self.period.len()].clone();
+        self.index += 1;
+        swap(&mut self.pprev_pair, &mut self.prev_pair);
+        self.prev_pair = pair.clone();
+
+        Some(pair)
+    }
+}
 
 #[cfg(test)]
 mod tests {
