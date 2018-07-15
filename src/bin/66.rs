@@ -20,44 +20,41 @@
  *
  * Find the value of D ≤ 1000 in minimal solutions of x for which the largest value of x is
  * obtained. */
-extern crate num;
 extern crate shared;
 
-use num::{BigUint, CheckedMul};
 use shared::continued_fraction::convergent_iterator;
-use std::collections::BTreeSet;
+use std::collections::HashSet;
 
-const MAX_D: u64 = 1000;
+const MAX_D: u128 = 1000;
 
 #[derive(Debug)]
 struct Solution {
-    d: BigUint,
-    x: BigUint,
+    d: u128,
+    x: u128,
 }
 
 fn main() {
-    let mut ds_to_solve: BTreeSet<BigUint> = (1..MAX_D).map(BigUint::from).collect();
+    let perfect_square_ds: HashSet<u128> = {
+        let max_d_root = (MAX_D as f64).sqrt().ceil() as u128;
 
-    for root in 1..((MAX_D as f64).sqrt().ceil() as u64) {
-        ds_to_solve.remove(&BigUint::from(root * root));
-    }
-
-    let mut solution = Solution {
-        d: BigUint::from(0u32),
-        x: BigUint::from(0u32),
+        (1..max_d_root).map(|root| root * root).collect()
     };
 
-    for d in ds_to_solve {
+    let mut solution = Solution { d: 0, x: 0 };
+
+    for d in 1..MAX_D {
+        if perfect_square_ds.contains(&d) {
+            continue;
+        }
+
         for pair in convergent_iterator(d.clone()) {
             let x = pair.numerator;
             let y = pair.denominator;
 
-            let numerator_squared = x.checked_mul(&x).unwrap();
-            let denominator_squared = y.checked_mul(&y).unwrap();
+            let numerator_squared = x.wrapping_mul(x);
+            let denominator_squared = y.wrapping_mul(y);
 
-            if denominator_squared * &d == numerator_squared - 1u32 {
-                println!("d = {}; x = {}", d, x);
-
+            if denominator_squared.wrapping_mul(d) == numerator_squared - 1 {
                 if x > solution.x {
                     solution = Solution { x, d };
                 }
