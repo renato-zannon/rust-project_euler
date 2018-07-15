@@ -4,11 +4,11 @@ version = "0.0.1"
 authors = ["Renato Zannon <renato@rrsz.com.br>"]
 
 [dependencies]
-num = "*"
-enum_primitive = "*"
-ascii = "*"
-enum-set = "*"
-itertools = "*"
+ascii = "0.9"
+enum-set = "0.0.7"
+enum_primitive = "0.1"
+itertools = "0.7"
+num = "0.2"
 
 [dependencies.shared]
 path = "lib"
