@@ -10,6 +10,7 @@ enum_primitive = "0.1"
 itertools = "0.7"
 num = "0.2"
 shared = { path = "shared" }
+rayon = "1.0.1"
 
 [profile.release]
 debug = true
