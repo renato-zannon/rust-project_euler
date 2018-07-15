@@ -4,7 +4,7 @@
  *
  * x² – Dy² = 1
  *
- * For example, when D=13, the minimal solution in x is 6492 – 13×1802 = 1.
+ * For example, when D=13, the minimal solution in x is 649^2 – 13×180^2 = 1.
  *
  * It can be assumed that there are no solutions in positive integers when D is square.
  *
@@ -20,72 +20,52 @@
  *
  * Find the value of D ≤ 1000 in minimal solutions of x for which the largest value of x is
  * obtained. */
+extern crate num;
+extern crate shared;
 
+use num::{BigUint, CheckedMul};
+use shared::continued_fraction::convergent_iterator;
 use std::collections::BTreeSet;
-use std::u64;
 
 const MAX_D: u64 = 1000;
 
-// x² - Dy² = 1
-// x² - 1 = Dy²
-// D = (x² - 1) / y²
-// D = (x + 1)(x - 1) / y²
-
-// x² - Dy² = 1
-// x² = Dy² + 1
-
+#[derive(Debug)]
 struct Solution {
-    d: u64,
-    x: u64,
+    d: BigUint,
+    x: BigUint,
 }
 
 fn main() {
-    let mut ds_to_solve: BTreeSet<u64> = (1..MAX_D).collect();
-    let mut ds_to_remove = Vec::with_capacity(MAX_D as usize);
+    let mut ds_to_solve: BTreeSet<BigUint> = (1..MAX_D).map(BigUint::from).collect();
 
     for root in 1..((MAX_D as f64).sqrt().ceil() as u64) {
-        ds_to_solve.remove(&(root * root));
+        ds_to_solve.remove(&BigUint::from(root * root));
     }
 
-    let max_y = (u64::MAX as f64).sqrt().ceil() as u64;
-    let mut solution = Solution { d: 0, x: 0 };
+    let mut solution = Solution {
+        d: BigUint::from(0u32),
+        x: BigUint::from(0u32),
+    };
 
-    // D = (x² - 1) / y²
-    // y²D = x² - 1
-    // x² = y²D + 1
-    // xx = yyD + 1
-    for y in 2..max_y {
-        let y_squared = y * y;
+    for d in ds_to_solve {
+        for pair in convergent_iterator(d.clone()) {
+            let x = pair.numerator;
+            let y = pair.denominator;
 
-        for &d in ds_to_solve.iter() {
-            let x_squared_candidate = (d * y_squared) + 1;
+            let numerator_squared = x.checked_mul(&x).unwrap();
+            let denominator_squared = y.checked_mul(&y).unwrap();
 
-            match integer_root(x_squared_candidate) {
-                Some(x) => {
-                    println!("{:?} - {}", ds_to_solve, d);
-                    ds_to_remove.push(d);
+            if denominator_squared * &d == numerator_squared - 1u32 {
+                println!("d = {}; x = {}", d, x);
 
-                    if x > solution.x {
-                        solution = Solution { x: x, d: d };
-                    }
+                if x > solution.x {
+                    solution = Solution { x, d };
                 }
 
-                None => continue,
+                break;
             }
-        }
-
-        for d_to_remove in ds_to_remove.drain(..) {
-            ds_to_solve.remove(&d_to_remove);
-        }
-
-        if ds_to_solve.len() == 0 {
-            break;
         }
     }
 
-    println!("{}", solution.d);
-}
-
-fn integer_root(_x: u64) -> Option<u64> {
-    None
+    println!("{:?}", solution);
 }
