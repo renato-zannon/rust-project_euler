@@ -18,7 +18,9 @@
  *
  * By concatenating each group it is possible to form 9-digit strings; the maximum string for a 3-gon ring is 432621513.
  *
- * Using the numbers 1 to 10, and depending on arrangements, it is possible to form 16- and 17-digit strings. What is the maximum 16-digit string for a "magic" 5-gon ring? */
+ * Using the numbers 1 to 10, and depending on arrangements, it is possible to form 16- and 17-digit strings.
+ * What is the maximum 16-digit string for a "magic" 5-gon ring? */
+extern crate itertools;
 extern crate shared;
 extern crate smallvec;
 
@@ -76,9 +78,9 @@ type Solution = SmallVec<[SolutionPart; RING_WIDTH]>;
 fn solutions() -> impl Iterator<Item = Solution> {
     let digits: SmallVec<[u8; MAX_NUMBER as usize + 1]> = (1..=MAX_NUMBER).collect();
 
-    digits
-        .permutations()
-        .filter_map(|perm| maybe_solution(&perm))
+    itertools::unfold(digits.permutations(), |state| {
+        state.permute().map(|s| maybe_solution(s))
+    }).filter_map(|opt| opt)
 }
 
 fn maybe_solution(numbers: &[u8]) -> Option<Solution> {

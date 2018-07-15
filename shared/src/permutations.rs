@@ -36,17 +36,28 @@ impl<A: Ord + Clone, T: AsMut<[A]> + AsRef<[A]>> Iterator for SEPA<T, A> {
     type Item = Vec<A>;
 
     fn next(&mut self) -> Option<Vec<A>> {
-        if self.first {
-            self.first = false;
-            return Some(self.current.as_ref().to_vec());
-        }
-
-        self.keys().map(|(key, newkey)| self.permute(key, newkey))
+        self.permute().map(|slice| slice.to_vec())
     }
 }
 
 impl<A: Ord + Clone, T: AsMut<[A]> + AsRef<[A]>> SEPA<T, A> {
-    fn keys(&self) -> Option<(usize, usize)> {
+    pub fn permute<'a>(&'a mut self) -> Option<&'a mut [A]> {
+        if self.first {
+            self.first = false;
+            return Some(self.current.as_mut());
+        }
+
+        if let Some((key, newkey)) = self.next_keys() {
+            let slice = self.current.as_mut();
+
+            permute(slice, key, newkey);
+            return Some(slice);
+        }
+
+        None
+    }
+
+    fn next_keys(&self) -> Option<(usize, usize)> {
         let current_perm = self.current.as_ref();
         let current_len = current_perm.len();
 
@@ -72,21 +83,17 @@ impl<A: Ord + Clone, T: AsMut<[A]> + AsRef<[A]>> SEPA<T, A> {
                 .map(|newkey| (key_index, newkey))
         })
     }
+}
 
-    fn permute(&mut self, key: usize, newkey: usize) -> Vec<A> {
-        let current_perm = self.current.as_mut();
+fn permute<T>(slice: &mut [T], key: usize, newkey: usize) {
+    slice.swap(key, newkey);
 
-        current_perm.swap(key, newkey);
+    let mut from_start = key + 1;
+    let mut from_end = slice.len() - 1;
 
-        let mut from_start = key + 1;
-        let mut from_end = current_perm.len() - 1;
-
-        while from_end > from_start {
-            current_perm.swap(from_end, from_start);
-            from_end -= 1;
-            from_start += 1;
-        }
-
-        current_perm.to_vec()
+    while from_end > from_start {
+        slice.swap(from_end, from_start);
+        from_end -= 1;
+        from_start += 1;
     }
 }
