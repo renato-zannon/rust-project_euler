@@ -30,37 +30,56 @@ use std::iter;
 
 const MAX: u32 = 1_000_000;
 
+struct Cell {
+    ratio: Ratio<u32>,
+    value: u32,
+}
+
 fn main() {
     let sieve = sieve::new::<u32>();
 
-    let mut totient_ratios: Vec<_> = iter::repeat(Ratio::from_integer(1))
-        .take(MAX as usize + 1)
+    let primes: Vec<_> = sieve.take_while(|n| *n < MAX / 2).collect();
+
+    let mut totient_ratios: Vec<_> = (1..=MAX)
+        .map(|value| Cell {
+            value,
+            ratio: Ratio::from_integer(1),
+        })
         .collect();
 
-    for prime in sieve {
-        let start = prime * 2;
-        if start > MAX {
-            break;
-        }
+    totient_ratios
+        .par_chunks_mut((MAX as usize) / 4)
+        .for_each(|chunk| {
+            let head_value = match chunk.first() {
+                Some(head) => head.value,
+                None => return,
+            };
 
-        let range = &mut totient_ratios[start as usize..];
-        let uprime = prime as usize;
+            for &prime in &primes {
+                let start = {
+                    let rem = head_value % prime;
 
-        range
-            .into_par_iter()
-            .enumerate()
-            .for_each(move |(n, value)| {
-                if (n as u32) % prime == 0 {
-                    // calculate n / phi(n) directly
-                    *value *= Ratio::new(prime, prime - 1);
+                    if rem > 0 {
+                        (prime - rem) as usize
+                    } else {
+                        0
+                    }
+                };
+
+                if start > chunk.len() {
+                    continue;
                 }
-            });
-    }
 
-    let result = totient_ratios
-        .into_par_iter()
-        .enumerate()
-        .max_by_key(|&(_, ratio)| ratio);
+                let range = start..chunk.len();
 
-    println!("{}", result.unwrap().0);
+                // Calculate n/phi(n) = product of (p / p - 1) for all prime divisors of n
+                for cell in chunk[range].iter_mut().step_by(prime as usize) {
+                    cell.ratio *= Ratio::new(prime, prime - 1);
+                }
+            }
+        });
+
+    let result = totient_ratios.into_par_iter().max_by_key(|cell| cell.ratio);
+
+    println!("{}", result.unwrap().value);
 }
