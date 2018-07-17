@@ -26,7 +26,6 @@ extern crate shared;
 use num::rational::Ratio;
 use rayon::prelude::*;
 use shared::sieve;
-use std::iter;
 
 const MAX: u32 = 1_000_000;
 
