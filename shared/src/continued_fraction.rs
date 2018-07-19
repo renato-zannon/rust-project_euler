@@ -128,12 +128,14 @@ where
         let pair = {
             let a = &self.next_a;
 
-            let numerator = self.prev_pair
+            let numerator = self
+                .prev_pair
                 .numerator
                 .checked_mul(a)
                 .and_then(|m| m.checked_add(&self.pprev_pair.numerator));
 
-            let denominator = self.prev_pair
+            let denominator = self
+                .prev_pair
                 .denominator
                 .checked_mul(a)
                 .and_then(|m| m.checked_add(&self.pprev_pair.denominator));
