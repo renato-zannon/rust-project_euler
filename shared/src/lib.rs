@@ -13,4 +13,5 @@ pub mod pandigital;
 pub mod permutations;
 pub mod primes;
 pub mod sieve;
+pub mod totient;
 pub mod triangle;
