@@ -6,3 +6,10 @@ authors = ["Renato Zannon <renato@rrsz.com.br>"]
 [dependencies]
 num = "0.2"
 fnv = "1.0.6"
+
+[dev-dependencies]
+criterion = "0.2.4"
+
+[[bench]]
+name = "digits"
+harness = false

@@ -1,7 +1,8 @@
 use num::{FromPrimitive, Integer, PrimInt, ToPrimitive};
-use std::fmt::Debug;
-use std::io::{self, Write};
+
 use std::marker::PhantomData;
+
+use digit_count::DigitCount;
 
 pub struct Digits<A, B> {
     remaining: A,
@@ -67,10 +68,10 @@ where
 
 pub fn new<A, B>(number: A) -> Digits<A, B>
 where
-    A: ToPrimitive + Debug,
+    A: DigitCount,
 {
     Digits {
-        remaining_digits: number_of_digits(&number),
+        remaining_digits: number.number_of_digits(),
         remaining: number,
         _marker: PhantomData,
     }
@@ -86,28 +87,6 @@ where
 
     pub fn count(self) -> u32 {
         self.remaining_digits
-    }
-}
-
-fn number_of_digits<A: ToPrimitive + Debug>(number: &A) -> u32 {
-    let mut counter = DigitCounter { count: 0 };
-    (write!(&mut counter, "{:?}", number)).unwrap();
-
-    counter.count
-}
-
-struct DigitCounter {
-    count: u32,
-}
-
-impl io::Write for DigitCounter {
-    fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
-        self.count += buf.len() as u32;
-        return Ok(buf.len());
-    }
-
-    fn flush(&mut self) -> io::Result<()> {
-        return Ok(());
     }
 }
 

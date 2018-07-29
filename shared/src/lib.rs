@@ -7,6 +7,7 @@ pub use permutations::Permutations;
 pub mod combinations;
 pub mod continued_fraction;
 pub mod data_reader;
+mod digit_count;
 pub mod digits;
 pub mod integer_extensions;
 pub mod pandigital;
