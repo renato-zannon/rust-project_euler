@@ -13,6 +13,7 @@ pub mod integer_extensions;
 pub mod pandigital;
 pub mod permutations;
 pub mod primes;
+pub mod pythagorean_triplets;
 pub mod sieve;
 pub mod totient;
 pub mod triangle;
