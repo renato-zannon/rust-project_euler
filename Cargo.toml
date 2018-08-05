@@ -19,4 +19,4 @@ debug = true
 lto = true
 
 [workspace]
-members = ["shared"]
+members = ["shared", "new-problem"]
