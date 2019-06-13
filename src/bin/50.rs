@@ -10,7 +10,7 @@
  *
  * Which prime, below one-million, can be written as the sum of the most consecutive primes? */
 
-extern crate shared;
+
 use shared::sieve::{self, Sieve};
 
 const MAX_PRIME: usize = 1_000_000;
@@ -52,20 +52,20 @@ fn longest_after_advancing<'a>(
     let mut prev_try = seq.clone();
 
     loop {
-        let try = match prev_try.advance() {
+        let r#try = match prev_try.advance() {
             None => break,
             Some(advanced) => longest_after_expanding(advanced, sieve),
         };
 
-        if try.value > MAX_PRIME {
+        if r#try.value > MAX_PRIME {
             break;
         }
 
-        if try.len() > longest_sequence.len() {
-            longest_sequence = try.clone();
+        if r#try.len() > longest_sequence.len() {
+            longest_sequence = r#try.clone();
         }
 
-        prev_try = try;
+        prev_try = r#try;
     }
 
     longest_sequence

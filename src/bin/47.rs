@@ -14,7 +14,7 @@
  * Find the first four consecutive integers to have four distinct prime factors. What is the first
  * of these numbers? */
 
-extern crate shared;
+
 
 use shared::sieve;
 use std::collections::{HashMap, HashSet};
@@ -46,7 +46,7 @@ fn main() {
 
 type Memo<'a> = &'a mut HashMap<usize, HashSet<usize>>;
 
-fn factors_for_number(count: FactorCount) -> usize {
+fn factors_for_number(count: FactorCount<'_>) -> usize {
     let (_, result) = factors(count);
     result.len()
 }
@@ -57,7 +57,7 @@ struct FactorCount<'a> {
     primes: &'a [usize],
 }
 
-fn factors(mut count: FactorCount) -> (Memo, HashSet<usize>) {
+fn factors(mut count: FactorCount<'_>) -> (Memo<'_>, HashSet<usize>) {
     match count.memo.get(&count.remaining).cloned() {
         Some(cached) => {
             return (count.memo, cached);

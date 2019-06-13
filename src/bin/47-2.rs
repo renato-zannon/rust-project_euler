@@ -14,7 +14,7 @@
  * Find the first four consecutive integers to have four distinct prime factors. What is the first
  * of these numbers? */
 
-extern crate shared;
+
 use shared::sieve;
 use std::cmp::Ordering;
 
@@ -114,7 +114,7 @@ impl Segment {
         factor_count.add_factor(factor);
     }
 
-    fn number_factors(&self) -> NumberFactors {
+    fn number_factors(&self) -> NumberFactors<'_> {
         NumberFactors {
             start: self.start,
             values: &self.values,

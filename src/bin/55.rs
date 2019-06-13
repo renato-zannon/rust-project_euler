@@ -27,9 +27,9 @@
  * NOTE: Wording was modified slightly on 24 April 2007 to emphasise the theoretical nature of Lychrel
  * numbers. */
 
-extern crate itertools;
-extern crate num;
-extern crate shared;
+use itertools;
+
+
 
 use num::bigint::BigUint;
 use num::FromPrimitive;

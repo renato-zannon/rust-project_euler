@@ -9,7 +9,7 @@
  *
  * Evaluate the sum of all the amicable numbers under 10000. */
 
-extern crate num;
+
 
 use std::collections::hash_map::Entry;
 use std::collections::{HashMap, HashSet};

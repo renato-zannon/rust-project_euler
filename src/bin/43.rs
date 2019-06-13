@@ -15,7 +15,7 @@
  *
  * Find the sum of all 0 to 9 pandigital numbers with this property. */
 
-extern crate shared;
+
 use shared::digits;
 
 const DIVISORS: &'static [u32] = &[2, 3, 5, 7, 11, 13, 17];

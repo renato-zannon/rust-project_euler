@@ -9,7 +9,7 @@
  *
  * What 12-digit number do you form by concatenating the three terms in this sequence? */
 
-extern crate shared;
+
 use shared::{digits, sieve, Permutations};
 
 const MEMBER_GAP: usize = 3330;

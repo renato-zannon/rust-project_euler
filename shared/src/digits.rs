@@ -2,7 +2,7 @@ use num::{FromPrimitive, Integer, PrimInt, ToPrimitive};
 
 use std::marker::PhantomData;
 
-use digit_count::DigitCount;
+use crate::digit_count::DigitCount;
 
 pub struct Digits<A, B> {
     remaining: A,

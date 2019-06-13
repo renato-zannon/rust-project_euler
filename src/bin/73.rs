@@ -13,8 +13,8 @@
  *
  * How many fractions lie between 1/3 and 1/2 in the sorted set of reduced proper fractions
  * for d ≤ 12,000? */
-extern crate num;
-extern crate rayon;
+
+
 
 use num::Integer;
 use rayon::prelude::*;

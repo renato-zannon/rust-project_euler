@@ -10,7 +10,7 @@ fn main() {
     println!("{}", result);
 }
 
-fn find_biggest(slices: consecutive_digits::ConsecutiveDigits) -> u32 {
+fn find_biggest(slices: consecutive_digits::ConsecutiveDigits<'_>) -> u32 {
     slices.map(multiply).max().unwrap()
 }
 
@@ -43,7 +43,7 @@ mod consecutive_digits {
         }
     }
 
-    pub fn new(string: &str, length: usize) -> ConsecutiveDigits {
+    pub fn new(string: &str, length: usize) -> ConsecutiveDigits<'_> {
         ConsecutiveDigits {
             string: string,
             length: length,

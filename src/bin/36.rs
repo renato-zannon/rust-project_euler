@@ -6,7 +6,7 @@
  *
  * (Please note that the palindromic number, in either base, may not include leading zeros.) */
 
-extern crate shared;
+
 use std::fmt::Write;
 
 trait NumberFormatter {

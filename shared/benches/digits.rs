@@ -1,7 +1,3 @@
-#[macro_use]
-extern crate criterion;
-extern crate shared;
-
 use self::criterion::*;
 use shared::digits::{self, Digits};
 

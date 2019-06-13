@@ -1,7 +1,7 @@
 use self::PandigitalResult::{HasRepetitions, IsPandigital, TooLarge, TooSmall};
 use super::digits;
-use super::std::{iter, slice};
 
+use std::{iter, slice};
 use num::{FromPrimitive, Integer, ToPrimitive};
 
 #[derive(Copy, Clone)]
@@ -78,7 +78,7 @@ pub fn is_9_pandigital<T: DigitCollection>(mut digits: T) -> PandigitalResult {
     let only_uniques = digits.digit_iter().all(|digit| {
         let found = match digit {
             0 => return false,
-            1...9 => &mut found_numbers[(digit as usize) - 1],
+            1..=9 => &mut found_numbers[(digit as usize) - 1],
             _ => unreachable!(),
         };
 

@@ -6,7 +6,7 @@
  *
  * Find the smallest cube for which exactly five permutations of its digits are cube. */
 
-extern crate shared;
+
 
 use shared::digits;
 use std::collections::{BTreeMap, BTreeSet};

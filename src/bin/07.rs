@@ -5,7 +5,7 @@
  *
  * What is the 10 001st prime number? */
 
-extern crate shared;
+
 
 use shared::sieve::{self, Sieve};
 

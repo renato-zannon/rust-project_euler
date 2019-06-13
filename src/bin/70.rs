@@ -11,9 +11,9 @@
  * Find the value of n, 1 < n < 107, for which φ(n) is a permutation of n and the ratio n/φ(n) produces a
  * minimum. */
 
-extern crate num;
-extern crate rayon;
-extern crate shared;
+
+use rayon;
+
 
 use num::rational::Ratio;
 use rayon::prelude::*;

@@ -19,7 +19,7 @@
 
 #[macro_use]
 extern crate enum_primitive;
-extern crate num;
+
 use num::{FromPrimitive, Integer};
 
 fn main() {

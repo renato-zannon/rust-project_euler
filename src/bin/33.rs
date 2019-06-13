@@ -12,8 +12,8 @@
  * If the product of these four fractions is given in its lowest common terms, find the value of the
  * denominator. */
 
-extern crate num;
-extern crate shared;
+
+
 
 use self::CancelResult::{Cancelable, NonCancelable};
 use num::integer::gcd;

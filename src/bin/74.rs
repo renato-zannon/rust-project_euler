@@ -24,8 +24,8 @@
  *
  * How many chains, with a starting number below one million, contain exactly sixty non-repeating
  * terms? */
-extern crate fnv;
-extern crate shared;
+
+
 
 use fnv::{FnvHashMap, FnvHashSet};
 use shared::digits;

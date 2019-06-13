@@ -11,7 +11,7 @@
  *
  * d1 × d10 × d100 × d1000 × d10000 × d100000 × d1000000 */
 
-extern crate shared;
+
 use shared::digits;
 
 fn main() {

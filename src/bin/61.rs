@@ -21,8 +21,8 @@
  * triangle, square, pentagonal, hexagonal, heptagonal, and octagonal, is represented by a different
  * number in the set. */
 
-extern crate enum_set;
-extern crate shared;
+
+
 
 use shared::digits;
 
@@ -72,7 +72,7 @@ fn build_candidates() -> Vec<NumberInfo> {
         let iter_candidates = iter.skip_while(|&n| n < 1_000).take_while(|&n| n < 10_000);
 
         for candidate in iter_candidates {
-            let mut candidate_info = map.entry(candidate).or_insert_with(|| {
+            let candidate_info = map.entry(candidate).or_insert_with(|| {
                 let mut value_digits = digits::new::<_, u8>(candidate);
 
                 let first_digits = [value_digits.next().unwrap(), value_digits.next().unwrap()];
@@ -109,7 +109,7 @@ fn find_set(candidates: Vec<NumberInfo>) -> Vec<u32> {
         candidates: &candidates[..],
     }).unwrap();
 
-    fn recurse(context: &mut Context) -> Option<Vec<u32>> {
+    fn recurse(context: &mut Context<'_>) -> Option<Vec<u32>> {
         if context.stack.len() == 6 {
             let result = context.stack.iter().map(|info| info.value).collect();
             return Some(result);
@@ -122,7 +122,7 @@ fn find_set(candidates: Vec<NumberInfo>) -> Vec<u32> {
 
             let fits_on_set = match context.stack.len() {
                 0 => true,
-                n @ 1...4 => context.stack[n - 1].last_digits == candidate.first_digits,
+                n @ 1..=4 => context.stack[n - 1].last_digits == candidate.first_digits,
                 5 => {
                     context.stack[4].last_digits == candidate.first_digits
                         && candidate.last_digits == context.stack[0].first_digits

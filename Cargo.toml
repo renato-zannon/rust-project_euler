@@ -2,6 +2,7 @@
 name = "project_euler"
 version = "0.0.1"
 authors = ["Renato Zannon <renato@rrsz.com.br>"]
+edition = "2018"
 
 [dependencies]
 ascii = "0.9"

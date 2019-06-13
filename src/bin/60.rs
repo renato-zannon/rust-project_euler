@@ -8,7 +8,7 @@
  * Find the lowest sum for a set of five primes for which any two primes concatenate to produce
  * another prime. */
 
-extern crate shared;
+
 
 use shared::digits;
 use shared::primes;
@@ -36,7 +36,7 @@ fn main() {
         }
 
         for &prime in &sieve.found_primes()[first_index..last_index] {
-            let mut prime_set: RefMut<BTreeSet<Prime>> = sets[&prime].borrow_mut();
+            let mut prime_set: RefMut<'_, BTreeSet<Prime>> = sets[&prime].borrow_mut();
 
             for (&other_prime, other_set_ref) in sets.iter() {
                 if other_prime >= prime {
@@ -46,7 +46,7 @@ fn main() {
                     continue;
                 }
 
-                let mut other_set: RefMut<BTreeSet<Prime>> = other_set_ref.borrow_mut();
+                let mut other_set: RefMut<'_, BTreeSet<Prime>> = other_set_ref.borrow_mut();
 
                 other_set.insert(prime);
                 prime_set.insert(other_prime);

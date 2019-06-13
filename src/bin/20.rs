@@ -7,7 +7,7 @@
  *
  * Find the sum of the digits in the number 100! */
 
-extern crate num;
+
 
 use num::bigint::{BigUint, ToBigUint};
 use num::One;

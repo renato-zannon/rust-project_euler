@@ -1,11 +1,7 @@
-extern crate structopt;
 #[macro_use]
 extern crate failure;
-extern crate reqwest;
-extern crate scraper;
 #[macro_use]
 extern crate serde_derive;
-extern crate handlebars;
 
 use failure::Error;
 use structopt::StructOpt;

@@ -1,4 +1,4 @@
-use sieve::{self, Sieve};
+use crate::sieve::{self, Sieve};
 
 pub fn up_to(n: u64) -> Vec<u64> {
     let mut prime_sieve: Sieve<u64> = sieve::new();

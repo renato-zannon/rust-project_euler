@@ -4,7 +4,7 @@
  *
  * Find the sum of all the primes below two million. */
 
-extern crate shared;
+
 use shared::sieve;
 
 const PRIME_MAX: usize = 2_000_000;

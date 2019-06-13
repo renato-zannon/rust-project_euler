@@ -16,8 +16,8 @@
  *
  * NOTE: Once the chain starts the terms are allowed to go above one million. */
 
-extern crate num;
-extern crate rayon;
+
+
 
 use num::Integer;
 use rayon::prelude::*;

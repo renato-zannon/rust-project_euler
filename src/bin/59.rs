@@ -23,7 +23,7 @@
  * text must contain common English words, decrypt the message and find the sum of the ASCII values
  * in the original text. */
 
-extern crate ascii;
+
 
 use ascii::*;
 
@@ -34,7 +34,7 @@ const COMMON_WORDS: &'static [&'static str] = &["the", "be", "to", "of", "and"];
 fn main() {
     let cipher: Vec<u8> = CIPHER
         .split(',')
-        .map(|num| num.trim_right_matches('\n').parse().unwrap())
+        .map(|num| num.trim_end_matches('\n').parse().unwrap())
         .collect();
 
     let mut buffer = AsciiString::with_capacity(cipher.len());

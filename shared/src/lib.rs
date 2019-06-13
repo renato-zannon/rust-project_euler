@@ -1,8 +1,5 @@
-extern crate fnv;
-extern crate num;
-
-pub use integer_extensions::IntegerExtensions;
-pub use permutations::Permutations;
+pub use crate::integer_extensions::IntegerExtensions;
+pub use crate::permutations::Permutations;
 
 pub mod combinations;
 pub mod continued_fraction;
