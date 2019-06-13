@@ -1,4 +1,3 @@
-#[macro_use]
 extern crate structopt;
 #[macro_use]
 extern crate failure;
@@ -122,7 +121,7 @@ fn fetch_problem_html(number: u32) -> Result<String, Error> {
         .send()?;
 
     match response.status() {
-        StatusCode::Ok => response.text().map_err(Error::from),
+        StatusCode::OK => response.text().map_err(Error::from),
         status => Err(format_err!("Unexpected response status: {:?}", status)),
     }
 }

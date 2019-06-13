@@ -4,9 +4,9 @@ version = "0.1.0"
 authors = ["Renato Zannon <renato@rrsz.com.br>"]
 
 [dependencies]
-reqwest = "0.8.7"
+reqwest = "0.9"
 handlebars = "1.0.0"
-scraper = "0.7.0"
+scraper = "0.10"
 failure = "0.1.2"
 structopt = "0.2.10"
 serde = "1.0.70"
