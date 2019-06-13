@@ -9,7 +9,6 @@
  *
  * NOTE: 2, 3, 5, and 7 are not considered to be truncatable primes. */
 
-
 use shared::{digits, sieve};
 
 fn main() {

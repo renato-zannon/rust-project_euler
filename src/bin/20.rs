@@ -7,8 +7,6 @@
  *
  * Find the sum of the digits in the number 100! */
 
-
-
 use num::bigint::{BigUint, ToBigUint};
 use num::One;
 

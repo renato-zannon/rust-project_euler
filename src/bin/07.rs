@@ -5,8 +5,6 @@
  *
  * What is the 10 001st prime number? */
 
-
-
 use shared::sieve::{self, Sieve};
 
 fn main() {

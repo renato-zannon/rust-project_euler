@@ -21,7 +21,6 @@
  * Find the value of D ≤ 1000 in minimal solutions of x for which the largest value of x is
  * obtained. */
 
-
 use shared::continued_fraction::convergent_iterator;
 use std::collections::HashSet;
 

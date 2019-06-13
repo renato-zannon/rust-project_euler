@@ -6,7 +6,6 @@
  *
  * Note: as 1! = 1 and 2! = 2 are not sums they are not included. */
 
-
 use shared::digits;
 
 fn main() {

@@ -29,8 +29,6 @@
 
 use itertools;
 
-
-
 use num::bigint::BigUint;
 use num::FromPrimitive;
 use shared::IntegerExtensions;
@@ -49,8 +47,9 @@ fn main() {
             let new_value = (&*current) + current.reverse();
 
             Some(mem::replace(current, new_value))
-        }).take(MAX_ITERATIONS)
-            .find(|number| number.is_palindrome());
+        })
+        .take(MAX_ITERATIONS)
+        .find(|number| number.is_palindrome());
 
         match first_palindrome {
             Some(_) => continue,

@@ -10,9 +10,6 @@
  * Using words.txt (right click and 'Save Link/Target As...'), a 16K text file containing nearly
  * two-thousand common English words, how many are triangle words? */
 
-
-
-
 use num::ToPrimitive;
 use shared::data_reader;
 

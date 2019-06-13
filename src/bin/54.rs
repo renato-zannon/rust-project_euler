@@ -42,7 +42,6 @@
 #[macro_use]
 extern crate enum_primitive;
 
-
 use num::FromPrimitive;
 use std::cmp::Ordering;
 

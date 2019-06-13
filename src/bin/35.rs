@@ -7,7 +7,6 @@
  *
  * How many circular primes are there below one million? */
 
-
 use shared::{digits, sieve};
 
 fn main() {

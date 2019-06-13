@@ -1,8 +1,8 @@
 use self::PandigitalResult::{HasRepetitions, IsPandigital, TooLarge, TooSmall};
 use super::digits;
 
-use std::{iter, slice};
 use num::{FromPrimitive, Integer, ToPrimitive};
+use std::{iter, slice};
 
 #[derive(Copy, Clone)]
 pub enum PandigitalResult {

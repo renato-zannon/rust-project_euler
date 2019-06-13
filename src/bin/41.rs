@@ -5,7 +5,6 @@
  *
  * What is the largest n-digit pandigital prime that exists? */
 
-
 use shared::primes;
 use shared::Permutations;
 

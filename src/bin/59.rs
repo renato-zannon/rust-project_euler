@@ -23,8 +23,6 @@
  * text must contain common English words, decrypt the message and find the sum of the ASCII values
  * in the original text. */
 
-
-
 use ascii::*;
 
 const CIPHER: &'static str = include_str!("../../data/59-cipher.txt");

@@ -12,7 +12,6 @@
  * Find the difference between the sum of the squares of the first one hundred natural numbers and
  * the square of the sum. */
 
-
 use shared::combinations;
 
 // (a + b + c + ...)² = a² + b² + c² + ... + 2ab + 2ac + 2ad + 2bc...
@@ -22,7 +21,7 @@ fn main() {
 
     let terms = combinations::new(first_natural_numbers)
         .filter(|&(a, b)| a != b) // No 2 * a * a
-        .filter(|&(a, b)| a <  b) // No 2 * a * b + 2 * b * a
+        .filter(|&(a, b)| a < b) // No 2 * a * b + 2 * b * a
         .map(|(a, b)| 2 * a * b);
 
     let result = terms.fold(0, |result, term| result + term);

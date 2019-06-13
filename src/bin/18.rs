@@ -16,7 +16,6 @@
  * However, Problem 67, is the same challenge with a triangle containing one-hundred rows; it cannot
  * be solved by brute force, and requires a clever method! ;o) */
 
-
 use shared::triangle;
 
 const TRIANGLE: &'static [&'static [u32]] = &[

@@ -14,8 +14,6 @@
  * Find the first four consecutive integers to have four distinct prime factors. What is the first
  * of these numbers? */
 
-
-
 use shared::sieve;
 use std::collections::{HashMap, HashSet};
 

@@ -15,8 +15,6 @@
  * What is the smallest odd composite that cannot be written as the sum of a prime and twice a
  * square? */
 
-
-
 use shared::sieve;
 use shared::sieve::Sieve as PrimeSieve;
 

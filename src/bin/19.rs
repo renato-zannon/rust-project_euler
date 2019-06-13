@@ -122,11 +122,13 @@ impl Month {
     fn day_count(self, year: Year) -> usize {
         match self {
             Month::September | Month::April | Month::June | Month::November => 30,
-            Month::February => if year.is_leap() {
-                29
-            } else {
-                28
-            },
+            Month::February => {
+                if year.is_leap() {
+                    29
+                } else {
+                    28
+                }
+            }
             _ => 31,
         }
     }

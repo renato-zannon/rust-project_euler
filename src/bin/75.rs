@@ -20,7 +20,6 @@
  * integer sided right angle triangle be formed?
  **/
 
-
 use num::Integer;
 
 use std::collections::HashMap;
@@ -46,9 +45,7 @@ fn main() {
 }
 
 fn triplets() -> impl Iterator<Item = (i32, i32, i32)> {
-    coprime_pairs().flat_map(|(m, n)| {
-        triplets_from_pair(m, n)
-    })
+    coprime_pairs().flat_map(|(m, n)| triplets_from_pair(m, n))
 }
 
 fn triplets_from_pair(m: i32, n: i32) -> impl Iterator<Item = (i32, i32, i32)> {
@@ -79,7 +76,7 @@ fn coprime_pairs() -> impl Iterator<Item = (i32, i32)> {
         loop {
             if n + 1 < m {
                 n += 1;
-            } else if (2*m*m + 2*m) < MAX_LENGTH - 1 {
+            } else if (2 * m * m + 2 * m) < MAX_LENGTH - 1 {
                 m += 1;
                 n = 1;
             } else {

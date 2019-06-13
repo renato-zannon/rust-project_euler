@@ -21,9 +21,6 @@
  * triangle, square, pentagonal, hexagonal, heptagonal, and octagonal, is represented by a different
  * number in the set. */
 
-
-
-
 use shared::digits;
 
 use enum_set::{CLike, EnumSet};
@@ -107,7 +104,8 @@ fn find_set(candidates: Vec<NumberInfo>) -> Vec<u32> {
         stack: Vec::new(),
         used_types: EnumSet::new(),
         candidates: &candidates[..],
-    }).unwrap();
+    })
+    .unwrap();
 
     fn recurse(context: &mut Context<'_>) -> Option<Vec<u32>> {
         if context.stack.len() == 6 {

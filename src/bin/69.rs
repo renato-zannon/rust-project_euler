@@ -19,10 +19,6 @@
  *
  * Find the value of n ≤ 1,000,000 for which n/φ(n) is a maximum. */
 
-
-
-
-
 use num::rational::Ratio;
 use rayon::prelude::*;
 use shared::sieve;

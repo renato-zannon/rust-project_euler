@@ -15,7 +15,6 @@
  *
  * Find the sum of all 0 to 9 pandigital numbers with this property. */
 
-
 use shared::digits;
 
 const DIVISORS: &'static [u32] = &[2, 3, 5, 7, 11, 13, 17];
@@ -43,21 +42,22 @@ fn main() {
         })
         .collect::<Vec<_>>();
 
-    let divisible_by_all = DIVISORS[0..DIVISORS.len() - 1].iter().rev().fold(
-        bases,
-        |numbers, &divisor| {
-            let mut next_digits: Vec<Vec<u8>> = Vec::new();
+    let divisible_by_all =
+        DIVISORS[0..DIVISORS.len() - 1]
+            .iter()
+            .rev()
+            .fold(bases, |numbers, &divisor| {
+                let mut next_digits: Vec<Vec<u8>> = Vec::new();
 
-            for digits in numbers.into_iter() {
-                let next = plus_one_digit(digits)
-                    .filter(|more_digits| to_number(&more_digits[..3]) % divisor == 0);
+                for digits in numbers.into_iter() {
+                    let next = plus_one_digit(digits)
+                        .filter(|more_digits| to_number(&more_digits[..3]) % divisor == 0);
 
-                next_digits.extend(next);
-            }
+                    next_digits.extend(next);
+                }
 
-            next_digits
-        },
-    );
+                next_digits
+            });
 
     let result = divisible_by_all
         .into_iter()

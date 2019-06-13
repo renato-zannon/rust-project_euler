@@ -10,7 +10,6 @@
  *
  * Which prime, below one-million, can be written as the sum of the most consecutive primes? */
 
-
 use shared::sieve::{self, Sieve};
 
 const MAX_PRIME: usize = 1_000_000;

@@ -22,8 +22,6 @@
  * What is the maximum 16-digit string for a "magic" 5-gon ring? */
 use itertools;
 
-
-
 use shared::Permutations;
 use smallvec::SmallVec;
 use std::fmt::Write;
@@ -80,7 +78,8 @@ fn solutions() -> impl Iterator<Item = Solution> {
 
     itertools::unfold(digits.permutations(), |state| {
         state.permute().map(|s| maybe_solution(s))
-    }).filter_map(|opt| opt)
+    })
+    .filter_map(|opt| opt)
 }
 
 fn maybe_solution(numbers: &[u8]) -> Option<Solution> {

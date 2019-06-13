@@ -16,9 +16,6 @@
  *
  * NOTE: Once the chain starts the terms are allowed to go above one million. */
 
-
-
-
 use num::Integer;
 use rayon::prelude::*;
 

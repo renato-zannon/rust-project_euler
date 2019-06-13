@@ -27,9 +27,6 @@
  *
  * Find the sum of digits in the numerator of the 100th convergent of the continued fraction for e */
 
-
-
-
 use shared::digits;
 use std::cmp;
 use std::iter::repeat;

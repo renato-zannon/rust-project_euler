@@ -18,8 +18,6 @@
  * every second it would take over twenty billion years to check them all. There is an efficient
  * algorithm to solve it. ;o) */
 
-
-
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::path::Path;

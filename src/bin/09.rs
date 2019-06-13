@@ -9,7 +9,6 @@
  *
  * Find the product abc. */
 
-
 use shared::pythagorean_triplets;
 
 fn main() {

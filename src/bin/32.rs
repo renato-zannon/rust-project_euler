@@ -12,7 +12,6 @@
  * HINT: Some products can be obtained in more than one way so be sure to only include it once in
  * your sum. */
 
-
 use shared::digits;
 use shared::pandigital::{is_9_pandigital, PandigitalResult};
 
