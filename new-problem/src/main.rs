@@ -79,7 +79,7 @@ fn parse_problem(number: u32, html: &str) -> Result<Problem, Error> {
         .select(&description_paragraphs_selector)
         .flat_map(|par_el| {
             par_el
-                .children()
+                .descendants()
                 .filter_map(|node| {
                     if let Node::Text(t) = node.value() {
                         return Some(t.to_string());
