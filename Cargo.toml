@@ -14,6 +14,7 @@ shared = { path = "shared" }
 rayon = "1.0.1"
 fnv = "1.0.6"
 smallvec = "0.6.2"
+memchr = "2.2.0"
 
 [profile.release]
 debug = true

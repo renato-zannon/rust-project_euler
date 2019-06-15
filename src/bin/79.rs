@@ -10,14 +10,19 @@
  * determine the shortest possible secret passcode of unknown length.
  **/
 
+use memchr::memchr;
 use std::collections::HashSet;
 
 const KEYLOG: &'static str = include_str!("../../data/79-keylog.txt");
 
 fn main() {
-    let seen: HashSet<Vec<u32>> = KEYLOG
+    let seen: HashSet<Vec<u8>> = KEYLOG
         .lines()
-        .map(|line| line.chars().map(|ch| ch.to_digit(10).unwrap()).collect())
+        .map(|line| {
+            line.chars()
+                .map(|ch| ch.to_digit(10).unwrap() as u8)
+                .collect()
+        })
         .collect();
 
     let different_digits = seen
@@ -26,9 +31,9 @@ fn main() {
         .collect::<HashSet<_>>()
         .len();
 
-    let hyp = hypothesis(different_digits as u32)
-        .find(|hyp| seen.iter().all(|followers| fits_followers(hyp, followers)))
-        .unwrap();
+    let hyp = find_hypothesis(different_digits as u8, |hyp| {
+        seen.iter().all(|followers| fits_followers(hyp, followers))
+    });
 
     for num in hyp {
         print!("{}", num);
@@ -36,10 +41,10 @@ fn main() {
     println!("");
 }
 
-fn hypothesis(min_size: u32) -> impl Iterator<Item = Vec<u32>> {
+fn find_hypothesis(min_size: u8, f: impl Fn(&[u8]) -> bool) -> Vec<u8> {
     let mut current = vec![0; min_size as usize];
 
-    std::iter::from_fn(move || {
+    loop {
         let maxed_count = current.iter().rev().take_while(|i| **i == 9).count();
 
         let first_to_turn = current.len() - maxed_count;
@@ -53,28 +58,23 @@ fn hypothesis(min_size: u32) -> impl Iterator<Item = Vec<u32>> {
             current.push(0);
         }
 
-        Some(current.clone())
-    })
+        if f(&current) {
+            return current;
+        }
+    }
 }
 
-fn fits_followers(hyp: &[u32], followers: &[u32]) -> bool {
-    let mut remaining = &hyp[..];
+fn fits_followers(hyp: &[u8], followers: &[u8]) -> bool {
+    let mut remaining = hyp;
 
     for &follower in followers {
-        loop {
-            match remaining.split_first() {
-                Some((head, tail)) => {
-                    remaining = tail;
+        let index = memchr(follower, remaining);
 
-                    if *head == follower {
-                        break;
-                    }
-                }
-
-                None => return false,
-            }
+        match index {
+            Some(index) => remaining = &hyp[index + 1..],
+            None => return false,
         }
     }
 
-    true
+    return true;
 }
