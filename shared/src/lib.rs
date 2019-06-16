@@ -1,6 +1,7 @@
 pub use crate::integer_extensions::IntegerExtensions;
 pub use crate::permutations::Permutations;
 
+pub mod a_star;
 pub mod combinations;
 pub mod continued_fraction;
 pub mod data_reader;
