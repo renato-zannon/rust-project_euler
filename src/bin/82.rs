@@ -22,8 +22,7 @@
 
 const MATRIX: &'static str = include_str!("../../data/82-matrix.txt");
 
-use rayon::prelude::*;
-use shared::a_star::{self, Coord, Matrix};
+use shared::a_star::{self, Traversable};
 
 fn main() {
     let m = build_matrix();
@@ -33,16 +32,13 @@ fn main() {
 }
 
 fn minimal_path_sum(matrix: &Problem82Matrix) -> u32 {
-    (0..matrix.height())
-        .into_par_iter()
-        .map(|start_y| {
-            let start = Coord { x: 0, y: start_y };
-            let path = a_star::a_star(matrix, start);
-
-            matrix.path_sum(path)
+    let path = a_star::a_star(matrix, Coord::Start);
+    path.into_iter()
+        .filter_map(|node| match node {
+            Coord::Start => None,
+            Coord::Node { x, y } => Some(matrix.nodes[y as usize][x as usize]),
         })
-        .min()
-        .unwrap()
+        .sum()
 }
 
 #[derive(Debug)]
@@ -50,20 +46,55 @@ struct Problem82Matrix {
     nodes: Vec<Vec<u32>>,
 }
 
-impl Matrix for Problem82Matrix {
+#[derive(Clone, Copy, Hash, PartialEq, Eq, Debug)]
+enum Coord {
+    Start,
+    Node { x: u32, y: u32 },
+}
+
+impl Problem82Matrix {
     fn nodes(&self) -> &[Vec<u32>] {
         &self.nodes
     }
 
-    fn neighbors(&self, node: Coord) -> Vec<Coord> {
-        let Coord { x, y } = node;
+    fn width(&self) -> u32 {
+        self.nodes[0].len() as u32
+    }
 
-        let up = Coord {
+    fn height(&self) -> u32 {
+        self.nodes().len() as u32
+    }
+
+    fn contains(&self, coord: Coord) -> bool {
+        match coord {
+            Coord::Start => true,
+            Coord::Node { x, y } => x < self.width() && y < self.height(),
+        }
+    }
+
+    fn first_column(&self) -> Vec<Coord> {
+        (0..self.height())
+            .into_iter()
+            .map(|y| Coord::Node { x: 0, y })
+            .collect()
+    }
+}
+
+impl Traversable for Problem82Matrix {
+    type Coord = Coord;
+
+    fn neighbors(&self, node: Coord) -> Vec<Coord> {
+        let (x, y) = match node {
+            Coord::Start => return self.first_column(),
+            Coord::Node { x, y } => (x, y),
+        };
+
+        let up = Coord::Node {
             x,
             y: y.wrapping_sub(1),
         };
-        let right = Coord { x: x + 1, y };
-        let down = Coord { x, y: y + 1 };
+        let right = Coord::Node { x: x + 1, y };
+        let down = Coord::Node { x, y: y + 1 };
 
         let mut neighbors = vec![up, right, down];
         neighbors.retain(|neighbor| self.contains(*neighbor));
@@ -71,14 +102,35 @@ impl Matrix for Problem82Matrix {
         neighbors
     }
 
+    fn dist_between(&self, start: Coord, end: Coord) -> u32 {
+        match (start, end) {
+            (_, Coord::Start) => panic!("We shouldn't be trying to go to the start"),
+
+            (Coord::Start, Coord::Node { x, y }) => {
+                assert_eq!(x, 0);
+                self.nodes[y as usize][0]
+            }
+
+            (Coord::Node { .. }, Coord::Node { x: x2, y: y2 }) => {
+                self.nodes[y2 as usize][x2 as usize]
+            }
+        }
+    }
+
     fn heuristic(&self, start: Coord) -> u32 {
         let right_margin = self.width() - 1;
 
-        right_margin - start.x
+        match start {
+            Coord::Start => right_margin + 1,
+            Coord::Node { x, .. } => right_margin - x,
+        }
     }
 
     fn reached_goal(&self, node: Coord) -> bool {
-        node.x == self.width() - 1
+        match node {
+            Coord::Start => false,
+            Coord::Node { x, .. } => x == self.width() - 1,
+        }
     }
 }
 
@@ -93,25 +145,25 @@ fn build_matrix() -> Problem82Matrix {
 
 #[cfg(test)]
 mod tests {
-    use super::Problem82Matrix;
-    use shared::a_star::{self, Coord};
+    use super::{Coord, Problem82Matrix};
+    use shared::a_star;
 
     #[test]
     fn test_example_path() {
         let matrix = demo_matrix();
 
-        let start = Coord { x: 0, y: 1 };
-        let path = a_star::a_star(&matrix, start);
+        let path = a_star::a_star(&matrix, Coord::Start);
 
         assert_eq!(
             path,
             vec![
-                Coord { x: 0, y: 1 },
-                Coord { x: 1, y: 1 },
-                Coord { x: 2, y: 1 },
-                Coord { x: 2, y: 0 },
-                Coord { x: 3, y: 0 },
-                Coord { x: 4, y: 0 },
+                Coord::Start,
+                Coord::Node { x: 0, y: 1 },
+                Coord::Node { x: 1, y: 1 },
+                Coord::Node { x: 2, y: 1 },
+                Coord::Node { x: 2, y: 0 },
+                Coord::Node { x: 3, y: 0 },
+                Coord::Node { x: 4, y: 0 },
             ]
         )
     }

@@ -1,5 +1,6 @@
+use hashbrown::{HashMap, HashSet};
 use std::cmp::Ordering;
-use std::collections::{BinaryHeap, HashMap, HashSet};
+use std::collections::BinaryHeap;
 use std::hash::Hash;
 
 pub mod matrix;
