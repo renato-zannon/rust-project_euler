@@ -1,4 +1,4 @@
-use fnv::FnvHashSet;
+use hashbrown::HashSet;
 use num::{self, Float, ToPrimitive};
 
 #[derive(Debug, PartialEq)]
@@ -27,7 +27,7 @@ pub fn divide_square(number: u32) -> FractionType {
         rest: closest_square,
     };
 
-    let mut seen_steps = FnvHashSet::with_capacity_and_hasher(10, Default::default());
+    let mut seen_steps = HashSet::with_capacity(10);
 
     loop {
         let (step_result, next_step) = step(prev_step);

@@ -25,7 +25,7 @@
  * How many chains, with a starting number below one million, contain exactly sixty non-repeating
  * terms? */
 
-use fnv::{FnvHashMap, FnvHashSet};
+use hashbrown::{HashMap, HashSet};
 use shared::digits;
 
 const DIGIT_FACTORIALS: [u32; 10] = [
@@ -44,7 +44,7 @@ const DIGIT_FACTORIALS: [u32; 10] = [
 const MAX: u32 = 1_000_000;
 
 fn main() {
-    let mut digit_cache = FnvHashMap::default();
+    let mut digit_cache = HashMap::default();
     digit_cache.reserve(MAX as usize);
 
     let result = (1..MAX)
@@ -55,8 +55,8 @@ fn main() {
     println!("{}", result);
 }
 
-fn chain_size(n: u32, cache: &mut FnvHashMap<u32, u32>) -> u32 {
-    let mut seen = FnvHashSet::with_capacity_and_hasher(60, Default::default());
+fn chain_size(n: u32, cache: &mut HashMap<u32, u32>) -> u32 {
+    let mut seen = HashSet::with_capacity(60);
     let mut current = n;
 
     while seen.insert(current) {
