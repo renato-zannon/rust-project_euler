@@ -1,20 +1,54 @@
-use std::cell::RefCell;
-use std::collections::BTreeMap;
+use crate::a_star;
+use hashbrown::HashMap;
 
-#[derive(Eq, PartialEq, Debug)]
-struct Value {
+#[derive(Eq, PartialEq, Debug, Hash, Copy, Clone)]
+pub struct Value {
     coord: (u32, u32),
     value: u32,
-    maximum: Option<u32>,
 }
 
 pub struct Triangle {
-    values: BTreeMap<(u32, u32), RefCell<Value>>,
+    values: HashMap<(u32, u32), Value>,
     height: u32,
+    biggest_node_value: u32,
+}
+
+impl a_star::Traversable for Triangle {
+    type Coord = Value;
+
+    fn heuristic(&self, start: Value) -> u32 {
+        self.height - start.coord.0
+    }
+
+    // A* minimizes the distance traveled, but here we want to *maximize* it.
+    //
+    // To trick A* into doing this we invert our node values, using the biggest node value as "0",
+    // so that nodes with bigger values are seen as being "closer" by the algorithm.
+    fn dist_between(&self, _start: Value, end: Value) -> u32 {
+        self.biggest_node_value - end.value
+    }
+
+    fn neighbors(&self, node: Value) -> Vec<Value> {
+        let (row, col) = node.coord;
+
+        if row + 1 >= self.height {
+            return vec![];
+        }
+
+        let left = self.get_coord((row + 1, col));
+        let right = self.get_coord((row + 1, col + 1));
+
+        vec![left, right]
+    }
+
+    fn reached_goal(&self, node: Self::Coord) -> bool {
+        node.coord.0 == self.height - 1
+    }
 }
 
 pub fn new(raw: &[&[u32]]) -> Triangle {
-    let mut values = BTreeMap::new();
+    let mut values = HashMap::new();
+    let mut biggest_node_value = 0;
 
     for (row_index, row) in raw.iter().enumerate() {
         assert_eq!(row.len(), row_index + 1);
@@ -26,95 +60,29 @@ pub fn new(raw: &[&[u32]]) -> Triangle {
             let value = Value {
                 coord: coord,
                 value: raw_value,
-                maximum: None,
             };
 
-            values.insert(coord, RefCell::new(value));
+            values.insert(coord, value);
+            if raw_value > biggest_node_value {
+                biggest_node_value = raw_value;
+            }
         }
     }
 
     Triangle {
-        values: values,
         height: raw.len() as u32,
+        values,
+        biggest_node_value,
     }
 }
 
 impl Triangle {
-    pub fn maximum_total(&mut self) -> u32 {
-        let origin_ref = self.get_coord((0, 0));
-
-        {
-            let mut origin = origin_ref.borrow_mut();
-            origin.maximum = Some(origin.value);
-        }
-
-        self.update_maximums(origin_ref);
-
-        self.values
-            .iter()
-            .filter_map(|(&(row, _), value)| {
-                if row == self.height - 1 {
-                    Some(value)
-                } else {
-                    None
-                }
-            })
-            .max_by(|v1ref, v2ref| {
-                let v1 = v1ref.borrow().maximum;
-                let v2 = v2ref.borrow().maximum;
-
-                v1.cmp(&v2)
-            })
-            .and_then(|refmax| refmax.borrow().maximum)
-            .unwrap()
+    pub fn maximum_total(&self) -> u32 {
+        let path = a_star::a_star(self, self.get_coord((0, 0)));
+        path.into_iter().map(|node| node.value).sum()
     }
 
-    fn update_maximums(&self, initial_ref: &RefCell<Value>) {
-        let below = self.values_below(initial_ref.borrow().coord);
-
-        match below {
-            Some((left, right)) => {
-                self.update_value(initial_ref, left);
-                self.update_value(initial_ref, right);
-            }
-
-            None => return,
-        }
-    }
-
-    fn update_value(&self, current_ref: &RefCell<Value>, adjacent_ref: &RefCell<Value>) {
-        let current_maximum = current_ref.borrow().maximum.unwrap();
-
-        let (adj_max, new_maximum) = {
-            let adjacent = adjacent_ref.borrow();
-            let new_maximum = adjacent.value + current_maximum;
-
-            let adj_max = match adjacent.maximum {
-                Some(adj_max) => adj_max,
-                None => 0,
-            };
-
-            (adj_max, new_maximum)
-        };
-
-        if new_maximum > adj_max {
-            adjacent_ref.borrow_mut().maximum = Some(new_maximum);
-            self.update_maximums(adjacent_ref);
-        }
-    }
-
-    fn get_coord(&self, coord: (u32, u32)) -> &RefCell<Value> {
-        self.values.get(&coord).unwrap()
-    }
-
-    fn values_below(&self, (row, col): (u32, u32)) -> Option<(&RefCell<Value>, &RefCell<Value>)> {
-        if row + 1 < self.height {
-            let left = self.get_coord((row + 1, col));
-            let right = self.get_coord((row + 1, col + 1));
-
-            Some((left, right))
-        } else {
-            None
-        }
+    fn get_coord(&self, coord: (u32, u32)) -> Value {
+        self.values.get(&coord).cloned().unwrap()
     }
 }

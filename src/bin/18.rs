@@ -37,7 +37,7 @@ const TRIANGLE: &'static [&'static [u32]] = &[
 ];
 
 fn main() {
-    let mut triangle = triangle::new(TRIANGLE);
+    let triangle = triangle::new(TRIANGLE);
     let result = triangle.maximum_total();
 
     println!("{}", result);

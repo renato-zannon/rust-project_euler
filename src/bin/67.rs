@@ -25,7 +25,7 @@ use std::path::Path;
 use shared::triangle;
 
 fn main() {
-    let mut triangle = triangle::new(&deep_slice(&read_triangle()));
+    let triangle = triangle::new(&deep_slice(&read_triangle()));
     let result = triangle.maximum_total();
 
     println!("{}", result);

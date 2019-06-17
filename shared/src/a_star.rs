@@ -22,6 +22,7 @@ struct ScoredCoord<C> {
 
 impl<C> Ord for ScoredCoord<C> {
     fn cmp(&self, other: &Self) -> Ordering {
+        // inverted on purpose, since we want the coordinates with the lowest f-score first
         other.score.cmp(&self.score)
     }
 }
