@@ -1,4 +1,5 @@
-use std::collections::{HashMap, HashSet};
+use std::cmp::Ordering;
+use std::collections::{BinaryHeap, HashMap, HashSet};
 use std::hash::Hash;
 
 pub mod matrix;
@@ -12,21 +13,50 @@ pub trait Traversable {
     fn neighbors(&self, node: Self::Coord) -> Vec<Self::Coord>;
 }
 
+struct ScoredCoord<C> {
+    coord: C,
+    score: u32,
+}
+
+impl<C> Ord for ScoredCoord<C> {
+    fn cmp(&self, other: &Self) -> Ordering {
+        other.score.cmp(&self.score)
+    }
+}
+
+impl<C> PartialOrd for ScoredCoord<C> {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl<C> PartialEq for ScoredCoord<C> {
+    fn eq(&self, other: &Self) -> bool {
+        self.score == other.score
+    }
+}
+
+impl<C> Eq for ScoredCoord<C> {}
+
+fn scored<C>(coord: C, score: u32) -> ScoredCoord<C> {
+    ScoredCoord { coord, score }
+}
+
 pub fn a_star<T: Traversable>(graph: &T, start: T::Coord, goal: T::Coord) -> Vec<T::Coord> {
     let mut closed_set = HashSet::new();
 
     let mut open_set = HashSet::new();
     open_set.insert(start);
 
+    let mut open_set_queue = BinaryHeap::new();
+    open_set_queue.push(scored(start, graph.heuristic(start, goal)));
+
     let mut came_from = HashMap::new();
 
     let mut g_score = HashMap::new();
     g_score.insert(start, 0);
 
-    let mut f_score = HashMap::new();
-    f_score.insert(start, graph.heuristic(start, goal));
-
-    while let Some(current) = lowest_score::<T>(&open_set, &f_score) {
+    while let Some(ScoredCoord { coord: current, .. }) = open_set_queue.pop() {
         if current == goal {
             return reconstruct_path::<T>(&came_from, goal);
         }
@@ -42,31 +72,19 @@ pub fn a_star<T: Traversable>(graph: &T, start: T::Coord, goal: T::Coord) -> Vec
             let tentative_gscore = get_score::<T>(&g_score, &current)
                 .saturating_add(graph.dist_between(current, neighbor));
 
-            if !open_set.contains(&neighbor) {
-                open_set.insert(neighbor);
+            if open_set.insert(neighbor) {
+                let fscore = tentative_gscore.saturating_add(graph.heuristic(neighbor, goal));
+                open_set_queue.push(scored(neighbor, fscore));
             } else if tentative_gscore >= get_score::<T>(&g_score, &neighbor) {
                 continue;
             }
 
             came_from.insert(neighbor, current);
             g_score.insert(neighbor, tentative_gscore);
-            f_score.insert(
-                neighbor,
-                g_score[&neighbor].saturating_add(graph.heuristic(neighbor, goal)),
-            );
         }
     }
 
     panic!("There's no path from start to goal");
-}
-
-fn lowest_score<T: Traversable>(
-    set: &HashSet<T::Coord>,
-    scores: &HashMap<T::Coord, u32>,
-) -> Option<T::Coord> {
-    set.iter()
-        .min_by_key(|c| get_score::<T>(scores, c))
-        .cloned()
 }
 
 fn get_score<T: Traversable>(scores: &HashMap<T::Coord, u32>, node: &T::Coord) -> u32 {
