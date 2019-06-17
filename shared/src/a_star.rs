@@ -8,9 +8,10 @@ pub use matrix::{Coord, Matrix};
 pub trait Traversable {
     type Coord: Copy + Eq + Hash;
 
-    fn heuristic(&self, start: Self::Coord, end: Self::Coord) -> u32;
+    fn heuristic(&self, start: Self::Coord) -> u32;
     fn dist_between(&self, start: Self::Coord, end: Self::Coord) -> u32;
     fn neighbors(&self, node: Self::Coord) -> Vec<Self::Coord>;
+    fn reached_goal(&self, node: Self::Coord) -> bool;
 }
 
 struct ScoredCoord<C> {
@@ -42,14 +43,14 @@ fn scored<C>(coord: C, score: u32) -> ScoredCoord<C> {
     ScoredCoord { coord, score }
 }
 
-pub fn a_star<T: Traversable>(graph: &T, start: T::Coord, goal: T::Coord) -> Vec<T::Coord> {
+pub fn a_star<T: Traversable>(graph: &T, start: T::Coord) -> Vec<T::Coord> {
     let mut closed_set = HashSet::new();
 
     let mut open_set = HashSet::new();
     open_set.insert(start);
 
     let mut open_set_queue = BinaryHeap::new();
-    open_set_queue.push(scored(start, graph.heuristic(start, goal)));
+    open_set_queue.push(scored(start, graph.heuristic(start)));
 
     let mut came_from = HashMap::new();
 
@@ -57,8 +58,8 @@ pub fn a_star<T: Traversable>(graph: &T, start: T::Coord, goal: T::Coord) -> Vec
     g_score.insert(start, 0);
 
     while let Some(ScoredCoord { coord: current, .. }) = open_set_queue.pop() {
-        if current == goal {
-            return reconstruct_path::<T>(&came_from, goal);
+        if graph.reached_goal(current) {
+            return reconstruct_path::<T>(&came_from, current);
         }
 
         open_set.remove(&current);
@@ -73,7 +74,7 @@ pub fn a_star<T: Traversable>(graph: &T, start: T::Coord, goal: T::Coord) -> Vec
                 .saturating_add(graph.dist_between(current, neighbor));
 
             if open_set.insert(neighbor) {
-                let fscore = tentative_gscore.saturating_add(graph.heuristic(neighbor, goal));
+                let fscore = tentative_gscore.saturating_add(graph.heuristic(neighbor));
                 open_set_queue.push(scored(neighbor, fscore));
             } else if tentative_gscore >= get_score::<T>(&g_score, &neighbor) {
                 continue;

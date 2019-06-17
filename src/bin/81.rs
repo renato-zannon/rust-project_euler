@@ -70,8 +70,8 @@ mod tests {
     fn test_example_path() {
         let matrix = demo_matrix();
 
-        let (start, end) = (matrix.top_left(), matrix.bottom_right());
-        let path = a_star::a_star(&matrix, start, end);
+        let start = matrix.top_left();
+        let path = a_star::a_star(&matrix, start);
 
         assert_eq!(
             path,
