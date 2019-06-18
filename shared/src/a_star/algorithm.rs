@@ -39,18 +39,19 @@ impl<'t, T: Traversable> Algorithm<'t, T> {
                 return self.reconstruct_path(current);
             }
 
+            let current_g_score = self.g_score(current);
+
             for neighbor in self.graph.neighbors(current) {
                 if self.closed_set.contains(&neighbor) {
                     continue;
                 }
 
-                let tentative_gscore = self
-                    .g_score(&current)
-                    .saturating_add(self.graph.dist_between(current, neighbor));
+                let distance = self.graph.dist_between(current, neighbor);
+                let tentative_gscore = current_g_score.saturating_add(distance);
 
                 let discovered = self.discover(neighbor, tentative_gscore);
 
-                if discovered || tentative_gscore < self.g_score(&neighbor) {
+                if discovered || tentative_gscore < self.g_score(neighbor) {
                     self.came_from.insert(neighbor, current);
                     self.g_score.insert(neighbor, tentative_gscore);
                 }
@@ -79,8 +80,8 @@ impl<'t, T: Traversable> Algorithm<'t, T> {
         true
     }
 
-    fn g_score(&self, node: &T::Coord) -> u32 {
-        self.g_score.get(node).cloned().unwrap_or(std::u32::MAX)
+    fn g_score(&mut self, node: T::Coord) -> u32 {
+        *self.g_score.entry(node).or_insert(std::u32::MAX)
     }
 
     fn reconstruct_path(&self, start: T::Coord) -> Vec<T::Coord> {
