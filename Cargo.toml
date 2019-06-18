@@ -14,7 +14,7 @@ shared = { path = "shared" }
 rayon = "1.0.1"
 smallvec = "0.6.2"
 memchr = "2.2.0"
-hashbrown = "0.5.0"
+hashbrown = { version = "0.5.0", features = ["rayon"] }
 
 [profile.release]
 debug = true
