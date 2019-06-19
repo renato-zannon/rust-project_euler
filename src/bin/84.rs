@@ -69,8 +69,8 @@ use rand::prelude::*;
 use rayon::prelude::*;
 use std::collections::VecDeque;
 
-const ROLLS_PER_SIMULATION: u32 = 100_000;
-const SIMULATIONS: u32 = 1000;
+const ROLLS_PER_SIMULATION: u32 = 10_000_000;
+const SIMULATIONS: u32 = 10;
 const DICE_SIZE: u32 = 4;
 
 fn main() {
@@ -115,7 +115,10 @@ fn main() {
     let mut result: Vec<_> = result.into_iter().collect();
     result.par_sort_unstable_by_key(|(_, visits)| std::cmp::Reverse(*visits));
 
-    println!("{:?}", &result[0..5]);
+    for (index, _) in result.into_iter().take(3) {
+        print!("{:02}", index);
+    }
+    println!();
 }
 
 fn run<R: Rng>(board: &mut Board, rng: &mut R) {
@@ -208,9 +211,13 @@ impl Board {
     }
 
     fn square_after_current(&mut self, step: i32) -> &mut BoardSquare {
+        self.square_after(self.current_square, step)
+    }
+
+    fn square_after(&mut self, base_square: usize, step: i32) -> &mut BoardSquare {
         use SpecialCard::*;
 
-        let (square_index, square_type) = self.advance_step(step);
+        let (square_index, square_type) = self.advance_step(base_square, step);
 
         let special_card = match square_type {
             Square::CC(_) => pop_special_card(&mut self.community_chest_cards),
@@ -222,7 +229,7 @@ impl Board {
         match special_card {
             Noop => &mut self.squares[square_index],
             AdvanceToGO => self.get_square(Square::GO),
-            GoBack3Squares => self.square_after_current(-3),
+            GoBack3Squares => self.square_after(square_index, -3),
             GoToC1 => self.get_square(Square::C(1)),
             GoToE3 => self.get_square(Square::E(3)),
             GoToH2 => self.get_square(Square::H(2)),
@@ -233,29 +240,29 @@ impl Board {
         }
     }
 
-    fn advance_step(&mut self, step: i32) -> (usize, Square) {
+    fn advance_step(&mut self, base_square: usize, step: i32) -> (usize, Square) {
         let square_count = self.squares.len();
-        let step = if step > 0 {
+        let step = if step >= 0 {
             step as usize
         } else {
-            square_count + (-step as usize)
+            square_count - (-step as usize)
         };
 
-        let square_index = (self.current_square + step) % square_count;
+        let square_index = (base_square + step) % square_count;
         let square_type = self.squares[square_index].square.clone();
 
         (square_index, square_type)
     }
 
-    fn next_r_square(&mut self, skip: usize) -> &mut BoardSquare {
-        self.find_next_square(skip, |bs| match bs.square {
+    fn next_r_square(&mut self, base_square: usize) -> &mut BoardSquare {
+        self.find_next_square(base_square, |bs| match bs.square {
             Square::R(_) => true,
             _ => false,
         })
     }
 
-    fn next_u_square(&mut self, skip: usize) -> &mut BoardSquare {
-        self.find_next_square(skip, |bs| match bs.square {
+    fn next_u_square(&mut self, base_square: usize) -> &mut BoardSquare {
+        self.find_next_square(base_square, |bs| match bs.square {
             Square::U(_) => true,
             _ => false,
         })
@@ -263,10 +270,17 @@ impl Board {
 
     fn find_next_square(
         &mut self,
-        skip: usize,
+        base_square: usize,
         f: impl Fn(&BoardSquare) -> bool,
     ) -> &mut BoardSquare {
-        let index = self.squares.iter().cycle().skip(skip).position(f).unwrap();
+        let index = self
+            .squares
+            .iter()
+            .cycle()
+            .skip_while(|bs| bs.index != base_square)
+            .skip(1)
+            .position(f)
+            .unwrap();
         &mut self.squares[index]
     }
 }
