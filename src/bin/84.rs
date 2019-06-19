@@ -64,47 +64,59 @@
  * string.
  **/
 
+use hashbrown::HashMap;
 use rand::prelude::*;
 use rayon::prelude::*;
 use std::collections::VecDeque;
 
 const ROLLS_PER_SIMULATION: u32 = 100_000;
-const SIMULATIONS: u32 = 1;
+const SIMULATIONS: u32 = 1000;
+const DICE_SIZE: u32 = 4;
 
 fn main() {
-    let mut thread_rng = thread_rng();
-
-    let simulation_rngs: Vec<_> = (0..SIMULATIONS)
-        .map(|_| SmallRng::from_rng(&mut thread_rng).unwrap())
-        .collect();
-
-    simulation_rngs
+    let result = (0..SIMULATIONS)
         .into_par_iter()
-        .map(|mut rng| {
-            let mut b = build_board(&mut rng);
+        .map_init(
+            || thread_rng(),
+            |thread_rng, _| {
+                let mut rng = SmallRng::from_rng(thread_rng).unwrap();
+                let mut b = build_board(&mut rng);
 
-            for _ in 1..ROLLS_PER_SIMULATION {
-                run(&mut b, &mut rng);
-            }
+                for _ in 0..ROLLS_PER_SIMULATION {
+                    run(&mut b, &mut rng);
+                }
 
-            b.squares
-                .par_sort_unstable_by_key(|bs| std::cmp::Reverse(bs.visits));
-            b.squares
-                .into_iter()
-                .map(|bs| {
-                    let ratio = (bs.visits as f32 * 100.0) / (ROLLS_PER_SIMULATION as f32);
+                b.squares
+            },
+        )
+        .fold(
+            || HashMap::new(),
+            |mut h, squares| {
+                for BoardSquare { index, visits, .. } in squares {
+                    h.entry(index)
+                        .and_modify(|c| *c += visits)
+                        .or_insert(visits);
+                }
+                h
+            },
+        )
+        .reduce(
+            || HashMap::new(),
+            |mut acc, h| {
+                for (square_index, visits) in h {
+                    acc.entry(square_index)
+                        .and_modify(|c| *c += visits)
+                        .or_insert(visits);
+                }
+                acc
+            },
+        );
 
-                    (bs.square, ratio)
-                })
-                .take(5)
-                .collect::<Vec<_>>()
-        })
-        .for_each(|squares| {
-            println!("{:?}", squares);
-        });
+    let mut result: Vec<_> = result.into_iter().collect();
+    result.par_sort_unstable_by_key(|(_, visits)| std::cmp::Reverse(*visits));
+
+    println!("{:?}", &result[0..5]);
 }
-
-const DICE_SIZE: u32 = 6;
 
 fn run<R: Rng>(board: &mut Board, rng: &mut R) {
     let index = {
@@ -128,22 +140,14 @@ fn roll_dice<R: Rng>(board: &mut Board, rng: &mut R) -> DiceResult {
     let d1 = dice_range.sample(rng);
     let d2 = dice_range.sample(rng);
 
-    let prev_dice = board.prev_dice.front().cloned();
-    board.prev_dice.push_front((d1, d2));
+    board.double_streak = if d1 == d2 { board.double_streak + 1 } else { 0 };
 
-    if board.prev_dice.len() < 3 {
-        return DiceResult::Normal(d1 + d2);
+    if board.double_streak == 3 {
+        board.double_streak = 0;
+        return DiceResult::TripleDouble;
     }
 
-    let pprev_dice = board.prev_dice.pop_back();
-
-    match (pprev_dice, prev_dice, (d1, d2)) {
-        (Some((6, 6)), Some((6, 6)), (6, 6)) => {
-            board.prev_dice.clear();
-            DiceResult::TripleDouble
-        }
-        _ => DiceResult::Normal(d1 + d2),
-    }
+    DiceResult::Normal(d1 + d2)
 }
 
 enum DiceResult {
@@ -151,7 +155,7 @@ enum DiceResult {
     Normal(u32),
 }
 
-#[derive(Debug, PartialEq, Eq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone, Hash)]
 enum Square {
     A(u8),
     B(u8),
@@ -192,7 +196,7 @@ struct Board {
     current_square: usize,
     community_chest_cards: VecDeque<SpecialCard>,
     chance_cards: VecDeque<SpecialCard>,
-    prev_dice: VecDeque<(u32, u32)>,
+    double_streak: u32,
 }
 
 impl Board {
@@ -224,8 +228,8 @@ impl Board {
             GoToH2 => self.get_square(Square::H(2)),
             GoToJAIL => self.get_square(Square::JAIL),
             GoToR1 => self.get_square(Square::R(1)),
-            GoToNextR => self.next_r_square(),
-            GoToNextU => self.next_u_square(),
+            GoToNextR => self.next_r_square(square_index),
+            GoToNextU => self.next_u_square(square_index),
         }
     }
 
@@ -243,31 +247,33 @@ impl Board {
         (square_index, square_type)
     }
 
-    fn next_r_square(&mut self) -> &mut BoardSquare {
-        self.squares
-            .iter_mut()
-            .find(|bs| match bs.square {
-                Square::R(_) => true,
-                _ => false,
-            })
-            .unwrap()
+    fn next_r_square(&mut self, skip: usize) -> &mut BoardSquare {
+        self.find_next_square(skip, |bs| match bs.square {
+            Square::R(_) => true,
+            _ => false,
+        })
     }
 
-    fn next_u_square(&mut self) -> &mut BoardSquare {
-        self.squares
-            .iter_mut()
-            .find(|bs| match bs.square {
-                Square::U(_) => true,
-                _ => false,
-            })
-            .unwrap()
+    fn next_u_square(&mut self, skip: usize) -> &mut BoardSquare {
+        self.find_next_square(skip, |bs| match bs.square {
+            Square::U(_) => true,
+            _ => false,
+        })
+    }
+
+    fn find_next_square(
+        &mut self,
+        skip: usize,
+        f: impl Fn(&BoardSquare) -> bool,
+    ) -> &mut BoardSquare {
+        let index = self.squares.iter().cycle().skip(skip).position(f).unwrap();
+        &mut self.squares[index]
     }
 }
 
 fn pop_special_card(cards: &mut VecDeque<SpecialCard>) -> SpecialCard {
     let card = cards.pop_front().unwrap();
     cards.push_back(card.clone());
-
     card
 }
 
@@ -323,9 +329,9 @@ fn build_board<R: Rng>(rng: &mut R) -> Board {
     Board {
         squares,
         current_square: 0,
+        double_streak: 0,
         community_chest_cards,
         chance_cards,
-        prev_dice: VecDeque::new(),
     }
 }
 
