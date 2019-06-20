@@ -69,8 +69,8 @@ use rand::prelude::*;
 use rayon::prelude::*;
 use std::collections::VecDeque;
 
-const ROLLS_PER_SIMULATION: u32 = 10_000_000;
-const SIMULATIONS: u32 = 10;
+const ROLLS_PER_SIMULATION: u32 = 100_000;
+const SIMULATIONS: u32 = 1000;
 const DICE_SIZE: u32 = 4;
 
 fn main() {
@@ -125,7 +125,7 @@ fn run<R: Rng>(board: &mut Board, rng: &mut R) {
     let index = {
         let next_square = match roll_dice(board, rng) {
             DiceResult::TripleDouble => board.get_square(Square::JAIL),
-            DiceResult::Normal(step) => board.square_after_current(step as i32),
+            DiceResult::Normal(step) => board.square_after_current(step as isize),
         };
 
         next_square.visits += 1;
@@ -210,11 +210,11 @@ impl Board {
             .unwrap()
     }
 
-    fn square_after_current(&mut self, step: i32) -> &mut BoardSquare {
+    fn square_after_current(&mut self, step: isize) -> &mut BoardSquare {
         self.square_after(self.current_square, step)
     }
 
-    fn square_after(&mut self, base_square: usize, step: i32) -> &mut BoardSquare {
+    fn square_after(&mut self, base_square: usize, step: isize) -> &mut BoardSquare {
         use SpecialCard::*;
 
         let (square_index, square_type) = self.advance_step(base_square, step);
@@ -222,8 +222,8 @@ impl Board {
         let special_card = match square_type {
             Square::CC(_) => pop_special_card(&mut self.community_chest_cards),
             Square::CH(_) => pop_special_card(&mut self.chance_cards),
-            Square::G2J => GoToJAIL,
-            _ => Noop,
+            Square::G2J => &GoToJAIL,
+            _ => &Noop,
         };
 
         match special_card {
@@ -240,16 +240,21 @@ impl Board {
         }
     }
 
-    fn advance_step(&mut self, base_square: usize, step: i32) -> (usize, Square) {
-        let square_count = self.squares.len();
-        let step = if step >= 0 {
-            step as usize
-        } else {
-            square_count - (-step as usize)
-        };
+    fn advance_step(&mut self, base_square: usize, step: isize) -> (usize, &Square) {
+        let square_count = self.squares.len() as isize;
+        let base_square = base_square as isize;
 
-        let square_index = (base_square + step) % square_count;
-        let square_type = self.squares[square_index].square.clone();
+        let mut square_index = base_square + step;
+        if square_index < 0 {
+            square_index += square_count;
+        }
+
+        if square_index >= square_count {
+            square_index -= square_count;
+        }
+
+        let square_index = square_index as usize;
+        let square_type = &self.squares[square_index].square;
 
         (square_index, square_type)
     }
@@ -285,10 +290,11 @@ impl Board {
     }
 }
 
-fn pop_special_card(cards: &mut VecDeque<SpecialCard>) -> SpecialCard {
+fn pop_special_card(cards: &mut VecDeque<SpecialCard>) -> &SpecialCard {
     let card = cards.pop_front().unwrap();
     cards.push_back(card.clone());
-    card
+
+    cards.back().unwrap()
 }
 
 #[derive(Debug)]
